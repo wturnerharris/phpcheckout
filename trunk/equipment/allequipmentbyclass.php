@@ -16,7 +16,7 @@ if (!(isset($pagenum))) {
 
 $StudentID = $_REQUEST['StudentID'];
 
-$mainQuery = "SELECT kit.ID AS KitID, kit.Name AS KitName, kit.ImageThumb AS KitImageThumb, accessorytype.ID AS AccessoryTypeID, accessorytype.Name AS AccessoryTypeName, kit_accessorytype.ID AS KitAccID, kit_class.ClassID AS kitClassID, class.ID as classID, class.Name as className FROM kit LEFT JOIN kit_accessorytype ON kit_accessorytype.KitID = kit.ID LEFT JOIN accessorytype ON kit_accessorytype.AccessorytypeID = accessorytype.ID LEFT JOIN kit_class ON kit_class.KitID = kit.ID LEFT JOIN class ON kit_class.ClassID = class.ID$insert ORDER BY class.Name ASC";
+$mainQuery = "SELECT kit.ID AS KitID, kit.Name AS KitName, kit.ImageThumb AS KitImageThumb, accessorytype.ID AS AccessoryTypeID, accessorytype.Name AS AccessoryTypeName, kit_accessorytype.ID AS KitAccID, kit_class.ClassID AS kitClassID, class.ID as classID, class.Name as className FROM kit LEFT JOIN kit_accessorytype ON kit_accessorytype.KitID = kit.ID LEFT JOIN accessorytype ON kit_accessorytype.AccessorytypeID = accessorytype.ID LEFT JOIN kit_class ON kit_class.KitID = kit.ID LEFT JOIN class ON kit_class.ClassID = class.ID$insert ORDER BY KitName ASC";
 
 mysql_select_db($database_equip, $equip);
 $query_Recordset1 = sprintf("$mainQuery");

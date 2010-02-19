@@ -17,7 +17,14 @@ if (isset($StudentID)) {
 ?>
 
 <script type="text/javascript">
-
+function showResponse(req){
+	setTimeout('refreshPage();',1000);
+}
+function refreshPage(){
+	$('filter').value = "no";
+	var location = "admin.php?page=classes"
+	window.location.href = location;
+}
 function submitForm1(){
 	$('filter').value = "yes";
 	$('form1').submit();
@@ -33,12 +40,10 @@ function showAddForm(){
 }
 function disableEnterKey(e){
      var key;
-
      if(window.event)
           key = window.event.keyCode;     //IE
      else
           key = e.which;     //firefox
-
      if(key == 13)
           return false;
      else
@@ -51,18 +56,9 @@ function delEntry(){
 		parameters: $('form2').serialize(true),
 		onComplete: showResponse 
 		});
-//	alert('Send Called');
 	$('alert').style.visibility = "visible";
 	$('alert').innerHTML = "Class Removed";
 	}
-function showResponse(req){
-	setTimeout('refreshPage();',2000);
-}
-function refreshPage(){
-	$('filter').value = "no";
-	var location = "admin.php?page=classes"
-	window.location.href = location;
-}
 </script>		
 <?php
 // **DEBUG
