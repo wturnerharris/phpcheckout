@@ -67,9 +67,10 @@ Student ID: <?php echo $row_Recordset1['StudentID']; ?><br />
 <?php 
 
 } else {
-echo "<FONT COLOR='red'>There is no student with ID number $StudentID in the system.</FONT><br>";
+echo "<span class='alert'>There is no student with ID number $StudentID in the system.</span><br><br>";
+////NEW CODE ADDED 2-16-2010
+echo "<strong>To ADD this Student, click <a href='admin/admin.php?page=students&StudentID=$StudentID'>here</a>.</strong>";
 }
-
 
 
 // *******************
@@ -90,7 +91,7 @@ $totalRows_Recordset4 = mysql_num_rows($Recordset4);
 ?>
 <p>
 <HR>
-<u><strong>Kits checked out by this student:</strong></u> (To check in equipment, click the link below)
+<u><strong>Kits checked out by this student:</strong></u> (To check in equipment, click the link below)<br>
 <?php if($row_Recordset4['CheckOutID']>1) { ?>
 <br>
 <table width="100%" border="0">
@@ -147,8 +148,8 @@ do {
 	echo $row_Recordset2['Name'] . "<br>"; 
  } while ($row_Recordset2 = mysql_fetch_assoc($Recordset2));
  
- //***********added to redirect for additional classes********
-echo "<br><strong>To add or remove classes for this Student, click <a href=\"admin.php?page=classes&StudentID=$StudentID\">here</a>.";
+////NEW CODE ADDED 2-16-2010
+echo "<br><strong>To add or remove classes for this Student, click <a href=\"admin/admin.php?page=classes&StudentID=$StudentID\">here</a>.</strong>";
  //end addition
 
 mysql_select_db($database_equip, $equip);
@@ -160,14 +161,15 @@ $totalRows_Recordset3 = mysql_num_rows($Recordset3);
  
 } else {
 
-echo "<br/><FONT COLOR='red'>Either this Student is NOT registered in the checkout system or needs to be added to a class.</FONT><br>";
+////NEW CODE ADDED 2-16-2010
+echo "<br/><strong class='alert'>This Student is either NOT registered for checkout or needs to be added to a class.</strong><br>";
 
 if($row_Recordset1['StudentID']!=""){
 
 // ADD STUDENT TO A CLASS
 $classes = mysql_query("SELECT * FROM class") or die(mysql_error());  ?>
 
-<form name="form" action="add-class.php" method="post">
+<form name="form" action="admin/add-class.php" method="post">
 <select name="class" size="1" id="class">
 <? while($option = mysql_fetch_array( $classes )) {
 

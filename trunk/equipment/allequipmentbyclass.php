@@ -111,7 +111,7 @@ $AccessoryFirstTime = 0;
 ?>
 <tr>
     <td bgcolor="e6e6e6">
-        <strong><a href="#" class="hints" title="<?php echo 'Enrolled for ' .$info['className']; ?>">Equipment:</a></strong> <?php $currentID = $info['KitID']; $checkedID = $info['KitID']; echo $info['KitName']; ?><br />
+        <strong><a href="#" class="hints" title="<?php echo 'Enrolled for ' .$info['className']; ?>">Equipment:</a></strong> <?php $currentID = $info['KitID']; $checkedID = $info['KitID']; echo $info['KitName']; ?><a href="http://witdesigns.com/equipment/kithistory.php?KitID=<?php echo $info['KitID']; ?>" > <img src="images/ip_icon_02_Info.png" title="Checkout History" width="18" height="18" border="0" align="absmiddle" /></a><br />
 	<?php	
 	// SHOWS IF UNAVAILABLE
 	mysql_select_db($database_kit, $equip);
@@ -122,7 +122,7 @@ $AccessoryFirstTime = 0;
 	
 	if (empty($_REQUEST['StudentID'])) { 
 		if ($row_Recordset5['ExpectedDateIn'] != ''){ ?> 
-			<? echo("<br/></td><td bgcolor=\"e6e6e6\" valign=\"top\"><B><font color=\"red\">Checked Out</font></B><br/><em>Unavailable</em>"); ?> </td></tr><tr><td valign="top" CLASS="accessoryText"><br>
+	<? echo("<br/></td><td bgcolor=\"e6e6e6\" valign=\"top\"><B><font color=\"red\">Checked Out</font></B><br/><em>Unavailable</em>"); ?> </td></tr><tr><td valign="top" CLASS="accessoryText"><br>
 		<?} else { ?>
 		</td><td bgcolor="e6e6e6">Available for <strong><a href="studentid.php" onClick="javascript:alert('No Student ID Selected')">Checkout</a></strong></td></tr><tr><td valign="top" CLASS="accessoryText"><br>
 	<? }} else {
