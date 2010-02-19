@@ -59,7 +59,7 @@ $message = "\r\n" .
 
 "In the rush to get a second equipment checkout created in the Service Bureau at he beginning of the semester, we weren't able to get policies in place to charge fines for equipment that is returned late.  We now have that in place as well correcting the default 24 hour checkout period.  Student can now see the equipment they are allowed to checkout based on their classes as well as when that equipment is expected to be returned.\r\n" .
 
-"http://gcc.bradley.edu/labs/students.php\r\n" .
+"http://wwwccny.cuny.edu\r\n" .
 
 "Before being able to checkout equipment after Spring Break, students must sign a contract that includes these policies and provide local contact information.\r\n" .
 
@@ -75,19 +75,15 @@ $message = "\r\n" .
 
 "---\r\n".
 
-"Kevin Reynen\r".
-"Director of Instructional Technology\r" .
-"Slane College of Communications and Fine Arts\r" .
-"Bradley University - Peoria, IL 61625\r";
+"City College - New York, NY 10031\r";
 	
 
 
 //START EMAIL ACTION
 mail("$ToEmail", "Changes to Equipment Checkout", $message,
-     "From: Kevin Reynen <kreynen@bradley.edu>\r\n" .
-     "Reply-To: kreynen@bradley.edu\r\n" .
-     "Return-Path: www@gcc.bradley.edu\r\n".
-     "Return-Receipt-To: www@gcc.bradley.edu\r\n".
+     "From: LabTechnician <labtech@ccny.cuny.edu>\r\n" .
+     "Return-Path: www@ccny.cuny.edu\r\n".
+     "Return-Receipt-To: www@ccny.cuny.edu\r\n".
      "X-Mailer: PHP/" . phpversion());
 //END EMAIL ACTION
 
