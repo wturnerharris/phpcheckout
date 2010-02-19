@@ -14,16 +14,16 @@ div.content {
 </head>
 <body>
 <center>
-<H1>Bradley University Department of Communciation</H1>
+<H1>City College of New York, Electronic Design & Multimedia (EDM) Department</H1>
 <H2>Equipment Use and Liability Contract</H2>
 
 <table width="500"><tr><td class="bodyText"><div class="content">
 <P>
 CATION: Read this document carefully before signing.  It commits you to pay for anything you break or damage while it is checked out to you.
 <P>
-1. PURPOSE OF CONTRACT:  The Department of Communciation has a large amount of equipment used regularly by students and staff.  In order to ensure responsible use of this equipment, provide for a means of protecting the university and the department from liability for damage or loss thereto, and to establish a method for assuring that the person who breaks, damages or loses any of this equipment through misuse or neglect will pay for repair or replacement costs, this contract has been devised.
+1. PURPOSE OF CONTRACT:  The Electronic Design & Multimedia (EDM) Department has a large amount of equipment used regularly by students and staff.  In order to ensure responsible use of this equipment, provide for a means of protecting the university and the department from liability for damage or loss thereto, and to establish a method for assuring that the person who breaks, damages or loses any of this equipment through misuse or neglect will pay for repair or replacement costs, this contract has been devised.
 <P>
-2. PARIES TO THE CONTRACT: The Department of Communciation as custodian of the equipment shall be known as PARTY 1.
+2. PARIES TO THE CONTRACT: The Electronic Design & Multimedia (EDM) Department as custodian of the equipment shall be known as PARTY 1.
 <P>
 Name of User: <i><? echo $_REQUEST['FirstName'] ?> <? echo $_REQUEST['LastName'] ?></i> Shall be known as Party 2.
 <P>

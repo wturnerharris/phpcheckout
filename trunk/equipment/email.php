@@ -1,4 +1,4 @@
-<?php require_once('Connections/equip.php'); ?>
+<?php require_once('config.php'); ?>
 <HTML>
 
 <head>
@@ -24,7 +24,7 @@ div.content {
 <?php
 
 //EMAIL FOR TESTING
-$ToEmail = "kreynen@bradley.edu";
+$ToEmail = "wturner02@ccny.cuny.edu";
 $Start = $_REQUEST[Start];
 $State = $_REQUEST[State];
 
@@ -41,7 +41,7 @@ $row_email = mysql_fetch_assoc($email);
 $totalRows_email = mysql_num_rows($email);
 
 do { 
-$ToEmail = $row_email['Email'] . "@bradley.edu";
+$ToEmail = $row_email['Email'] . "@ccny.cuny.edu";
 $conName = $row_email['Name'];
 
 if($ToEmail != $previousEmail){
