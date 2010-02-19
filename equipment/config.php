@@ -3,9 +3,9 @@
 # Type="MYSQL"
 # HTTP="true"
 $hostname_equip = "localhost";
-$database_equip = "equipment";
-$username_equip = "root";
-$password_equip = "new-password";
+$database_equip = "witdesig_equipment";
+$username_equip = "witdesig_equip";
+$password_equip = "u81i812";
 $equip = mysql_pconnect($hostname_equip, $username_equip, $password_equip) or die(mysql_error());
 
 $weekends = false; // if open weekends, flag this

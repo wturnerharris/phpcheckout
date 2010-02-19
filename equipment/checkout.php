@@ -82,6 +82,9 @@ var Date2 = Date1.substr(0,Date1.length-2) +  addDay;
 var newDate = newDay + Date2.substr(3,Date1.length);
 $('changeDate').firstChild.nodeValue = newDate;
 }
+function divClose() {
+	$('alert').style.visibility = "hidden";
+}
 </script>
 <P>
 <form name="frmCheckOut" action="checkoutaction.php" method="post">
@@ -201,8 +204,11 @@ $ServerCheckHours = 0;
 	//IF NOT OPEN weekends
 	if(!$weekends) {
 		if (date("D", strtotime($returndateSQL)) == "Sat") {
-			$Day = ($Day + 1);
-			echo "<P> saturday found moving to next day";
+			$Day = ($Day + 2);
+			echo "<div id='alert' style='visibility: visible;'>Not open on Sunday, return on Tuesday...</div>";
+			echo "<script type='text/javascript'>";
+			echo "setTimeout(\"divClose();\"),3000);";
+			echo "</script>"; 
 		}
 		
 		//IS LAST DAY OF MONTH?
@@ -215,8 +221,11 @@ $ServerCheckHours = 0;
 		
 		//IF NOT OPEN SUNDAY
 		if (date("D", strtotime($returndateSQL)) == "Sun") {
-			$Day = ($Day + 1);
-			echo "<P> sunday found moving to next day";
+			$Day = ($Day + 2);
+			echo "<div id='alert'>Not open on Sunday, return on Tuesday...</div>";
+			echo "<script type='text/javascript'>";
+			echo "setTimeout('divClose();'),3000);";
+			echo "</script>"; 
 		}
 		
 		//IS LAST DAY OF MONTH?

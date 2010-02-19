@@ -1,6 +1,6 @@
 <?php 
 require_once('config.php');
-//include('includes/heading.html'); 
+include('includes/heading.html'); 
 
 mysql_select_db($database_equip, $equip);
 $query_Recordset1 = "SELECT * FROM checkedout ORDER BY KitID";
@@ -61,6 +61,6 @@ $PrevID = $row_Recordset1['KitID'];
  }
 
 mysql_free_result($Recordset1);
-//include('includes/footer.html'); 
+include('includes/footer.html'); 
 ?>
 
