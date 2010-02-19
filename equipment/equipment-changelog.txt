@@ -1,0 +1,147 @@
+TODO
+
+* Secure login method with MD5.
+* Determine method for manual return date upon checkout.
+* Detect if 'checkedout' for manual link submissions to prevent unauthorized or incorrect class checkout/checkin.
+
+CHANGELOG
+
+17-January-2010
+
+* Added method to modify/add/remove 'users' from db.
+* Fixed 'Add' new student record.
+* Minor styling adjusments.
+* Modified icons for 'add/remove/modify' student records.
+
+
+16-January-2010
+
+* Can 'Delete and Modify' student records, but 'Add' problematic.
+* Implemented icon buttons for 'add/remove/modify' student records.
+* Minor styling adjusments.
+* Added method of inserting new student records.
+
+
+14-January-2010
+
+* Can 'Delete and Modify' student records.
+* Completed 'Admin > Student' panel.
+* Minor styling adjusments.
+* Added Selection Menu to sort equipment by class.
+
+
+10-January-2010
+
+* Hover over 'equipment' link on equipment page yields 'enrolled class' for selected equipment.
+* Work on admin>students page.
+* Added pagination to 'list equipment' and 'student records' pages.
+* Style added for all table data.
+* All tabular data retains table structures.
+* Major styling; removed tables from main layout.
+
+
+07-January-2010
+
+* Admin includes 'general, users, equipment, classes, and students' settings.
+* Added 'admin' link to footer.
+* Added separate logout div to upper right corner while logged in.
+* Changed header icon to return to index page instead of logging out.
+* Standardized checkin/checkout page allowing 10sec for a printout.
+* Equipment organized by class in ascending order.
+* Dummy 'delete' added to 'student records' list.
+
+04-January-2010
+
+* Admin pages started.
+* Student records organized by LastName.
+* Redirect set for 'student info' page.
+* Checkin link added to currently checked out section under the student id page.
+* Index now includes 'currently checked out' below 'student id' lookup.
+* Defaulted index.php as main page.
+
+
+14-December-2009
+
+* Security Fixes
+	o Disabled checkout link on allequipment page when 'checkedout' detected.
+	o Detects if student record is currently active.
+	o Disabled checkout link on studentinfo page when 'checkedout' detected.
+* Added active student name to 'checkout' link on allequipment page.
+* Made 'unavailable' equipment display when 'checkedout' detected.
+* Alert added when checking out from allequipment with no active student.
+* Checkin link added to currentlycheckedout page record.
+* StudentID link added to currentlycheckedout page record.
+* Availability denoted for allequipmentpage records.
+
+
+13-December-2009
+
+* Removed background color from header and replaced to solid color.
+* Changed email support backend.
+* Styled Checkout, Checkin, and currentlycheckedout pages.
+* Added support to add student to a class. Currently only one class can be added. Must add/change multiple classes manually.
+
+
+11-December-2009
+
+* Styled Login to match rest of site.
+* "Student Info" link displays 'no student id' message when student id field is null.
+* Minor style changes to allequipment page.
+* Added 'Student ID' field with equivalent data for "Student Info" page.
+* Fixed emails throughout site to display as-is for data type.
+* Changed login cookie to 24 hours unless idle.
+* Changed 'Student ID' field to accept any multicharacter alphanumeric combination of any length. Should be limited once a default method is selected.
+* LDAP Lookup is defunct and only refers to studentinfo page until better records created.
+
+
+GETTING STARTED
+
+1) Copy the checkout directory to you webserver
+
+2) create a database named equipment (or modify the config.php to the name of the database you create run the equipment.sql in)
+
+3) using phpmyadmin or mysql command line, run equipment.sql
+
+4) Go to http://www.yourserver.edu/equipment/
+
+5) Login with checkoutguy/password
+
+6) The only student in the test setup has an ID in 1234
+
+7) This student is in the only class in the system called Test Class
+
+
+ABOUT THE DATABASE
+
+The database relies on primary secondary key relations.  If this is a new concept to you, you may want to wait for some admin tools to be written.  Currently you must manually enter everything including the joining tables.
+
+
+Primary Tables:
+	accessorytype - These are smaller items included in kit, but not tracked as individual items.
+	class - 
+	kit - The main items
+	students 
+	users - This is for people who can log into the system and check things out
+
+Joining Tables:
+	kit_accessorytype 
+	kit_class
+	student_class
+
+Active Tables:
+	checkedout - This is where checkout records are kept.  These are never deleted. When equipment in returned, a checkedin date is added.  
+		
+	 
+ADDING MORE STUDENTS/CLASSES/EQUIPMENT
+
+Adding a student to the students table does not give them access to any kits.  Access to kits are determined by the classes the student is enrolled in.  If the student is enrolled in multiple classes that have access to the same kit, the class with longest checkout hours are used.  The idea is that once the basic structure of your checkout is set up, the only thing that has to be changed each semester are the students and student_class.
+
+The same is true for kits. Adding a kit doesn't make it available to anyone. You must add links between kits and classes in the kit_class table.  
+
+The equipment and accessory lists included with phplabman are the current list available to students in Braldey University's Multimedia Program.  There is no reason you have to define you equipment the same way.  We do it this way because we don't track things like which tripod or battery charge a student has.  We do care about which Canon Digital Rebel because we track the average number of hours equipment is checked out before it is damaged, lost, or stolen.  The ability to show how often all our Digital Rebels are checked out as well as how many times the cameras go out each semester helps us justify our requests for new equipment as well as the lab fees and late fees we charge students.
+
+
+FINES
+
+The default fine system is fairly draconian.  We charge students $5 for every 15 minutes a kit is late PER KIT!  If you checkout a lighting kit and a DV camera and return it an hour late, you'd owe $30.  We give students a 15 minute grace period, but the students who run the checkout have no control over fines.  Fines are automagically assessed and no additional equipment can be checked out until they are paid.
+

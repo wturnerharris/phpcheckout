@@ -3,29 +3,29 @@
 # Type="MYSQL"
 # HTTP="true"
 $hostname_equip = "localhost";
-$database_equip = "witdesig_equipment";
-$username_equip = "witdesig_equip";
-$password_equip = "u81i812";
+$database_equip = "equipment";
+$username_equip = "root";
+$password_equip = "new-password";
 $equip = mysql_pconnect($hostname_equip, $username_equip, $password_equip) or die(mysql_error());
 
 $weekends = false; // if open weekends, flag this
 
 
 // set your open and close times here. System will only work with Hour arguments, input hour in 24 our time in format HH
-$monOpen = 10;
-$monClose = 22;
-$tueOpen = 10;
-$tueClose = 22;
-$wedOpen = 10;
-$wedClose = 22;
-$thuOpen = 10;
-$thuClose = 22;
-$friOpen = 10;
+$monOpen = 00;
+$monClose = 00;
+$tueOpen = 14;
+$tueClose = 17;
+$wedOpen = 14;
+$wedClose = 17;
+$thuOpen = 14;
+$thuClose = 17;
+$friOpen = 14;
 $friClose = 17;
-$satOpen = 12;
-$satClose = 15;
-$sunOpen = 12;
-$sunClose = 15;
+$satOpen = 14;
+$satClose = 17;
+$sunOpen = 00;
+$sunClose = 00;
 
 
 // fine controls
