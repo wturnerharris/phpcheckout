@@ -1,32 +1,42 @@
 -- phpMyAdmin SQL Dump
--- version 2.8.0.1
+-- version 3.2.4
 -- http://www.phpmyadmin.net
--- 
+--
 -- Host: localhost
--- Generation Time: Mar 22, 2006 at 02:57 PM
--- Server version: 5.0.18
--- PHP Version: 5.1.2
--- 
--- Database: `equipment`
--- 
+-- Generation Time: Feb 18, 2010 at 09:38 PM
+-- Server version: 5.1.43
+-- PHP Version: 5.2.9
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Database: `witdesig_equipment`
+--
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `accessorytype`
--- 
+--
 
-CREATE TABLE `accessorytype` (
-  `ID` int(11) NOT NULL auto_increment,
-  `Name` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=110 ;
+CREATE TABLE IF NOT EXISTS `accessorytype` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=121 ;
 
--- 
+--
 -- Dumping data for table `accessorytype`
--- 
+--
 
-INSERT INTO `accessorytype` (`ID`, `Name`) VALUES (60, 'Battery'),
+INSERT INTO `accessorytype` (`ID`, `Name`) VALUES
+(60, 'Battery'),
 (61, 'Charger'),
 (62, 'Lav Mic'),
 (63, 'DV Cable'),
@@ -44,23 +54,22 @@ INSERT INTO `accessorytype` (`ID`, `Name`) VALUES (60, 'Battery'),
 (76, 'USB Cable'),
 (77, '4 AA Rechargeable Batteries'),
 (78, 'AA Battery Charger'),
-(79, 'Wireless transmitter'),
-(80, 'Wireless Receiver'),
-(81, 'Stick mic'),
+(119, '2gb Compact Flash Card'),
+(118, 'Film Back'),
+(117, '80mm Lens'),
 (82, '18-55mm stock lens'),
 (87, 'Lens Cap'),
 (86, 'Tripod'),
-(85, 'Flash memory card'),
+(85, '8gb SD card'),
 (88, 'Light Stand'),
 (89, 'Omni Light'),
-(90, 'Tota Light'),
+(115, 'Rubber case'),
 (91, 'AC Cord'),
 (92, 'Umbrella reflector'),
 (93, 'Gel Frame'),
 (94, 'Mounting Plate'),
 (95, 'Extension Cord'),
-(96, '8 AA Rechargeable Batteries'),
-(97, 'Mic Stand'),
+(114, 'USB Extension'),
 (98, 'AC Adapter'),
 (99, 'XLR Cord'),
 (100, 'Power/PC Sync Cord'),
@@ -69,170 +78,192 @@ INSERT INTO `accessorytype` (`ID`, `Name`) VALUES (60, 'Battery'),
 (103, 'Mounting Plate'),
 (104, 'Wiring Harness'),
 (105, 'Battery Pack'),
-(106, '(3) AA Batteries'),
-(107, 'Pro Light'),
+(116, 'manual winder'),
+(113, 'Bag'),
 (108, 'Component Video Cable'),
-(109, 'Rain Cover');
+(109, 'Rain Cover'),
+(110, 'Dark Cloth'),
+(111, 'remote cord'),
+(112, '4x5 Film Holder'),
+(120, '18-70mm lens');
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `checkedout`
--- 
+--
 
-CREATE TABLE `checkedout` (
-  `ID` int(11) NOT NULL auto_increment,
-  `KitID` int(11) NOT NULL default '0',
-  `StudentID` int(11) NOT NULL default '0',
-  `DateOut` datetime NOT NULL default '0000-00-00 00:00:00',
-  `ExpectedDateIn` datetime NOT NULL default '0000-00-00 00:00:00',
-  `DateIn` varchar(255) NOT NULL default '',
-  `FinePaid` varchar(255) default NULL,
-  `Reserved` int(11) default NULL,
-  `Accessories` varchar(255) NOT NULL default '',
-  `Notes` varchar(255) default NULL,
-  `Problem` int(1) NOT NULL default '0',
-  `CheckoutUser` varchar(255) NOT NULL default '0',
-  `CheckinUser` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=510 ;
+CREATE TABLE IF NOT EXISTS `checkedout` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `KitID` int(11) NOT NULL DEFAULT '0',
+  `StudentID` varchar(24) NOT NULL DEFAULT '0',
+  `DateOut` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `ExpectedDateIn` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `DateIn` varchar(255) NOT NULL DEFAULT '',
+  `FinePaid` varchar(255) DEFAULT NULL,
+  `Reserved` int(11) DEFAULT NULL,
+  `Accessories` varchar(255) NOT NULL DEFAULT '',
+  `Notes` varchar(255) DEFAULT NULL,
+  `Problem` int(1) NOT NULL DEFAULT '0',
+  `CheckoutUser` varchar(255) NOT NULL DEFAULT '0',
+  `CheckinUser` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
--- 
+--
 -- Dumping data for table `checkedout`
--- 
+--
 
-
+INSERT INTO `checkedout` (`ID`, `KitID`, `StudentID`, `DateOut`, `ExpectedDateIn`, `DateIn`, `FinePaid`, `Reserved`, `Accessories`, `Notes`, `Problem`, `CheckoutUser`, `CheckinUser`) VALUES
+(1, 141, '29016001661241', '2010-02-15 21:34:07', '2010-02-17 17:00:00', '2010-02-15 21:37:25', NULL, NULL, '', '', 0, 'labtech', 'labtech'),
+(2, 141, '2901600121212', '2010-02-16 09:24:46', '2010-02-18 17:00:00', '2010-02-16 16:53:01', NULL, NULL, 'USB Cable, Charger', '', 0, 'labtech', 'labtech');
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `class`
--- 
+--
 
-CREATE TABLE `class` (
-  `ID` int(11) NOT NULL auto_increment,
-  `Name` varchar(255) NOT NULL default '',
+CREATE TABLE IF NOT EXISTS `class` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) NOT NULL DEFAULT '',
   UNIQUE KEY `ID` (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
 
--- 
+--
 -- Dumping data for table `class`
--- 
+--
 
-INSERT INTO `class` (`ID`, `Name`) VALUES (1, 'Test Class');
-
+INSERT INTO `class` (`ID`, `Name`) VALUES
+(1, 'Test Class'),
+(16, 'EDM Class'),
+(17, 'Photo Class');
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `kit`
--- 
+--
 
-CREATE TABLE `kit` (
-  `ID` int(16) NOT NULL auto_increment,
-  `Name` varchar(255) NOT NULL default '',
-  `Image` varchar(255) default NULL,
-  `Repair` int(11) default NULL,
-  `Genre` varchar(100) default NULL,
-  `CheckHours` int(11) default NULL,
-  `SerialNumber` varchar(100) default NULL,
-  `ModelNumber` varchar(100) default NULL,
-  `ImageThumb` varchar(100) default NULL,
-  `ContractRequired` int(1) default '0',
-  `Notes` varchar(255) default NULL,
+CREATE TABLE IF NOT EXISTS `kit` (
+  `ID` int(16) NOT NULL AUTO_INCREMENT,
+  `Name` varchar(255) NOT NULL DEFAULT '',
+  `Image` varchar(255) DEFAULT NULL,
+  `Repair` int(11) DEFAULT NULL,
+  `Genre` varchar(100) DEFAULT NULL,
+  `CheckHours` int(11) DEFAULT NULL,
+  `SerialNumber` varchar(100) DEFAULT NULL,
+  `ModelNumber` varchar(100) DEFAULT NULL,
+  `ImageThumb` varchar(100) DEFAULT NULL,
+  `ContractRequired` int(1) DEFAULT '0',
+  `Notes` varchar(255) DEFAULT NULL,
   UNIQUE KEY `ID` (`ID`),
-  UNIQUE KEY `ID_2` (`ID`),
   KEY `Name` (`Name`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=102 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=197 ;
 
--- 
+--
 -- Dumping data for table `kit`
--- 
+--
 
-INSERT INTO `kit` (`ID`, `Name`, `Image`, `Repair`, `Genre`, `CheckHours`, `SerialNumber`, `ModelNumber`, `ImageThumb`, `ContractRequired`, `Notes`) VALUES (64, '(2) Motorola Talkabout Radios', 'talkaboutbig.jpg', NULL, NULL, 24, '690WAS2TRP / 690WAS0Q33', 'FR50', 'talkaboutthumb.jpg', 0, NULL),
-(65, '(3) Motorola Talkabout Radios', 'talkaboutbig.jpg', NULL, NULL, NULL, NULL, 'FR 50', 'talkaboutthumb.jpg', 0, NULL),
-(21, 'Canon Digital Rebel Kit 1', 'rebelbig.jpg', NULL, NULL, 24, '1860515001', 'Canon Digital Rebel DS-6041', 'rebelthumb.jpg', 0, NULL),
-(70, 'Canon Digital Rebel Kit 10', 'rebelbig.jpg', NULL, NULL, 24, '1260438417', 'DS-6041', 'rebelthumb.jpg', 0, NULL),
-(71, 'Canon Digital Rebel Kit 11', 'rebelbig.jpg', NULL, NULL, 24, '1260440186', 'DS-6041', 'rebelthumb.jpg', 0, NULL),
-(72, 'Canon Digital Rebel Kit 12', 'rebelbig.jpg', NULL, NULL, 24, '1660514350', 'DS-6041', 'rebelthumb.jpg', 0, NULL),
-(73, 'Canon Digital Rebel Kit 13', 'rebelbig.jpg', NULL, NULL, 24, '1760520351', 'DS-6041', 'rebelthumb.jpg', 0, NULL),
-(74, 'Canon Digital Rebel Kit 14', 'rebelbig.jpg', NULL, NULL, 24, '1660516053', 'DS-6041', 'rebelthumb.jpg', 0, NULL),
-(22, 'Canon Digital Rebel Kit 2', 'rebelbig.jpg', NULL, NULL, 24, '1560542844', 'Canon Digital Rebel DS-6041', 'rebelthumb.jpg', 0, NULL),
-(23, 'Canon Digital Rebel Kit 3', 'rebelbig.jpg', NULL, NULL, 24, '1860515000', 'Canon Digital Rebel DS-6041', 'rebelthumb.jpg', 0, NULL),
-(24, 'Canon Digital Rebel Kit 4', 'rebelbig.jpg', NULL, NULL, 24, '1860514935', 'Canon Digital Rebel DS-6041', 'rebelthumb.jpg', 0, NULL),
-(25, 'Canon Digital Rebel Kit 5', 'rebelbig.jpg', 1, NULL, 24, '1560542845', 'Canon Digital Rebel DS-6041', 'rebelthumb.jpg', 0, 'Missing FA05'),
-(66, 'Canon Digital Rebel Kit 6', 'rebelbig.jpg', NULL, NULL, 24, '460011228', 'DS-6041', 'rebelthumb.jpg', 0, 'No USB cable'),
-(67, 'Canon Digital Rebel Kit 7', 'rebelxt.jpg', NULL, NULL, 24, '420229511', 'DS126071', 'rebelxtThumb.jpg', 0, NULL),
-(68, 'Canon Digital Rebel Kit 8', 'rebelxt.jpg', NULL, NULL, 24, '420229513', 'DS126071', 'rebelxtThumb.jpg', 0, NULL),
-(69, 'Canon Digital Rebel Kit 9', 'rebelxt.jpg', NULL, NULL, 24, '420229515', 'DS126071', 'rebelxtThumb.jpg', 0, NULL),
-(79, 'Canon GL kit 1', 'gl1big.jpg', NULL, NULL, 24, '2040100096', 'GL-1', 'Gl1thumb.jpg', 0, NULL),
-(80, 'Canon GL kit 2', 'Gl2big.jpg', NULL, NULL, 24, '132072810563', 'GL-2', 'gl2thumb.jpg', 0, NULL),
-(81, 'Canon GL kit 3', 'Gl2big.jpg', NULL, NULL, 24, '132072810329', 'GL-2', 'gl2thumb.jpg', 0, NULL),
-(83, 'Canon Rebel Lens 55-200 1', '55200big.jpg', NULL, NULL, 24, '1061741', '55-200mm', '55200thumb.jpg', 0, NULL),
-(84, 'Canon Rebel Lens 55-200 2', '55200big.jpg', NULL, NULL, 24, '1062128', '55-200mm', '55200thumb.jpg', 0, NULL),
-(85, 'Canon Rebel Lens 55-200 3', '55200big.jpg', NULL, NULL, 24, '1061974', '55-200mm', '55200thumb.jpg', 0, NULL),
-(86, 'Canon Rebel Lens 55-200 4', '55200big.jpg', NULL, NULL, 24, '1061962', '55-200mm', '55200thumb.jpg', 0, NULL),
-(32, 'Digital Rebel Lens 1 70-200mm', '70200big.jpg', NULL, NULL, 24, '4002234', 'Sigma 70-200mm', '70200thumb.jpg', 0, NULL),
-(75, 'Digital Rebel Lens 2 70-200', '70200big.jpg', NULL, NULL, 24, '5003473', '70-200mm', '70200thumb.jpg', 0, NULL),
-(31, 'Digital Rebel Lens 5 18-50mm', '1850big.jpg', NULL, NULL, 24, '1004805', 'Sigma 18-50mm', '1850thumb.jpg', 0, NULL),
-(2, 'DV Kit 2', 'ez30bigg.gif', NULL, NULL, 24, 'L9SA10055', 'Panasonic AG-EZ30', 'ez30thumb.jpg', 0, NULL),
-(4, 'DV Kit 4', '38big.jpg', NULL, NULL, 24, '1341133', 'Sony DCR-TRV38', '38thumb.jpg', 0, NULL),
-(5, 'DV Kit 5', '11big.jpg', NULL, NULL, 24, '101818', 'Sony DCR-TRV38', '11thumb.jpg', 0, NULL),
-(7, 'DV Kit 7', '25big.jpg', NULL, NULL, 24, '324396', 'Sony DCR-TRV38', '25thumb.jpg', 0, NULL),
-(8, 'DV Kit 8', '910big.jpg', NULL, NULL, 24, 'J9SA10582', 'Panasonic PV-DV910D', '910thumb.jpg', 0, NULL),
-(63, 'Glidecam 2000 Pro', NULL, NULL, NULL, 24, NULL, '2000 PRO', NULL, 0, NULL),
-(87, 'iBook A', 'ibookbig.jpg', NULL, NULL, 24, NULL, NULL, 'ibookthumb.jpg', 0, NULL),
-(88, 'iBook B', 'ibookbig.jpg', NULL, NULL, 24, NULL, NULL, 'ibookthumb.jpg', 0, NULL),
-(89, 'iBook C', 'ibookbig.jpg', NULL, NULL, 24, NULL, NULL, 'ibookthumb.jpg', 0, NULL),
-(90, 'iBook D', 'ibookbig.jpg', NULL, NULL, 24, NULL, NULL, 'ibookthumb.jpg', 0, NULL),
-(91, 'iBook E', 'ibookbig.jpg', NULL, NULL, 24, NULL, NULL, 'ibookthumb.jpg', 0, NULL),
-(92, 'iBook F', 'ibookbig.jpg', NULL, NULL, 24, NULL, NULL, 'ibookthumb.jpg', 0, NULL),
-(93, 'iBook G', 'ibookbig.jpg', NULL, NULL, 24, NULL, NULL, 'ibookthumb.jpg', 0, NULL),
-(94, 'iBook H', 'ibookbig.jpg', NULL, NULL, 24, NULL, NULL, 'ibookthumb.jpg', 0, NULL),
-(95, 'iBook I', 'ibookbig.jpg', NULL, NULL, 24, NULL, NULL, 'ibookthumb.jpg', 0, NULL),
-(96, 'iBook J', 'ibookbig.jpg', NULL, NULL, 24, NULL, NULL, 'ibookthumb.jpg', 0, NULL),
-(97, 'iBook K', 'ibookbig.jpg', NULL, NULL, 24, NULL, NULL, 'ibookthumb.jpg', 0, NULL),
-(98, 'iBook L', 'ibookbig.jpg', NULL, NULL, 24, NULL, NULL, 'ibookthumb.jpg', 0, NULL),
-(99, 'iBook M', 'ibookbig.jpg', NULL, NULL, 24, NULL, NULL, 'ibookthumb.jpg', 0, NULL),
-(100, 'iBook N', 'ibookbig.jpg', NULL, NULL, 24, NULL, NULL, 'ibookthumb.jpg', 0, NULL),
-(101, 'iBook O', 'ibookbig.jpg', NULL, NULL, 24, NULL, NULL, 'ibookthumb.jpg', 0, NULL),
-(41, 'Lowel Multimedia Light Kit 1', 'lightbig.jpg', NULL, NULL, 24, NULL, 'Lowel Omni-Tota', 'lightthumb.jpg', 0, NULL),
-(76, 'Lowel Multimedia Light Kit 2', 'lightbig.jpg', NULL, NULL, 24, NULL, 'Lowel Omni, Tota, Pro, Rifa', 'lightthumb.jpg', 0, NULL),
-(77, 'Lowel Multimedia Light Kit 3', 'lightbig.jpg', NULL, NULL, 24, NULL, 'Omni, Tota, Pro Rifa', 'lightthumb.jpg', 0, NULL),
-(78, 'Lowel Multimedia Light Kit 4', 'lightbig.jpg', NULL, NULL, 24, NULL, 'Omni, Tota, Pro, Rifa', 'lightthumb.jpg', 0, NULL),
-(62, 'Magellan GPS', NULL, NULL, NULL, 24, '0041964', 'MAP 330', NULL, 0, NULL),
-(61, 'Marantz Digital Audio Recorder', 'DARbig.jpg', NULL, NULL, 24, NULL, NULL, 'DARthumb.jpg', 0, NULL),
-(38, 'POV Video Camera (Helmet-Cam)', NULL, NULL, NULL, 24, 'N020504480', 'AVC597N/F36', NULL, 0, NULL),
-(51, 'QTVR Tripod Head', NULL, NULL, NULL, 24, NULL, NULL, NULL, 0, NULL),
-(52, 'QTVR Tripod Head', NULL, NULL, NULL, 24, NULL, NULL, NULL, 0, NULL),
-(53, 'QTVR Tripod Head', NULL, NULL, NULL, 24, NULL, NULL, NULL, 0, NULL),
-(10, 'Sony DV Deck', 'sonydvdeck.jpg', NULL, NULL, 24, NULL, NULL, 'sonydvdeckthumb.jpg', 0, NULL),
-(82, 'Sony HD Cam', 'Sonyhdbig.jpg', NULL, NULL, 24, NULL, NULL, 'Sonyhdthumb.jpg', 0, NULL),
-(34, 'Telephoto Adapter - SONY DV CAMERAS ONLY', NULL, NULL, NULL, 24, NULL, 'Kodak 2x Telephoto Converter', NULL, 0, NULL),
-(35, 'Tripod Only (without camera)', NULL, NULL, NULL, 24, NULL, 'Tripod', NULL, 0, NULL),
-(36, 'Tripod Only (without camera)', NULL, NULL, NULL, 24, NULL, 'Tripod', NULL, 0, NULL),
-(37, 'Tripod Only (without camera)', NULL, NULL, NULL, 24, NULL, 'Tripod', NULL, 0, NULL),
-(33, 'Wide Angle Adapter - SONY DV CAMERAS ONLY', NULL, NULL, NULL, 24, NULL, 'Kodak .5x Wide Angle Converter', NULL, 0, NULL),
-(9, 'Wireless Mic', NULL, NULL, NULL, 24, NULL, 'WM-PRO', NULL, 0, NULL);
+INSERT INTO `kit` (`ID`, `Name`, `Image`, `Repair`, `Genre`, `CheckHours`, `SerialNumber`, `ModelNumber`, `ImageThumb`, `ContractRequired`, `Notes`) VALUES
+(132, 'Nikon D40', NULL, NULL, 'Still Camera', NULL, '3057513', NULL, NULL, 0, 'Nikon D40 with 18-55MM lens'),
+(131, 'Samson C01U 2', 'samson.jpg', NULL, 'Equipment', NULL, 'COUW7I1039', NULL, 'samson-thumb.jpg', 0, 'USB Studio Condenser Microphone C01U'),
+(130, 'Music Star Keyboard', NULL, NULL, 'Equipment', NULL, '4B05655', NULL, NULL, 0, 'keyboard'),
+(129, 'Wacom 4x5-2', NULL, NULL, 'Graphic Tablet', NULL, '5jz036617', NULL, NULL, 0, 'Graphic Tablet'),
+(128, 'Canon ZR850-3', NULL, NULL, 'Video Camera', NULL, '5.82432E+11', NULL, NULL, 0, 'Digital Video Camera / W accessories '),
+(127, 'Sony-Tripod', NULL, NULL, 'Tripod', NULL, '', NULL, NULL, 0, 'Sony Tripod VCT-D680Rm'),
+(126, 'Canon ZR850-2', NULL, NULL, 'Video Camera', NULL, '5.82432E+11', NULL, NULL, 0, 'Digital Video Camera / W accessories '),
+(124, 'Frotto-Tripod', NULL, NULL, 'Tripod', NULL, '', NULL, NULL, 0, 'Video Tripod'),
+(125, 'Sony-Handycam', NULL, NULL, 'Video Camera', NULL, 'SO10202142', NULL, NULL, 0, 'Sony Digital Handycam, 120 Digital zoom'),
+(122, 'Cull Tripod 2', NULL, NULL, 'Tripod', NULL, '', NULL, NULL, 0, 'Photography/Video Tripod'),
+(123, 'Velbon-Tripod', NULL, NULL, 'Tripod', NULL, '', NULL, NULL, 0, 'Video Tripod'),
+(121, 'Cull Tripod 1', NULL, NULL, 'Tripod', NULL, '', NULL, NULL, 0, 'Photography/Video Tripod'),
+(120, 'N5000-Negative', NULL, NULL, 'Scanner', NULL, '', NULL, NULL, 0, 'Slide Adapter'),
+(119, 'N5000-Slides', NULL, NULL, 'Scanner', NULL, '326885', NULL, NULL, 0, 'Slide Adapter'),
+(118, 'Canon GL1 ', NULL, NULL, 'Video Camera', NULL, '2210200331', NULL, NULL, 0, 'Digital Video'),
+(117, 'Canon ZR850-1', NULL, NULL, 'Video Camera', NULL, '5.82322E+11', NULL, NULL, 1, 'Digital Video Camera / W accessories '),
+(116, 'Wacom-3', NULL, NULL, 'Graphic Tablet', NULL, '0CU006728', NULL, NULL, 0, 'Wacom Tablet w/o Accessories'),
+(115, 'Wacom-2', NULL, NULL, 'Graphic Tablet', NULL, '0CU006727', NULL, NULL, 0, 'Wacom Tablet w/o Accessories'),
+(114, 'Wacom-1', NULL, NULL, 'Graphic Tablet', NULL, '0CU006729', NULL, NULL, 0, 'Wacom Tablets w/o Accessories'),
+(113, 'Tascam Studio ', NULL, NULL, 'Equipment', NULL, '110519', NULL, NULL, 0, 'Tascam Audio setupUS-122L interface/ LD-74 condenser microphone.'),
+(112, 'Wacom Tablet', NULL, NULL, 'Graphic Tablet', NULL, '5IZ002606', NULL, NULL, 0, 'Graphic tablet for Adobe with Accessoriesmodel CTE-440'),
+(111, 'Wacom Bamboo 01', NULL, NULL, 'Graphic Tablet', NULL, '8AP003435', NULL, NULL, 0, 'Graphic Tablet/ Bamboo Fun with accessories. 8.5x5.3'),
+(110, 'Samson C01U 1', 'samson.jpg', NULL, 'Equipment', NULL, 'COUW7I1038', NULL, 'samson-thumb.jpg', 0, 'USB Studio Condenser Microphone C01U'),
+(109, 'Nikon Coolpix2', NULL, NULL, 'Still Camera', NULL, '30158470', NULL, NULL, 0, 'www.bhphotovideo.com	B&H# NICPP1KA	Nikon Coolpix P1 B&H Kit   '),
+(108, 'Nikon Coolpix1', NULL, NULL, 'Still Camera', NULL, '30158468', NULL, NULL, 0, 'www.bhphotovideo.com	B&H# NICPP1KA	Nikon Coolpix P1 B&H Kit   '),
+(104, 'Canon GL2', NULL, NULL, 'Video Camera', NULL, '1.32223E+11', NULL, NULL, 0, 'PRICE IS GUESSED AS ON TECH BUDGET.05-06_EDM_BudgetBut camera is not listed as being ordered.B&H.com'),
+(196, 'Nikon D80', NULL, NULL, 'Still Camera', NULL, '3219975', NULL, NULL, 0, 'camera sn# 3219975lens sn#us36185108'),
+(103, 'Nikon-D70-2', 'nikond70.jpg', NULL, 'Still Camera', NULL, '3117224', NULL, 'nikond70-thumb.jpg', 0, 'serial  camera: 3109236serial lens: 3238542received 04/06, EDMorder40706www.cdwg.com		Mfr# 25226'),
+(102, 'Nikon-D70-1', 'nikond70.jpg', NULL, 'Still Camera', NULL, '3109236', NULL, 'nikond70-thumb.jpg', 0, 'Serial # camera: 3109236serial # Lens: 3238542 WHICH BUDGETreceived 04/06,not yet loggedwww.cdwg.com		Mfr# 25226'),
+(135, 'Mamiya 645E-1', 'mamiya.jpg', NULL, 'Still Camera', NULL, 'TC1208', NULL, 'mamiya-thumb.jpg', 0, 'Mamiya 645E Camera with accesories'),
+(136, 'Mamiya 645E-2', 'mamiya.jpg', NULL, 'Still Camera', NULL, 'AA1122', NULL, 'mamiya-thumb.jpg', 0, 'Mamiya 645E Camera with accesories'),
+(137, 'CanonHD 1', 'canonhd.jpg', NULL, 'Video Camera', NULL, '7.72723E+11', NULL, 'canonhd-thumb.jpg', 0, 'Canon HD CMOS Camera with optical Image Stabilizer. '),
+(138, 'CanonHD 2', 'canonhd.jpg', NULL, 'Video Camera', NULL, '7.72723E+11', NULL, 'canonhd-thumb.jpg', 0, 'Canon HD CMOS Camera with optical Image Stabilizer. '),
+(139, 'Pears-Tripod-1', NULL, NULL, 'Tripod', NULL, '', NULL, NULL, 0, 'Pearstone Video Tripod'),
+(140, 'Pears-Tripod-2', NULL, NULL, 'Tripod', NULL, '', NULL, NULL, 0, 'Pearstone Video Tripod'),
+(141, 'Aiptek DigHD 1', 'aiptek.jpg', NULL, 'Video Camera', NULL, 'BRU80007638', NULL, 'aiptek-thumb.jpg', 0, 'Aiptek Digital HD Video Camera with 2GB Internal Memory'),
+(142, 'Audio-Tech Mic 1', NULL, NULL, 'Equipment', NULL, '', NULL, NULL, 0, 'Audio Tech Stereo Microphone with Hot Shoe mount.'),
+(143, 'Stabilizer-1', NULL, NULL, 'Tripod', NULL, '', NULL, NULL, 0, 'Glidecam HD-1000 with central support'),
+(144, 'Stabilizer-2', NULL, NULL, 'Tripod', NULL, '', NULL, NULL, 0, 'Glidecam HD-1000 with central support'),
+(146, 'Aiptek DigHD 2', 'aiptek.jpg', NULL, 'Video Camera', NULL, 'BRU80007354', NULL, 'aiptek-thumb.jpg', 0, 'Aiptek Digital HD Video Camera with 2GB Internal Memory'),
+(147, 'Audio-Tech Mic 2', NULL, NULL, 'Equipment', NULL, '', NULL, NULL, 0, 'Audio Tech Stereo Microphone with Hot Shoe mount.'),
+(148, 'Audio-Tech Mic 3', NULL, NULL, 'Equipment', NULL, '', NULL, NULL, 0, 'Audio Tech Stereo Microphone with Hot Shoe mount.'),
+(149, 'Aiptek DigHD 3', 'aiptek.jpg', NULL, 'Video Camera', NULL, 'BRU80007406', NULL, 'aiptek-thumb.jpg', 0, 'Aiptek Digital HD Video Camera with 2GB Internal Memory'),
+(150, 'Aiptek DigHD 4', 'aiptek.jpg', NULL, 'Video Camera', NULL, 'BRU80007539', NULL, 'aiptek-thumb.jpg', 0, 'Aiptek Digital HD Video Camera with 2GB Internal Memory'),
+(151, 'Aiptek DigHD 5', 'aiptek.jpg', NULL, 'Video Camera', NULL, 'BRU80007750', NULL, 'aiptek-thumb.jpg', 0, 'Aiptek Digital HD Video Camera with 2GB Internal Memory'),
+(152, 'Pears-Tripod-3', NULL, NULL, 'Tripod', NULL, '', NULL, NULL, 0, 'Pearstone Video Tripod'),
+(153, 'Pears-Tripod-4', NULL, NULL, 'Tripod', NULL, '', NULL, NULL, 0, 'Pearstone Video Tripod'),
+(154, 'Nikon-D70-3', 'nikond70.jpg', NULL, 'Still Camera', NULL, '3062523', NULL, 'nikond70-thumb.jpg', 0, 'serial  camera: 3062523serial lens: 3238542received 04/06, EDMorder40706www.cdwg.com		Mfr# 25226'),
+(155, 'Sony Cybershot 1', NULL, NULL, 'Still Camera', NULL, '392956', NULL, NULL, 0, ''),
+(156, 'Sony Cybershot 2', NULL, NULL, 'Still Camera', NULL, '415847', NULL, NULL, 0, ''),
+(169, 'Nikon D90', NULL, NULL, 'Still Camera', NULL, '3219975', NULL, NULL, 0, 'camera sn# 3219975lens sn#us36185108'),
+(170, 'Nikon SB-900', 'nikonflash.jpg', NULL, 'Equipment', NULL, '2239987', NULL, 'nikonflash.jpg', 0, ''),
+(171, 'Light Meter 1', 'lightmeter.jpg', NULL, 'Equipment', NULL, 'jh12-114252', NULL, 'lightmeter-thumb.jpg', 0, ''),
+(172, 'Light Meter 2', 'lightmeter.jpg', NULL, 'Equipment', NULL, 'jh12-113281', NULL, 'lightmeter-thumb.jpg', 0, ''),
+(173, 'Light Meter 3', 'lightmeter.jpg', NULL, 'Equipment', NULL, 'jh12-113607', NULL, 'lightmeter-thumb.jpg', 0, ''),
+(174, 'View Camera 1', 'toyo.gif', NULL, 'Still Camera', NULL, '126-0002450', NULL, 'toyo.gif', 0, ''),
+(175, 'View Camera 2', 'toyo.gif', NULL, 'Still Camera', NULL, '', NULL, 'toyo.gif', 0, ''),
+(176, 'View Camera 3', 'toyo.gif', NULL, 'Still Camera', NULL, '', NULL, 'toyo.gif', 0, ''),
+(177, 'View Camera 4', 'toyo.gif', NULL, 'Still Camera', NULL, '', NULL, 'toyo.gif', 0, 'Speed Graphic Camera - owned by Patterson Beckwithschool''s lens'),
+(178, 'Travel Lights', NULL, NULL, 'Equipment', NULL, '', NULL, NULL, 0, ''),
+(179, 'Bogen Tripod 3', NULL, NULL, 'Equipment', NULL, '', NULL, NULL, 0, ''),
+(180, 'Bogen Tripod 2', NULL, NULL, 'Equipment', NULL, '', NULL, NULL, 0, ''),
+(181, 'Bogen Tripod 4', NULL, NULL, 'Equipment', NULL, '', NULL, NULL, 0, ''),
+(182, 'Bogen Tripod 1', NULL, NULL, 'Equipment', NULL, '', NULL, NULL, 0, ''),
+(183, 'Bogen Tripod 5', NULL, NULL, 'Equipment', NULL, '', NULL, NULL, 0, ''),
+(184, 'Calumet Tripod', NULL, NULL, 'Equipment', NULL, '', NULL, NULL, 0, ''),
+(185, 'CanonHD 3', 'canonhd.jpg', NULL, 'Video Camera', NULL, '', NULL, 'canonhd-thumb.jpg', 0, 'Canon HD CMOS Camera with optical image stabilization'),
+(186, 'CanonHD 4', 'canonhd.jpg', NULL, 'Video Camera', NULL, '', NULL, 'canonhd-thumb.jpg', 0, 'Canon HD CMOS Camera with optical Image Stabilization'),
+(187, 'CanonHD 5', 'canonhd.jpg', NULL, 'Video Camera', NULL, '', NULL, 'canonhd-thumb.jpg', 0, 'Canon HD CMOS Camera with optical image stabalizer '),
+(188, 'Vado HD 1', 'Vado.jpg', NULL, 'Video Camera', NULL, '', NULL, 'Vado-thumb.jpg', 0, ''),
+(189, 'CanonHD 6', 'canonhd.jpg', NULL, 'Video Camera', NULL, '42890565589', NULL, 'canonhd-thumb.jpg', 0, 'Canon Hd CMOS Camera with optical image stablizer'),
+(190, 'CanonHD 7', 'canonhd.jpg', NULL, 'Video Camera', NULL, '42890565517', NULL, 'canonhd-thumb.jpg', 0, 'Canon HD CMOS Camera with optical image stabalizer '),
+(191, 'Vado HD 2', 'Vado.jpg', NULL, 'Video Camera', NULL, '', NULL, 'Vado-thumb.jpg', 0, ''),
+(192, 'Vado HD 3', 'Vado.jpg', NULL, 'Video Camera', NULL, '', NULL, 'Vado-thumb.jpg', 0, ''),
+(193, 'Vado HD 4', 'Vado.jpg', NULL, 'Video Camera', NULL, '', NULL, 'Vado-thumb.jpg', 0, ''),
+(194, 'Vado HD 5', 'Vado.jpg', NULL, 'Video Camera', NULL, '', NULL, 'Vado-thumb.jpg', 0, ''),
+(195, 'Vado HD 6', 'Vado.jpg', NULL, 'Video Camera', NULL, '', NULL, 'Vado-thumb.jpg', 0, ''),
+(1, 'Test Kit', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `kit_accessorytype`
--- 
+--
 
-CREATE TABLE `kit_accessorytype` (
-  `ID` int(16) NOT NULL auto_increment,
-  `KitID` int(16) NOT NULL default '0',
-  `AccessorytypeID` int(16) NOT NULL default '0',
-  PRIMARY KEY  (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=709 ;
+CREATE TABLE IF NOT EXISTS `kit_accessorytype` (
+  `ID` int(16) NOT NULL AUTO_INCREMENT,
+  `KitID` int(16) NOT NULL DEFAULT '0',
+  `AccessorytypeID` int(16) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=860 ;
 
--- 
+--
 -- Dumping data for table `kit_accessorytype`
--- 
+--
 
-INSERT INTO `kit_accessorytype` (`ID`, `KitID`, `AccessorytypeID`) VALUES (593, 76, 90),
+INSERT INTO `kit_accessorytype` (`ID`, `KitID`, `AccessorytypeID`) VALUES
+(593, 76, 90),
 (592, 76, 89),
 (591, 76, 88),
 (590, 76, 88),
@@ -519,93 +550,332 @@ INSERT INTO `kit_accessorytype` (`ID`, `KitID`, `AccessorytypeID`) VALUES (593, 
 (701, 100, 61),
 (702, 100, 91),
 (703, 101, 61),
-(704, 101, 91);
+(704, 174, 110),
+(709, 174, 111),
+(710, 174, 112),
+(750, 177, 112),
+(749, 177, 112),
+(748, 176, 112),
+(747, 176, 112),
+(746, 176, 112),
+(745, 176, 112),
+(744, 176, 112),
+(743, 176, 111),
+(742, 176, 110),
+(741, 175, 110),
+(740, 175, 111),
+(739, 175, 112),
+(738, 175, 112),
+(737, 175, 112),
+(736, 175, 112),
+(735, 175, 112),
+(734, 174, 112),
+(733, 174, 112),
+(732, 174, 112),
+(731, 174, 112),
+(751, 177, 112),
+(752, 177, 112),
+(753, 177, 112),
+(754, 177, 111),
+(755, 177, 110),
+(756, 177, 113),
+(757, 176, 113),
+(758, 175, 113),
+(759, 174, 113),
+(760, 141, 113),
+(761, 141, 76),
+(762, 141, 61),
+(763, 146, 61),
+(764, 146, 76),
+(765, 146, 113),
+(766, 149, 113),
+(767, 149, 76),
+(768, 149, 61),
+(769, 150, 61),
+(770, 150, 76),
+(771, 150, 113),
+(772, 151, 113),
+(773, 151, 76),
+(774, 151, 61),
+(775, 137, 60),
+(776, 137, 60),
+(777, 138, 60),
+(778, 138, 60),
+(779, 185, 60),
+(780, 185, 60),
+(781, 186, 60),
+(782, 186, 60),
+(783, 187, 60),
+(784, 187, 60),
+(785, 189, 60),
+(786, 189, 60),
+(787, 190, 60),
+(788, 190, 60),
+(789, 190, 61),
+(790, 189, 61),
+(791, 187, 61),
+(792, 186, 61),
+(793, 185, 61),
+(794, 138, 61),
+(795, 137, 61),
+(796, 137, 76),
+(797, 138, 76),
+(798, 185, 76),
+(799, 186, 76),
+(800, 187, 76),
+(801, 189, 76),
+(802, 190, 76),
+(803, 190, 85),
+(804, 189, 85),
+(818, 188, 113),
+(806, 187, 85),
+(807, 186, 85),
+(808, 185, 85),
+(809, 138, 85),
+(810, 137, 85),
+(811, 137, 113),
+(812, 138, 113),
+(813, 185, 113),
+(814, 186, 113),
+(815, 187, 113),
+(816, 189, 113),
+(817, 190, 113),
+(819, 188, 114),
+(820, 188, 115),
+(821, 191, 115),
+(822, 191, 114),
+(823, 191, 113),
+(824, 192, 113),
+(825, 192, 114),
+(826, 192, 115),
+(827, 193, 115),
+(828, 193, 114),
+(829, 193, 113),
+(830, 194, 113),
+(831, 194, 114),
+(832, 194, 115),
+(833, 195, 115),
+(834, 195, 114),
+(835, 195, 113),
+(836, 171, 113),
+(837, 172, 113),
+(838, 173, 113),
+(839, 135, 116),
+(840, 135, 117),
+(841, 135, 118),
+(842, 136, 118),
+(843, 136, 117),
+(844, 136, 116),
+(845, 102, 60),
+(846, 102, 61),
+(847, 102, 76),
+(848, 102, 119),
+(849, 102, 120),
+(850, 103, 60),
+(851, 103, 61),
+(852, 103, 76),
+(853, 103, 119),
+(854, 103, 120),
+(855, 154, 60),
+(856, 154, 61),
+(857, 154, 76),
+(858, 154, 119),
+(859, 154, 120);
 
 -- --------------------------------------------------------
 
--- 
+--
 -- Table structure for table `kit_class`
--- 
+--
 
-CREATE TABLE `kit_class` (
-  `ID` int(16) NOT NULL auto_increment,
-  `KitID` int(16) NOT NULL default '0',
-  `ClassID` int(16) NOT NULL default '0',
-  `CheckHours` int(16) NOT NULL default '0',
-  `OverNightAllowed` int(1) NOT NULL default '0',
-  PRIMARY KEY  (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=518 ;
+CREATE TABLE IF NOT EXISTS `kit_class` (
+  `ID` int(16) NOT NULL AUTO_INCREMENT,
+  `KitID` int(16) NOT NULL DEFAULT '0',
+  `ClassID` int(16) NOT NULL DEFAULT '0',
+  `CheckHours` int(16) NOT NULL DEFAULT '0',
+  `OverNightAllowed` int(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=607 ;
 
--- 
+--
 -- Dumping data for table `kit_class`
--- 
+--
 
-INSERT INTO `kit_class` (`ID`, `KitID`, `ClassID`, `CheckHours`, `OverNightAllowed`) VALUES (384, 71, 7, 24, 1),
-(1, 2, 1, 24, 1),
+INSERT INTO `kit_class` (`ID`, `KitID`, `ClassID`, `CheckHours`, `OverNightAllowed`) VALUES
+(384, 71, 7, 24, 1),
+(1, 2, 16, 24, 1),
 (2, 4, 1, 24, 1),
 (3, 5, 1, 24, 1),
 (4, 7, 1, 24, 1),
 (5, 8, 1, 24, 1),
-(6, 9, 1, 24, 1);
+(6, 9, 1, 24, 1),
+(518, 141, 16, 48, 2),
+(519, 146, 16, 48, 2),
+(520, 149, 16, 48, 2),
+(521, 150, 16, 48, 2),
+(522, 151, 16, 48, 2),
+(523, 142, 16, 48, 2),
+(524, 147, 16, 48, 2),
+(525, 148, 16, 48, 2),
+(526, 182, 17, 48, 2),
+(527, 180, 17, 48, 2),
+(528, 179, 17, 48, 2),
+(529, 181, 17, 48, 2),
+(530, 183, 17, 48, 2),
+(531, 184, 17, 48, 2),
+(532, 118, 16, 48, 2),
+(533, 104, 16, 48, 2),
+(534, 117, 16, 48, 2),
+(535, 126, 16, 48, 2),
+(536, 128, 16, 48, 2),
+(537, 137, 16, 48, 2),
+(538, 138, 16, 48, 2),
+(539, 185, 16, 48, 2),
+(540, 186, 16, 48, 2),
+(541, 187, 16, 48, 2),
+(542, 189, 16, 48, 2),
+(543, 190, 16, 48, 2),
+(544, 121, 16, 48, 2),
+(545, 122, 16, 48, 2),
+(546, 124, 16, 48, 2),
+(547, 171, 17, 48, 2),
+(548, 172, 17, 48, 2),
+(549, 173, 17, 48, 2),
+(550, 135, 17, 48, 2),
+(551, 136, 17, 48, 2),
+(552, 108, 16, 48, 2),
+(553, 109, 16, 48, 2),
+(554, 132, 16, 48, 2),
+(555, 169, 17, 48, 2),
+(556, 170, 17, 48, 2),
+(557, 102, 16, 48, 2),
+(558, 103, 16, 48, 2),
+(559, 154, 16, 48, 2),
+(560, 140, 16, 48, 2),
+(561, 139, 16, 48, 2),
+(562, 152, 16, 48, 2),
+(563, 153, 16, 48, 2),
+(564, 110, 16, 48, 2),
+(565, 131, 16, 48, 2),
+(566, 155, 16, 48, 2),
+(567, 156, 16, 48, 2),
+(568, 125, 16, 48, 2),
+(569, 127, 16, 48, 2),
+(570, 143, 16, 48, 2),
+(571, 144, 16, 48, 2),
+(572, 113, 16, 48, 2),
+(573, 178, 17, 48, 2),
+(574, 188, 16, 48, 2),
+(575, 191, 16, 48, 2),
+(576, 192, 16, 48, 2),
+(577, 193, 16, 48, 2),
+(578, 193, 16, 48, 2),
+(579, 194, 16, 48, 2),
+(580, 195, 16, 48, 2),
+(581, 123, 16, 48, 2),
+(582, 174, 17, 48, 2),
+(583, 175, 17, 48, 2),
+(584, 176, 17, 48, 2),
+(585, 177, 17, 48, 2),
+(586, 129, 16, 48, 2),
+(587, 111, 16, 48, 2),
+(588, 162, 16, 48, 2),
+(589, 163, 16, 48, 2),
+(590, 164, 16, 48, 2),
+(591, 165, 16, 48, 2),
+(592, 166, 16, 48, 2),
+(593, 167, 16, 48, 2),
+(594, 133, 16, 48, 2),
+(595, 134, 16, 48, 2),
+(596, 157, 16, 48, 2),
+(597, 158, 16, 48, 2),
+(598, 168, 16, 48, 2),
+(599, 159, 16, 48, 2),
+(600, 160, 16, 48, 2),
+(601, 161, 16, 48, 2),
+(602, 112, 16, 48, 2),
+(603, 114, 16, 48, 2),
+(604, 115, 16, 48, 2),
+(605, 116, 16, 48, 2),
+(606, 1, 1, 0, 0);
 
 -- --------------------------------------------------------
 
--- 
--- Table structure for table `student_class`
--- 
-
-CREATE TABLE `student_class` (
-  `ID` int(16) NOT NULL auto_increment,
-  `StudentID` int(16) NOT NULL default '0',
-  `ClassID` int(16) NOT NULL default '0',
-  PRIMARY KEY  (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
-
--- 
--- Dumping data for table `student_class`
--- 
-
-INSERT INTO `student_class` (`ID`, `StudentID`, `ClassID`) VALUES (1, 1234, 1);
-
--- --------------------------------------------------------
-
--- 
+--
 -- Table structure for table `students`
--- 
+--
 
-CREATE TABLE `students` (
-  `ID` int(11) NOT NULL auto_increment,
-  `StudentID` varchar(255) NOT NULL default '',
-  `FirstName` varchar(255) NOT NULL default '',
-  `LastName` varchar(255) NOT NULL default '',
-  `Email` varchar(255) default NULL,
-  `Phone` varchar(255) default NULL,
-  `ContractSigned` int(1) default NULL,
-  UNIQUE KEY `ID` (`ID`),
-  UNIQUE KEY `ID_2` (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+CREATE TABLE IF NOT EXISTS `students` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `StudentID` varchar(255) NOT NULL DEFAULT '',
+  `FirstName` varchar(255) NOT NULL DEFAULT '',
+  `LastName` varchar(255) NOT NULL DEFAULT '',
+  `Email` varchar(255) DEFAULT NULL,
+  `Phone` varchar(255) DEFAULT NULL,
+  `ContractSigned` int(1) DEFAULT NULL,
+  UNIQUE KEY `ID` (`ID`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
 
--- 
+--
 -- Dumping data for table `students`
--- 
+--
 
-INSERT INTO `students` (`ID`, `StudentID`, `FirstName`, `LastName`, `Email`, `ContractSigned`) VALUES (1, '1234', 'John', 'Smith', 'jsmith@email.edu', '');
+INSERT INTO `students` (`ID`, `StudentID`, `FirstName`, `LastName`, `Email`, `Phone`, `ContractSigned`) VALUES
+(1, '29016001661241', 'Wesley', 'Turner', 'wesswei@hotmail.com', '3472846408', 1),
+(2, '2901600121212', 'Bob', 'Dole', 'meyer@bob.com', '1234567890', 1),
+(7, '29016001346792', 'Wendell', 'Freeman', 'skiter@gmail.com', '2126502134', 1),
+(10, '29016001234567', 'Yelsew', 'Renrut', 'yrenrut@gmail.com', '1234567890', 1),
+(11, '29016001234567', 'Robert', 'Seagram', 'rseagram@gmail.com', '5551234657', 1),
+(12, '29016001346798', 'Yvegev', 'Horace', 'horat@amail.com', '5552127576', 1),
+(15, '29016001234567', 'Wes', 'Lee', 'leewes@hotmail.com', '9876543210', NULL);
 
 -- --------------------------------------------------------
 
--- 
+--
+-- Table structure for table `student_class`
+--
+
+CREATE TABLE IF NOT EXISTS `student_class` (
+  `ID` int(16) NOT NULL AUTO_INCREMENT,
+  `StudentID` varchar(18) NOT NULL DEFAULT '0',
+  `ClassID` int(16) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`ID`),
+  KEY `ID` (`ID`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=32 ;
+
+--
+-- Dumping data for table `student_class`
+--
+
+INSERT INTO `student_class` (`ID`, `StudentID`, `ClassID`) VALUES
+(2, '2901600121212', 16),
+(22, '2901600313259', 16),
+(29, '29016001346798', 1),
+(8, '2901600313257', 1),
+(9, '2901600313257', 16),
+(31, '29016001234567', 16),
+(30, '29016002123634', 1),
+(26, '290160013456789', 16),
+(28, '29016001346792', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
--- 
+--
 
-CREATE TABLE `users` (
-  `ID` int(11) NOT NULL auto_increment,
-  `Username` varchar(255) NOT NULL default '',
-  `Password` varchar(255) NOT NULL default '',
-  PRIMARY KEY  (`ID`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+CREATE TABLE IF NOT EXISTS `users` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `Username` varchar(255) NOT NULL DEFAULT '',
+  `Password` varchar(255) NOT NULL DEFAULT '',
+  `Type` varchar(8) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
--- 
+--
 -- Dumping data for table `users`
--- 
+--
 
-INSERT INTO `users` (`ID`, `Username`, `Password`) VALUES (1, 'checkoutguy', 'password');
+INSERT INTO `users` (`ID`, `Username`, `Password`, `Type`) VALUES
+(1, 'labtech', 'challengerdeep', 'LabMon'),
+(5, 'admin', 'u81i812', 'Admin');
