@@ -21,10 +21,17 @@ $SelectedID = $_REQUEST['studentList'];
 
 <script type="text/javascript">
 
+function showResponse(req){
+	setTimeout('refreshPage();',1000);
+}
+function refreshPage(){
+	$('SelectedID').value = "";
+	var location = "admin.php?page=users";
+	window.location.href = location;
+}
 function submitForm(){
 	$('SelectedID').value = $('studentList').value;
 	$('form1').submit();
-//	sendRequest();
 }
 function showAddForm(){
 	$('SelectedID').value = 0;
@@ -48,9 +55,8 @@ function Add() {
 		parameters: $('form3').serialize(true),
 		onComplete: showResponse 
 		});
-//	alert('Send Called');
 	$('alert').style.visibility = "visible";
-	$('alert').innerHTML = "Record Added";
+	$('alert').innerHTML = "User Added";
 	}
 function Modify() {
 //	new Ajax.Request("modify-user.php", 
@@ -70,19 +76,10 @@ function delEntry(){
 		parameters: $('form2').serialize(true),
 		onComplete: showResponse 
 		});
-//	alert('Send Called');
 	$('alert').style.visibility = "visible";
 	$('alert').innerHTML = "User Removed";
 	$('form2').submit();
 	}
-function showResponse(req){
-	var t=setTimeout(refreshPage(),5000);
-}
-function refreshPage(){
-	$('SelectedID').value = "";
-	var location = "admin.php?page=users";
-	window.location.href = location;
-}
 </script>		
 <form id="form1" name="form1" action="admin.php?page=users" method="post">
 	<p><strong style="line-height: 30px;">Username: </strong>

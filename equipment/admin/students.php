@@ -23,9 +23,15 @@ if (isset($StudentID)) {
 ?>
 
 <script type="text/javascript">
-
+function showResponse(req){
+	setTimeout('refreshPage();',1000);
+}
+function refreshPage(){
+	$('filter').value = "no";
+	var location = "admin.php?page=students"
+	window.location.href = location;
+}
 function TxtBoxStart(){
-//	alert('TextBox Called');
 	$('txtFilter').disabled = false;
 	$('txtFilter').select();
 	$('btn').disabled = false;
@@ -35,16 +41,12 @@ function EnableButton(){
 }
 function ChangeValue(){
 	$('filter').value = "yes";
-//	alert('Submit Called');
 	$('form1').submit();
 }
 function submitForm(){
-//	alert('Submit Called');
-//	$('btn2').disabled = false;
 	$('SelectedID').value = $('studentList').value;
 	$('filter').value = "yesyes";
 	$('form1').submit();
-//	sendRequest();
 }
 function showAddForm(){
 	$('filter').value = "add";
@@ -52,12 +54,10 @@ function showAddForm(){
 }
 function disableEnterKey(e){
      var key;
-
      if(window.event)
           key = window.event.keyCode;     //IE
      else
           key = e.which;     //firefox
-
      if(key == 13)
           return false;
      else
@@ -69,7 +69,6 @@ function isNumeric(sText)
    var IsNumber=true;
    var Char;
 
- 
    for (i = 0; i < sText.length && IsNumber == true; i++) 
       { 
       Char = sText.charAt(i); 
@@ -160,9 +159,8 @@ function Add() {
 		parameters: $('form3').serialize(true),
 		onComplete: showResponse 
 		});
-//	alert('Send Called');
 	$('alert').style.visibility = "visible";
-	$('alert').innerHTML = "Record Added";
+	$('alert').innerHTML = "Student Record Added";
 	setTimeout('window.location.href = \"../allstudents.php\";',1000);
 	}
 }
@@ -173,9 +171,8 @@ function Modify() {
 		parameters: $('form2').serialize(true),
 		onComplete: showResponse 
 		});
-//	alert('Send Called');
 	$('alert').style.visibility = "visible";
-	$('alert').innerHTML = "Record Modified";
+	$('alert').innerHTML = "Student Record Modified";
 	}
 function delEntry(){
 	new Ajax.Request("remove-student.php", 
@@ -184,19 +181,10 @@ function delEntry(){
 		parameters: $('form2').serialize(true),
 		onComplete: showResponse 
 		});
-//	alert('Send Called');
 	$('alert').style.visibility = "visible";
-	$('alert').innerHTML = "Student Removed";
+	$('alert').innerHTML = "Student Record Removed";
 	$('form2').submit();
 	}
-function showResponse(req){
-	setTimeout('refreshPage()',8000);
-}
-function refreshPage(){
-	$('filter').value = "no";
-	var location = "admin.php?page=students"
-	window.location.href = location;
-}
 </script>		
 
 <form id="form1" name="form1" action="admin.php?page=students" method="post">
