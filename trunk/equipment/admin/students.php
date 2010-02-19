@@ -284,11 +284,11 @@ if ($filter == "yesyes") {
 <br />
 <br />
 <a href="#" style="float: right; margin-right: 35px;" onClick="Modify()">
-	<img src="<?php echo $root; ?>/images/modify-button.png" border="0" title="Modify" /></a>
+	<img src="/<?php echo $root; ?>/images/modify-button.png" border="0" title="Modify" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
-	<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
+	<img src="/<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="answer=confirm('Do you wish to remove <?php echo $row_Students["FirstName"]; ?> <?php echo $row_Students["LastName"]; ?> from the student records?');if(answer!=0){delEntry();}else{alert('Canceled')}">
-	<img src="<?php echo $root; ?>/images/remove-button.png" border="0" title="Remove" /></a>
+	<img src="/<?php echo $root; ?>/images/remove-button.png" border="0" title="Remove" /></a>
 <input id="pID" name="pID" type="hidden" value="<?php echo $row_Students['ID']; ?>" />
 </form>
 </div>
@@ -310,16 +310,16 @@ if ($filter == "add") {
 <br />
 <br />
 <a href="#" style="float: right; margin-right: 35px;" onClick="Add()">
-	<img src="<?php echo $root; ?>/images/add-button.png" border="0" title="Add" /></a>
+	<img src="/<?php echo $root; ?>/images/add-button.png" border="0" title="Add" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
-	<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
+	<img src="/<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 </form>
 </div>
 <?php
 }}
 ?>
 
-<div style="position: absolute; bottom: 10px; left: 20px;"><a href="#" title="Add Student" onClick="showAddForm();"><img src="<?php echo $root; ?>/images/add-student-button.png" border="0" /></a></div>
+<div style="position: absolute; bottom: 10px; left: 20px;"><a href="#" title="Add Student" onClick="showAddForm();"><img src="/<?php echo $root; ?>/images/add-student-button.png" border="0" /></a></div>
 <?php
 mysql_free_result($Students);
 ?>
