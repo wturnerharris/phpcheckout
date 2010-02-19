@@ -207,7 +207,7 @@ $ServerCheckHours = 0;
 			$Day = ($Day + 2);
 			echo "<div id='alert' style='visibility: visible;'>Not open on Sunday, return on Tuesday...</div>";
 			echo "<script type='text/javascript'>";
-			echo "setTimeout('divClose();'),3000);";
+			echo "setTimeout('divClose();',3000);";
 			echo "</script>"; 
 		}
 		
