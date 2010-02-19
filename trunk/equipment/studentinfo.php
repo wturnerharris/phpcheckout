@@ -62,8 +62,9 @@ if($row_Recordset1['StudentID']!=""){
 ?>
 Name: <?php echo $row_Recordset1['FirstName']; ?> <?php echo $row_Recordset1['LastName']; ?><br />
 E-mail: <a href="mailto:<?php echo $row_Recordset1['Email']; ?>"><?php echo $row_Recordset1['Email']; ?></a><br />
-Phone: <?php echo $row_Recordset1['Phone']; ?> <a href="studentinfo.php?StudentID=<?php echo $row_Recordset1['StudentID']; ?>" target="_parent">LDAP Lookup</a><br />
+Phone: <?php echo $row_Recordset1['Phone']; ?><br /> 
 Student ID: <?php echo $row_Recordset1['StudentID']; ?><br />
+LDAP: <a href="studentinfo.php?StudentID=<?php echo $row_Recordset1['StudentID']; ?>" target="_parent">Lookup Entry</a><br />
 <?php 
 
 } else {
