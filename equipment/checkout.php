@@ -203,11 +203,11 @@ $ServerCheckHours = 0;
 	
 	//IF NOT OPEN weekends
 	if(!$weekends) {
-		if (date("D", strtotime($returndateSQL)) == "Sat") {
+		if (date("D", strtotime($returndateSQL)) == "Sun") {
 			$Day = ($Day + 2);
 			echo "<div id='alert' style='visibility: visible;'>Not open on Sunday, return on Tuesday...</div>";
 			echo "<script type='text/javascript'>";
-			echo "setTimeout(\"divClose();\"),3000);";
+			echo "setTimeout('divClose();'),3000);";
 			echo "</script>"; 
 		}
 		
@@ -224,7 +224,7 @@ $ServerCheckHours = 0;
 			$Day = ($Day + 2);
 			echo "<div id='alert'>Not open on Sunday, return on Tuesday...</div>";
 			echo "<script type='text/javascript'>";
-			echo "setTimeout('divClose();'),3000);";
+			echo "setTimeout('divClose();',3000);";
 			echo "</script>"; 
 		}
 		
