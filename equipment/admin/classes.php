@@ -141,7 +141,7 @@ do {
 	}
 	?>
 	<a id="remClass" href="#" onClick="answer=confirm('Remove this class for this student?');if(answer!=0){$('rmClassID').value=<? echo $row_Recordset2['scID']; ?>;delEntry();}else{alert('Canceled')}" >
-	<img id="remClass" src="<?php echo $root; ?>/images/remove_icn.png" border="0" title="Remove Class" /></a>
+	<img id="remClass" src="/<?php echo $root; ?>/images/remove_icn.png" border="0" title="Remove Class" /></a>
 	<? echo $row_Recordset2['Name']; ?><br/> 
 	<?php
 	}
@@ -176,7 +176,7 @@ echo "<FONT COLOR='red'><br>This Student is NOT registered to checkout.</FONT><b
 <br />
 <br />
 <a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
-	<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
+	<img src="/<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 </div>
 <?php
 //****end if for #showClass
