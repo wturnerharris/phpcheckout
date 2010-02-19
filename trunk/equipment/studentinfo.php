@@ -8,7 +8,7 @@
 if (empty($_REQUEST['StudentID'])) {
 ?>
 <? include('includes/heading.html'); ?>  
-<meta http-equiv="refresh" content="5;URL=studentid.php">
+<meta http-equiv="refresh" content="60;URL=studentid.php">
 </head>
 <body>
 <p><h3 class="alert">No student ID selected. Enter a valid Student ID.</h3></p>
@@ -58,7 +58,7 @@ echo "<h1><strong><font color='#FF0000'>STUDENT OWES FINES!!!</font></strong></h
 <center><h1>Student Information</h1></center> 
 
 <?
-if($row_Recordset1['FirstName']!=""){
+if($row_Recordset1['StudentID']!=""){
 ?>
 Name: <?php echo $row_Recordset1['FirstName']; ?> <?php echo $row_Recordset1['LastName']; ?><br />
 E-mail: <a href="mailto:<?php echo $row_Recordset1['Email']; ?>"><?php echo $row_Recordset1['Email']; ?></a><br />
@@ -69,6 +69,7 @@ Student ID: <?php echo $row_Recordset1['StudentID']; ?><br />
 } else {
 echo "<FONT COLOR='red'>There is no student with ID number $StudentID in the system.</FONT><br>";
 }
+
 
 
 // *******************
@@ -145,6 +146,10 @@ do {
 	}
 	echo $row_Recordset2['Name'] . "<br>"; 
  } while ($row_Recordset2 = mysql_fetch_assoc($Recordset2));
+ 
+ //***********added to redirect for additional classes********
+echo "<br><strong>To add or remove classes for this Student, click <a href=\"admin.php?page=classes&StudentID=$StudentID\">here</a>.";
+ //end addition
 
 mysql_select_db($database_equip, $equip);
 $query_Recordset3 = "SELECT kit.ID AS KitID, kit.Name, kit.ContractRequired, kit.Repair FROM kit_class INNER JOIN kit ON kit_class.KitID = kit.ID WHERE kit_class.ClassID = $ClassIDSQL GROUP BY KitID ORDER BY Name ASC";
@@ -155,12 +160,14 @@ $totalRows_Recordset3 = mysql_num_rows($Recordset3);
  
 } else {
 
-echo "<FONT COLOR='red'>This Student is NOT registered for any classes with equipment in the checkout system.</FONT><br>";
+echo "<br/><FONT COLOR='red'>Either this Student is NOT registered in the checkout system or needs to be added to a class.</FONT><br>";
+
+if($row_Recordset1['StudentID']!=""){
 
 // ADD STUDENT TO A CLASS
 $classes = mysql_query("SELECT * FROM class") or die(mysql_error());  ?>
 
-<form name="form" action="addclass.php" method="post">
+<form name="form" action="add-class.php" method="post">
 <select name="class" size="1" id="class">
 <? while($option = mysql_fetch_array( $classes )) {
 
@@ -169,11 +176,11 @@ echo "<option value='$option[Name]'>$option[Name]</option>";
 } ?>
 </select>
 <input name="StudentID" type="hidden" value="<?php echo $row_Recordset1['StudentID']; ?>">
-<input type="submit" name="Submit" value="Submit">
+<input type="submit" name="Submit" value="Add Class">
 </form> 
 
 <?
-
+}
 $NoClasses = 1;
 //Additional Contract Required?
 

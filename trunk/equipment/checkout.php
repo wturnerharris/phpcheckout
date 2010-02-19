@@ -39,6 +39,50 @@ if ($row_Recordset1['ContractRequired'] == 1) {
 echo("<b>Student must sign an individual contract for this kit.</b>");
 }
 ?>
+<script type="text/javascript">
+function modDay0() 
+{
+var date = $("OriginalDate").value;
+var begin = date.substr(0,8);
+var day = date.substr(8,2);
+var end = date.substr(10,9);
+$("ReturnDate").value = $("OriginalDate").value;
+var newDay = $('plusNone').value;
+var Date1 = $('changeDate').firstChild.nodeValue;
+var Date2 = Date1.substr(0,Date1.length-2) +  day;
+var newDate = newDay + Date2.substr(3,Date1.length);
+$('changeDate').firstChild.nodeValue = newDate;
+
+}
+function modDay1() 
+{
+var date = $("OriginalDate").value;
+var begin = date.substr(0,8);
+var day = date.substr(8,2);
+var addDay = parseFloat(day)+ 1;
+var end = date.substr(10,9);
+$("ReturnDate").value = begin+addDay+end;
+var newDay = $('plusOne').value;
+var Date1 = $('changeDate').firstChild.nodeValue;
+var Date2 = Date1.substr(0,Date1.length-2) +  addDay;
+var newDate = newDay + Date2.substr(3,Date1.length);
+$('changeDate').firstChild.nodeValue = newDate;
+}
+function modDay2() 
+{
+var date = $("OriginalDate").value;
+var begin = date.substr(0,8);
+var day = date.substr(8,2);
+var addDay = parseFloat(day)+ 2;
+var end = date.substr(10,9);
+$("ReturnDate").value = begin+addDay+end;
+var newDay = $('plusTwo').value;
+var Date1 = $('changeDate').firstChild.nodeValue;
+var Date2 = Date1.substr(0,Date1.length-2) +  addDay;
+var newDate = newDay + Date2.substr(3,Date1.length);
+$('changeDate').firstChild.nodeValue = newDate;
+}
+</script>
 <P>
 <form name="frmCheckOut" action="checkoutaction.php" method="post">
 
@@ -49,12 +93,14 @@ echo("<b>Student must sign an individual contract for this kit.</b>");
 
 
 <P>
-<strong><?php echo $row_Recordset3['FirstName']; ?> <?php echo $row_Recordset3['LastName']; ?></strong> is
- checking out a <strong><?php echo $row_Recordset1['Name']; ?></strong><br>
- Checked Out:<strong> 
- 
- <?php 
- $ServerCheckHours = 0;
+<div id="tag-br">
+<div id="tag-top"><?php echo $row_Recordset3['FirstName']; ?> <?php echo $row_Recordset3['LastName']; ?></div>
+<div id="tag-info"> is checking out the <?php echo $row_Recordset1['Name']; ?>.</div></div>
+<div id="tag-br">
+<div id="tag">Checking Out:</div>
+<div id="tag-info">
+<?php 
+$ServerCheckHours = 0;
  do {
  	if($row_Recordset4['CheckHours'] > $ServerCheckHours){
  		$ServerCheckHours = $row_Recordset4['CheckHours'];
@@ -63,15 +109,11 @@ echo("<b>Student must sign an individual contract for this kit.</b>");
 		$overNight = $row_Recordset4['OverNightAllowed'];
 	}
 } while ($row_Recordset4 = mysql_fetch_assoc($Recordset4)); 
- ?>
- 
-<?php 
-
-echo date("D, F j, g:i a") 
 ?>
- </strong><br>
-Due Back:
-
+<?php echo date("D, F d, g:i a"); ?></div></div>
+<div id="tag-br">
+<div id="tag">Due Back:</div>
+<div id="tag-info">
 <?php 
 
 	$Year = date('Y');
@@ -82,13 +124,9 @@ Due Back:
 	$Month = "0".$Month;
 	}
 	
-	$Hours = date('G');
-	
-	if ($Hours < 10) {
-	$Hours = "0".$Hours;
-	}
+	$Hours = "17";
 
-	$Minutes = date('i');
+	$Minutes = "00";
 	
 	
 	//DUE BACK NEXT DAY / 24 HOURS
@@ -158,7 +196,7 @@ Due Back:
 		$Day = 1;
 	}
 		
-	$returndateSQL = $Year."-".$Month."-".$Day." ".$Hours.":".$Minutes.":00";
+	$returndateSQL = $Year."-".$Month."-".$Day." 17:00:00";
 	
 	//IF NOT OPEN weekends
 	if(!$weekends) {
@@ -173,7 +211,7 @@ Due Back:
 			$Day = 1;
 		}
 		
-		$returndateSQL = $Year."-".$Month."-".$Day." ".$Hours.":".$Minutes.":00";
+		$returndateSQL = $Year."-".$Month."-".$Day." 17:00:00";
 		
 		//IF NOT OPEN SUNDAY
 		if (date("D", strtotime($returndateSQL)) == "Sun") {
@@ -188,7 +226,7 @@ Due Back:
 		}
 	}
 	
-	$returndateSQL = $Year."-".$Month."-".$Day." ".$Hours.":".$Minutes.":00";
+	$returndateSQL = $Year."-".$Month."-".$Day." 17:00:00";
 	
 	// figure out hours here
 	switch (date("D",strtotime($returndateSQL))) {
@@ -238,15 +276,33 @@ Due Back:
 	}
 	
 	//date formate for sql 0000-00-00 00:00:00
-	$returndateSQL = $Year."-".$Month."-".$Day." ".$Hours.":".$Minutes.":00";
+	$returndateSQL = $Year."-".$Month."-".$Day." 17:00:00";
 
 ?>
+<span id="changeDate"><? echo date("D, F d", strtotime($returndateSQL));?></span>, BEFORE <? echo date("g:i a", strtotime($returndateSQL));?></div></div>
+<div id="options">
+Options:
+<label><input name="chkBox" type="radio" id="chkBox0" onClick="modDay0();" value="0" checked="checked" />Reset</label>
+<label><input id="chkBox1" name="chkBox" type="radio" value="1" onClick="modDay1();" />+1 Day</label>
+<label><input id="chkBox2" name="chkBox" type="radio" value="2" onClick="modDay2();" />+2 Days</label>
+</div>
+<? 
+function addDate($date,$day)//add days
+{
+$sum = strtotime(date("Y-m-d", strtotime("$date")) . " +$day days");
+$dateTo=date('Y-m-d',$sum);
+return $dateTo;
+}
+$plusOne = addDate($returndateSQL,1);
+$plusTwo = addDate($returndateSQL,2);
 
-<strong><? echo date("D, F j, g:i a", strtotime($returndateSQL));?></strong>
-
-<input type="hidden" name="ReturnDate" value="<? echo $returndateSQL;?>">
-
-<br>
+?>
+<input type="hidden" id="plusNone" name="plusNone" value="<? echo date("D", strtotime($returndateSQL)); ?>">
+<input type="hidden" id="plusOne" name="plusOne" value="<? echo date("D", strtotime($plusOne)); ?>">
+<input type="hidden" id="plusTwo" name="plusTwo" value="<? echo date("D", strtotime($plusTwo)); ?>">
+<input type="hidden" id="OriginalDate" name="OriginalDate" value="<? echo $returndateSQL;?>">
+<input type="hidden" id="ReturnDate" name="ReturnDate" value="<? echo $returndateSQL;?>">
+</span>
 <? 
 if ($row_Recordset1['FineAmount']!="") { 
  echo "Fine: $" . number_format($fineAmount,2); 
@@ -255,7 +311,7 @@ if ($row_Recordset1['FineAmount']!="") {
  echo " Minutes.";
  } 
 ?>
-
+<div id="tag-br"></div>
  <br>
  <table width="40%" border="0" align="center" cellpadding="0" cellspacing="0">
   <tr>
@@ -267,7 +323,6 @@ if ($row_Recordset1['FineAmount']!="") {
     $Image = $row_Recordset1['Image'];
     if($Image!=""){ 
     echo("<IMG SRC=\"images/$Image\">");
-    echo("<p>IMG SRC=\"images/$Image\"</p>");
     }?>
     <br>
     </div></td>
@@ -296,7 +351,7 @@ do not check off.</i>
 <input type="hidden" name="ReturnDate" value="<? echo $returndateSQL ?>">
 <P>
 <?
-if ($AccessoryName!=""){
+if ($AccessoryName=""){
 	echo"<p>No Accessories are available for this item.</p>";
 } else {
 $i = 0;

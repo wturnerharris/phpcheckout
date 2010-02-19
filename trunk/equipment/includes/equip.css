@@ -124,15 +124,35 @@ tr.ListHeaderColor th {
 .alert {
 	color: #FF0000;
 	font-weight: bold; 
-	}
+}
 h1 {
 	color: #FF0000;
-	}
+}
 h2 {
 	padding: 0px;
 	margin: 0px;
 	color: #999999;
+}
+#tag-top {
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	background-color:#8ece6a;
+	border: 1px solid #8ece6a;
+	display: block; float: left; text-align: left; margin-left: 1px; padding: 8 10 0 10; height: 22px; color: #FFFFFF; font-weight: bold; 
+}
+#tag-br {
+	display: block; height: 40px;
 	}
+#tag {
+	display: block; float: left; text-align: left; padding: 8 0 0 10; height: 28px; width: 110px; color: #FFFFFF; font-weight: bold; background: url('../images/tag_blue.png') left center no-repeat;
+}
+#tag-info {
+	display: block; float: left; text-align: left; padding: 8 0 0 5; height: 31px; font-weight: bold; 
+}
+#options {
+	display: block; float: left; text-align: left; padding: 8 0 0 10; height: 31px; font-weight: bold; 
+}
 #logout {
 	display: block;
 	width: 95px;
@@ -248,6 +268,12 @@ a.hints {
 }
 #showModify, #showAdd {
 	line-height: 35px;
+}
+#showClass {
+	line-height: 30px;
+}
+#remClass {
+	float: left; margin-left: 10px; margin-right: 10px; padding-top: 2px;
 }
 #txtStudentID, #txtFirstName, #txtLastName, #txtEmail, #txtPhone {
 	float: right;

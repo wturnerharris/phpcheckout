@@ -50,7 +50,7 @@ if ($_REQUEST['ContractRequired']==1) {
 	Checked Out: <i><? echo date("D, F j, g:i a"); ?></i>
 	<P>
 	Due Back: <i><? echo date("D, F j, g:i a", strtotime($_REQUEST['ReturnDate'])); ?></i><br>
-	<P>&nbsp;
+	<P>
 	<P>
 	Student's Signature: 
 	
@@ -132,12 +132,24 @@ mysql_query($sql, $equip) or die(mysql_error());
 
 <center><h1>Item Checked Out</h1></center>
 <strong><h2>Summary</h2></strong>
-<p>Equipment: <? echo $KitName; ?><br/>
-With the following accessories: <i><? if ($Accessories = ""){ echo "N/A";} else { echo $Accessories;} ?></i><br/>
-Checked out by: <? echo $FirstName; ?> <? echo $LastName; ?><br/>
-Due Back: <i class="alert"><? echo date("D, F j, g:i a", strtotime($_REQUEST['ReturnDate'])); ?></i>
-</p>
-<p><em>This page will refresh automatically in 10 seconds. Please print now for a receipt.</em></p><br/>
+
+<div id="tag-br">
+	<div id="tag-top"><?php echo $FirstName; ?> <?php echo $LastName; ?></div>
+	<div id="tag-info"> has checked out the <?php echo $KitName; ?>.</div>
+</div>
+<div id="tag-br">
+	<div id="options">With the following accessories: <? if ($Accessories != ""){ echo $Accessories; } else { echo "N/A"; } ?><br/></div>
+</div>
+<div id="tag-br">
+	<div id="tag">Beginning:</div>
+	<div id="tag-info"><? echo date("D, F j, g:i a"); ?></div>
+</div>
+<div id="tag-br">
+	<div id="tag">Due Back:</div>
+	<div id="tag-info"><span id="changeDate"><i class="alert"><? echo date("D, F j", strtotime($_REQUEST['ReturnDate'])); ?></i></span>, BEFORE <? echo date("g:i a", strtotime($_REQUEST['ReturnDate']));?></div>
+</div>
+
+<p><em>Please print now for a receipt. Otherwise this page will refresh automatically in 10 seconds. </em></p><br/>
 Return to <a href="studentinfo.php?StudentID=<? echo $StudentID; ?>">Student Info Page</a><br />
 
 <? include('includes/footer.html'); 
