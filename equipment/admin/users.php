@@ -1,4 +1,17 @@
 <?php 
+$username = $_COOKIE["EquipmentCheckout"];
+mysql_select_db($database_equip, $equip);
+
+$access = "SELECT * FROM users WHERE Username = '$username'";
+
+$entry = mysql_query($access, $equip) or die(mysql_error());
+$row_entry = mysql_fetch_assoc($entry);
+$totalRows_entry = mysql_num_rows($entry);
+
+if ($row_entry['Type'] == "LabMon") {
+	echo "<strong class='alert'>You do not have permission to modify these settings.</strong>";
+	echo "<br><br><strong>To add students to checkout, you must click the Students tab.</strong>";
+} else {
 
 //variables
 $SelectedID = $_REQUEST['studentList'];
@@ -36,6 +49,7 @@ function Add() {
 		onComplete: showResponse 
 		});
 //	alert('Send Called');
+	$('alert').style.visibility = "visible";
 	$('alert').innerHTML = "Record Added";
 	}
 function Modify() {
@@ -46,6 +60,7 @@ function Modify() {
 //		onComplete: showResponse 
 //		});
 //	alert('Send Called');
+	$('alert').style.visibility = "visible";
 	$('alert').innerHTML = "<p class='alert'>Must delete, then add new users.</p>";
 	}
 function delEntry(){
@@ -56,7 +71,8 @@ function delEntry(){
 		onComplete: showResponse 
 		});
 //	alert('Send Called');
-	$('alert').innerHTML = "Student Removed";
+	$('alert').style.visibility = "visible";
+	$('alert').innerHTML = "User Removed";
 	$('form2').submit();
 	}
 function showResponse(req){
@@ -68,11 +84,10 @@ function refreshPage(){
 	window.location.href = location;
 }
 </script>		
-
 <form id="form1" name="form1" action="admin.php?page=users" method="post">
-	<strong style="line-height: 30px;">Username: </strong>
+	<p><strong style="line-height: 30px;">Username: </strong>
 	<input id="SelectedID" name="SelectedID" type="hidden" value="<?php echo $SelectedID; ?>" />
-	<select id="studentList" name="studentList" style="float: right; width: 300px; height: 25px; margin-right: 35px; margin-top: 5px;" onChange="submitForm();">
+	<select id="studentList" name="studentList" style="float: right; width: 300px; height: 25px; margin-right: 35px;" onChange="submitForm();">
 		<option selected value="">Select a user...</option>
 
 <?php
@@ -81,17 +96,14 @@ function refreshPage(){
 mysql_select_db($database_equip, $equip);
 
 if (!isset($SelectedID)) {
-	$echo1 = "SELECT * FROM users";
 	$query_S = "SELECT * FROM users";
 } else {
-	$echo1 = "SELECT * FROM users WHERE ID = '$SelectedID'";
 	$query_S = "SELECT * FROM users WHERE ID = '$SelectedID'";
 }
 
 $Users = mysql_query($query_S, $equip) or die(mysql_error());
 $row_Users = mysql_fetch_assoc($Users);
 $totalRows_Users = mysql_num_rows($Users);
-
 
 //***** LOOP SELECT BOX *****
 mysql_data_seek($Users,0);
@@ -122,19 +134,19 @@ if (isset($SelectedID)) {
 <br />
 <strong style="line-height: 30px;">Account Type: </strong>
 <select id="acctType" name="acctType" disabled="true" style="float: right; width: 225px; height: 25px; margin-right: 35px; margin-top: 5px; line-height:30px;">
-	<option <?php if ($row_Users['Type'] = "Admin") { echo "selected"; } ?> value="Admin">Administrator</option>
-	<option <?php if ($row_Users['Type'] = "LabMon") { echo "selected"; } ?> value="LabMon">Lab Monitor</option>
+	<option <?php if ($row_Users['Type'] == "Admin") { echo "selected"; } ?> value="Admin">Administrator</option>
+	<option <?php if ($row_Users['Type'] == "LabMon") { echo "selected"; } ?> value="LabMon">Lab Monitor</option>
 </select>
 <br />
 <strong style="line-height: 30px;">Password: </strong><input type="textarea" id="txtPassword" name="txtPassword" style="float: right; width: 225px; height: 25px; margin-right: 35px; margin-top: 5px; line-height:30px;" value="<?php echo $row_Users['Password']; ?>" disabled="true" />
 <br />
 <br />
 <a href="#" style="float: right; margin-right: 35px;" onClick="Modify()">
-	<img src="images/modify-button.png" border="0" title="Modify" /></a>
+	<img src="<?php echo $root; ?>/images/modify-button.png" border="0" title="Modify" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
-	<img src="images/cancel-button.png" border="0" title="Cancel" /></a>
+	<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="answer=confirm('Do you wish to remove <?php echo $row_Users["Username"]; ?> from the users?');if(answer!=0){delEntry();}else{alert('Canceled')}">
-	<img src="images/remove-button.png" border="0" title="Remove" /></a>
+	<img src="<?php echo $root; ?>/images/remove-button.png" border="0" title="Remove" /></a>
 <input id="pID" name="pID" type="hidden" value="<?php echo $row_Users['ID']; ?>" />
 </form>
 </div>
@@ -156,9 +168,9 @@ if (isset($SelectedID)) {
 <br />
 <br />
 <a href="#" style="float: right; margin-right: 35px;" onClick="Add()">
-	<img src="images/add-button.png" border="0" title="Add" /></a>
+	<img src="<?php echo $root; ?>/images/add-button.png" border="0" title="Add" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
-	<img src="images/cancel-button.png" border="0" title="Cancel" /></a>
+	<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 </form>
 </div>
 <?php
@@ -166,8 +178,9 @@ if (isset($SelectedID)) {
 	}
 }
 ?>
-<div style="position: absolute; bottom: 10px; left: 20px;"><a href="#" title="Add Student" onClick="$('SelectedID').value = '0'; $('form1').submit();"><img src="images/add-student-button.png" border="0" /></a></div>
-<div id="alert"></div>
+<div style="position: absolute; bottom: 10px; left: 20px;"><a href="#" title="Add Student" onClick="$('SelectedID').value = '0'; $('form1').submit();"><img src="<?php echo $root; ?>/images/add-student-button.png" border="0" /></a></div>
 <?php
+mysql_free_result($entry);
 mysql_free_result($Users);
+}
 ?>

@@ -99,12 +99,20 @@ function Add() {
    { 
       alert('Only enter the 14-digit Student ID number.') 
       StudentID.focus(); 
+      StudentID.select(); 
+	  return false;
+   }
+  if (StudentID.value.length < 14)
+   { 
+      alert('Must be a 14-digit Student ID number.') 
+      StudentID.focus(); 
+      StudentID.select(); 
 	  return false;
    }
    if (IsEmpty(StudentID.value)) 
    { 
       alert('You have not entered a Student ID number.') 
-      $('txtStudentID1').focus(); 
+      StudentID.focus(); 
 	  return false;
    } 
    if(IsEmpty(txtFirstName1.value)) 
@@ -129,6 +137,14 @@ function Add() {
    { 
       alert('Only enter the 10-digit phone number.') 
       txtPhone1.focus(); 
+      txtPhone1.select(); 
+	  return false;
+   }
+   if (txtPhone1.value.length < 10)
+   { 
+      alert('Must be a 10-digit phone number.') 
+      txtPhone1.focus(); 
+      txtPhone1.select(); 
 	  return false;
    }
    if(IsEmpty(txtPhone1.value)) 
@@ -147,6 +163,7 @@ function Add() {
 //	alert('Send Called');
 	$('alert').style.visibility = "visible";
 	$('alert').innerHTML = "Record Added";
+	setTimeout('window.location.href = \"../allstudents.php\";',1000);
 	}
 }
 function Modify() {
@@ -173,7 +190,7 @@ function delEntry(){
 	$('form2').submit();
 	}
 function showResponse(req){
-	var t=setTimeout(refreshPage(),5000);
+	setTimeout('refreshPage()',8000);
 }
 function refreshPage(){
 	$('filter').value = "no";
@@ -183,7 +200,7 @@ function refreshPage(){
 </script>		
 
 <form id="form1" name="form1" action="admin.php?page=students" method="post">
-	<p><strong>Filter by: </strong>
+	<p><strong style="line-height: 30px;">Filter by: </strong>
 	<select id="filterList" name="filterList" style="margin-left: 10px; margin-right: 5px;" onChange="TxtBoxStart();">
 		<option <?php if (!isset($filterBy)) { echo "selected"; } ?> value="">Select...</option>
 		<option <?php if ($filterBy == "StudentID") { echo "selected"; } ?> value="StudentID">Student ID</option>
@@ -191,7 +208,7 @@ function refreshPage(){
 		<option <?php if ($filterBy == "LastName") { echo "selected"; } ?> value="LastName">Last Name</option>
 	</select>
 	<input type="textarea" id="txtFilter" name="txtFilter"style="margin-right: 5px;"  value="<?php echo $txtVal; ?>" disabled="true" onKeyPress="return disableEnterKey(event)"/>
-	<input id="btn" disabled="true" type="button" style="float: right; margin-right: 35px;" onClick="ChangeValue();" value="Filter" onKeyPress="ChangeValue();" />
+	<input id="btn" disabled="true" type="button" style="margin-right: 35px;" onClick="ChangeValue();" value="Filter" onKeyPress="ChangeValue();" />
 
 	</p><hr/ style="border: 0px; height: 3px; background-color: #ffcc00;">
 	<strong style="line-height: 30px;">Student: </strong>
@@ -267,11 +284,11 @@ if ($filter == "yesyes") {
 <br />
 <br />
 <a href="#" style="float: right; margin-right: 35px;" onClick="Modify()">
-	<img src="images/modify-button.png" border="0" title="Modify" /></a>
+	<img src="<?php echo $root; ?>/images/modify-button.png" border="0" title="Modify" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
-	<img src="images/cancel-button.png" border="0" title="Cancel" /></a>
+	<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="answer=confirm('Do you wish to remove <?php echo $row_Students["FirstName"]; ?> <?php echo $row_Students["LastName"]; ?> from the student records?');if(answer!=0){delEntry();}else{alert('Canceled')}">
-	<img src="images/remove-button.png" border="0" title="Remove" /></a>
+	<img src="<?php echo $root; ?>/images/remove-button.png" border="0" title="Remove" /></a>
 <input id="pID" name="pID" type="hidden" value="<?php echo $row_Students['ID']; ?>" />
 </form>
 </div>
@@ -293,17 +310,16 @@ if ($filter == "add") {
 <br />
 <br />
 <a href="#" style="float: right; margin-right: 35px;" onClick="Add()">
-	<img src="images/add-button.png" border="0" title="Add" /></a>
+	<img src="<?php echo $root; ?>/images/add-button.png" border="0" title="Add" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
-	<img src="images/cancel-button.png" border="0" title="Cancel" /></a>
+	<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 </form>
 </div>
 <?php
 }}
 ?>
 
-<div style="position: absolute; bottom: 10px; left: 20px;"><a href="#" title="Add Student" onClick="showAddForm();"><img src="images/add-student-button.png" border="0" /></a></div>
-<div id="alert"></div>
+<div style="position: absolute; bottom: 10px; left: 20px;"><a href="#" title="Add Student" onClick="showAddForm();"><img src="<?php echo $root; ?>/images/add-student-button.png" border="0" /></a></div>
 <?php
 mysql_free_result($Students);
 ?>
