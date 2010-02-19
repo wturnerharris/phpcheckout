@@ -3,12 +3,12 @@
 # Type="MYSQL"
 # HTTP="true"
 $hostname_equip = "localhost";
-$database_equip = "equipment";
-$username_equip = "root";
-$password_equip = "";
+$database_equip = "witdesig_equipment";
+$username_equip = "witdesig_equip";
+$password_equip = "u81i812";
 $equip = mysql_pconnect($hostname_equip, $username_equip, $password_equip) or die(mysql_error());
 
-$weekends = true; // if open weekends, flag this
+$weekends = false; // if open weekends, flag this
 
 
 // set your open and close times here. System will only work with Hour arguments, input hour in 24 our time in format HH
@@ -32,4 +32,6 @@ $sunClose = 15;
 $fineAmount = 5.00; // amount of fine
 $fineFreq = 900; // amount of time per fine increment, in seconds
 $maxFine = 100.00; // max amount of fine per kit
+
+$root = "http://www.witdesigns.com/equipment";
 ?>

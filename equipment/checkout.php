@@ -236,7 +236,8 @@ Due Back:
 			$Minutes = 30;
 		}
 	}
-
+	
+	//date formate for sql 0000-00-00 00:00:00
 	$returndateSQL = $Year."-".$Month."-".$Day." ".$Hours.":".$Minutes.":00";
 
 ?>
@@ -266,6 +267,7 @@ if ($row_Recordset1['FineAmount']!="") {
     $Image = $row_Recordset1['Image'];
     if($Image!=""){ 
     echo("<IMG SRC=\"images/$Image\">");
+    echo("<p>IMG SRC=\"images/$Image\"</p>");
     }?>
     <br>
     </div></td>
@@ -294,6 +296,9 @@ do not check off.</i>
 <input type="hidden" name="ReturnDate" value="<? echo $returndateSQL ?>">
 <P>
 <?
+if ($AccessoryName!=""){
+	echo"<p>No Accessories are available for this item.</p>";
+} else {
 $i = 0;
 do { 
 $AccessoryName = $row_Recordset2['Name'];
@@ -301,10 +306,11 @@ echo"<input name=\"Accessory$i\" type=\"checkbox\" value=\"$AccessoryName\">";
 echo $AccessoryName ."<br>";
 $i++;
 } while ($row_Recordset2 = mysql_fetch_assoc($Recordset2)); 
+}
 ?>
 <P>
 Notes:<br>
-<textarea cols=80 rows=5 name="Notes"></textarea><br>
+<textarea cols=60 rows=5 name="Notes"></textarea><br>
 <input type="submit" name="Submit" value="Check Out">
 
 </form>
