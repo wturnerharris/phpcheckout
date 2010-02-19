@@ -33,5 +33,5 @@ $fineAmount = 5.00; // amount of fine
 $fineFreq = 900; // amount of time per fine increment, in seconds
 $maxFine = 100.00; // max amount of fine per kit
 
-$root = "equipment"; //name of installed directory just past root. if you moved or renamed, you must change this as the includes files are absolute.
+$root = "http://www.witdesigns.com/equipment";
 ?>

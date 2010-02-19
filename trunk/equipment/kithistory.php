@@ -1,6 +1,6 @@
-<?php include('includes/heading.html'); 
+<?php require_once('config.php');
 
-require_once('config.php');
+include('includes/heading.html'); 
 
 $KitID = $_REQUEST['KitID'];
 
