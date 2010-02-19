@@ -111,7 +111,7 @@ $AccessoryFirstTime = 0;
 ?>
 <tr>
     <td bgcolor="e6e6e6">
-        <strong><a href="#" class="hints" title="<?php echo 'Enrolled for ' .$info['className']; ?>">Equipment:</a></strong> <?php $currentID = $info['KitID']; $checkedID = $info['KitID']; echo $info['KitName']; ?><a href="http://witdesigns.com/equipment/kithistory.php?KitID=<?php echo $info['KitID']; ?>" > <img src="images/ip_icon_02_Info.png" title="Checkout History" width="18" height="18" border="0" align="absmiddle" /></a><br />
+        <strong><a href="#" class="hints" title="<?php echo 'Enrolled for ' .$info['className']; ?>">Equipment:</a></strong> <?php $currentID = $info['KitID']; $checkedID = $info['KitID']; echo $info['KitName']; ?><a href="/<? echo $root; ?>/kithistory.php?KitID=<?php echo $info['KitID']; ?>" > <img src="images/ip_icon_02_Info.png" title="Checkout History" width="18" height="18" border="0" align="absmiddle" /></a><br />
 	<?php	
 	// SHOWS IF UNAVAILABLE
 	mysql_select_db($database_kit, $equip);

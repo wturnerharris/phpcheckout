@@ -310,13 +310,13 @@ table caption {
 	font-size: 1.8em;
 	text-align: left;
 	text-indent: 100px;
-	background: url(images/bg_caption.gif) left top;
+	background: url(../images/bg_caption.gif) left top;
 	height: 40px;
 	color: #FFFFFF;
 	border:1px solid #000000; }
 
 thead th {
-	background: url(images/bg_th.gif) left;
+	background: url(../images/bg_th.gif) left;
 	background-color: black;
 	height: 21px;
 	color: #FFFFFF;
@@ -332,12 +332,12 @@ tbody tr {	background: #ffffff; }
 tbody tr.odd {	background: #f0f0f0; }
 
 tbody th {
-	background: url(images/arrow_white.gif) left center no-repeat;
+	background: url(../images/arrow_white.gif) left center no-repeat;
 	background-position: 5px;
 	padding-left: 40px !important; }
 
 tbody tr.odd th {
-	background: url(images/arrow_grey.gif) left center no-repeat;
+	background: url(../images/arrow_grey.gif) left center no-repeat;
 	background-position: 5px;
 	padding-left: 40px !important; }
 
@@ -360,12 +360,12 @@ tbody a:hover {
 	text-decoration: none; }
 
 tbody tr:hover th {
-	background: #800000 url(images/arrow_red.gif) left center no-repeat;
+	background: #800000 url(../images/arrow_red.gif) left center no-repeat;
 	background-position: 5px;
 	color: #ffffff; }
 
 tbody tr.odd:hover th {
-	background: #000000 url(images/arrow_black.gif) left center no-repeat;
+	background: #000000 url(../images/arrow_black.gif) left center no-repeat;
 	background-position: 5px;
 	color: #ffffff; }
 
@@ -381,7 +381,7 @@ tbody tr.odd:hover td, tr.odd:hover td a{
 	color: #000000;	 }
 
 tfoot th, tfoot td {
-	background: #ffffff url(images/bg_footer.gif) repeat-x bottom;
+	background: #ffffff url(../images/bg_footer.gif) repeat-x bottom;
 	font-size: 0.8em;
 	color: #ffffff;
 	height: 21px;

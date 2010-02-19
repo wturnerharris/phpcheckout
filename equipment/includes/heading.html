@@ -1,7 +1,7 @@
 <?php if (strlen($_COOKIE["EquipmentCheckout"]) < 1) { 
-header('location:/equipment/login.php');
+header('location:/$root/login.php');
 }  else { 
-$MetaRefresh = "<meta http-equiv=\"refresh\" content=\"600;URL=/equipment/index.php\">";
+$MetaRefresh = "<meta http-equiv=\"refresh\" content=\"600;URL=/".$root;."/index.php\">";
 } ?>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
@@ -13,8 +13,8 @@ $MetaRefresh = "<meta http-equiv=\"refresh\" content=\"600;URL=/equipment/index.
 <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
 <META HTTP-EQUIV="Expires" CONTENT="-1">
 
-<script type="text/javascript" src="/equipment/includes/prototype.js"></script>
-<link href="/equipment/includes/equip.css" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="/<? echo $root; ?>/includes/prototype.js"></script>
+<link href="/<? echo $root; ?>/includes/equip.css" rel="stylesheet" type="text/css">
 </head>
 
 <?php if(1==2) { ?>
@@ -22,17 +22,17 @@ $MetaRefresh = "<meta http-equiv=\"refresh\" content=\"600;URL=/equipment/index.
 <?php } else { ?>
 <BODY OnLoad=$('StudentID').focus();>
 <?php } ?>
-<div id="logout"><a class="logout" href="/equipment/logout.php"><img src="/equipment/images/logout_icon.png">&nbsp;<strong>Logout</strong></a></div>
+<div id="logout"><a class="logout" href="/<? echo $root; ?>/logout.php"><img src="/<? echo $root; ?>/images/logout_icon.png">&nbsp;<strong>Logout</strong></a></div>
 <div id="main">
 		<div id="gray-bar"></div>
 		<div id="header">
-			<a href="/equipment/index.php"><img src="/equipment/images/logo.jpg" align="center" width="308" height="127"></a>
+			<a href="/<? echo $root; ?>/index.php"><img src="/<? echo $root; ?>/images/logo.jpg" align="center" width="308" height="127"></a>
 			<ul id="header-nav">
-				<li><a href="/equipment/studentinfo.php?StudentID=<? echo $_REQUEST['StudentID'] ?>">Student Info</a></li>
-				<li><a href="/equipment/allstudents.php">Student Records</a></li>
-				<li><a href="/equipment/allequipmentbyclass.php?StudentID=<? echo $_REQUEST['StudentID'] ?>">List Equipment</a></li>
-				<li><a href="/equipment/currentlycheckedout.php?StudentID=<? echo $_REQUEST['StudentID'] ?>">Checked Out</a></li>
-				<li><a href="/equipment/fines.php?StudentID=<?php echo $_REQUEST['StudentID'] ?>">Fines List</a></li>
+				<li><a href="/<? echo $root; ?>/studentinfo.php?StudentID=<? echo $_REQUEST['StudentID'] ?>">Student Info</a></li>
+				<li><a href="/<? echo $root; ?>/allstudents.php">Student Records</a></li>
+				<li><a href="/<? echo $root; ?>/allequipmentbyclass.php?StudentID=<? echo $_REQUEST['StudentID'] ?>">List Equipment</a></li>
+				<li><a href="/<? echo $root; ?>/currentlycheckedout.php?StudentID=<? echo $_REQUEST['StudentID'] ?>">Checked Out</a></li>
+				<li><a href="/<? echo $root; ?>/fines.php?StudentID=<?php echo $_REQUEST['StudentID'] ?>">Fines List</a></li>
 			</ul>
 		</div>
 		<div id="content">

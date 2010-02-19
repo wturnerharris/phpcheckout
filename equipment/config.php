@@ -3,9 +3,9 @@
 # Type="MYSQL"
 # HTTP="true"
 $hostname_equip = "localhost";
-$database_equip = "witdesig_equipment";
-$username_equip = "witdesig_equip";
-$password_equip = "u81i812";
+$database_equip = "equipment";
+$username_equip = "root";
+$password_equip = "new-password";
 $equip = mysql_pconnect($hostname_equip, $username_equip, $password_equip) or die(mysql_error());
 
 $weekends = false; // if open weekends, flag this
@@ -33,5 +33,5 @@ $fineAmount = 5.00; // amount of fine
 $fineFreq = 900; // amount of time per fine increment, in seconds
 $maxFine = 100.00; // max amount of fine per kit
 
-$root = "http://www.witdesigns.com/equipment";
+$root = "equipment"; //name of installed directory just past root. if you moved or renamed, you must change this as the includes files are absolute.
 ?>
