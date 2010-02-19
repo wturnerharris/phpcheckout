@@ -1,5 +1,5 @@
 <?php 
-require_once('config.php'); 
+require_once('../config.php'); 
 
 $StudentID = $_POST['txtStudentID'];
 $FirstName = $_POST['txtFirstName'];

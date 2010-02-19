@@ -1,5 +1,5 @@
 <?php 
-require_once('config.php'); 
+require_once('../config.php'); 
 
 $Username = $_POST['txtUsername'];
 $Type = $_POST['acctType'];

@@ -1,6 +1,5 @@
 <?php 
-require_once('config.php'); 
-include('includes/heading.html');
+require_once('../config.php'); 
 
 $StudentID = $_POST['StudentID'];
 $class = $_POST['class'];
@@ -17,19 +16,14 @@ mysql_select_db($database_equip, $equip);
 mysql_query($sql, $equip) or die(mysql_error());
 
 ?>
-<pre>
-Class: <? echo $class ?><br />
+
+<meta http-equiv="refresh" content="2,../studentinfo.php?StudentID=<?php echo $StudentID; ?>" />
+<div id="alert" style="visibility:visible">
+Class Added: <? echo $class ?><br />
+<br />
 StudentID: <? echo $StudentID ?><br />
-ClassID: <? echo $ClassID ?><br />
-ClassID_query: <? echo $option ?><br />
-</pre>
-Added to Class. Thank you.
+</div>
 
-Page will refresh automatically.
-
-<meta http-equiv="refresh" content="3,studentinfo.php?StudentID=<? echo $StudentID ?>" />
-<? 
-include 'includes/footer.html';
+<?
+include ('../studentinfo.php');
 ?>
-
-

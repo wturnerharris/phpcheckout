@@ -24,8 +24,8 @@ function Filter(){
 </script>		
 
 <form id="form1" name="form1" action="admin.php?page=equipment" method="post">
-	<p><strong style="line-height: 30px;">Genre by: </strong>
-	<select id="filterList" name="filterList" style="margin-left: 20px; width: 200px; height: 25px;" onChange="Filter();">
+	<p><strong style="line-height: 30px;">Genre: </strong>
+	<select id="filterList" name="filterList" style="margin-left: 38px; width: 200px; height: 25px;" onChange="Filter();">
 		<option <?php if (!isset($filterBy)) { echo "selected"; } ?> value="no">Select a type...</option>
 		<option <?php if ($filterBy == "Equipment") { echo "selected"; } ?> value="Equipment">Equipment</option>
 		<option <?php if ($filterBy == "Graphic Tablet") { echo "selected"; } ?> value="Graphic Tablet">Graphic Tablet</option>
@@ -34,7 +34,7 @@ function Filter(){
 		<option <?php if ($filterBy == "Tripod") { echo "selected"; } ?> value="Tripod">Tripod</option>
 		<option <?php if ($filterBy == "Video Camera") { echo "selected"; } ?> value="Video Camera">Video Camera</option>
 	</select>
-	<input id="btn" type="button" style="float: right; margin-right: 35px; height: 26px; margin-top: 3px; width: 75px;" onClick="Filter();" value="Filter" onKeyPress="Filter();" />
+	<input id="btn" type="button" style="margin-left: 30px; height: 25px; width: 65px;" onClick="Filter();" value="Filter" onKeyPress="Filter();" />
 
 	</p><hr/ style="border: 0px; height: 3px; background-color: #ffcc00;">
 	<strong style="line-height: 30px;">Equipment: </strong>
@@ -101,11 +101,11 @@ if ($filter == "yesyes") {
 <br />
 <br />
 <a href="#" style="float: right; margin-right: 35px;" onClick="Modify()">
-	<img src="images/modify-button.png" border="0" title="Modify" /></a>
+	<img src="<?php echo $root; ?>/images/modify-button.png" border="0" title="Modify" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
-	<img src="images/cancel-button.png" border="0" title="Cancel" /></a>
+	<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="answer=confirm('Do you wish to remove <?php echo $row_Students["FirstName"]; ?> <?php echo $row_Students["LastName"]; ?> from the student records?');if(answer!=0){delEntry();}else{alert('Canceled')}">
-	<img src="images/remove-button.png" border="0" title="Remove" /></a>
+	<img src="<?php echo $root; ?>/images/remove-button.png" border="0" title="Remove" /></a>
 <input id="pID" name="pID" type="hidden" value="<?php echo $row_Students['ID']; ?>" />
 </form>
 </div>
@@ -132,16 +132,15 @@ if ($filter == "add") {
 <br />
 <br />
 <a href="#" style="float: right; margin-right: 35px;" onClick="Add()">
-	<img src="images/add-button.png" border="0" title="Add" /></a>
+	<img src="<?php echo $root; ?>/images/add-button.png" border="0" title="Add" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
-	<img src="images/cancel-button.png" border="0" title="Cancel" /></a>
+	<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 </form>
 </div>
 <?php
 }}
 ?>
-<div style="position: absolute; bottom: 10px; left: 20px;"><a href="#" title="Add Student" onClick="showAddForm();"><img src="images/add-student-button.png" border="0" /></a></div>
-<div id="alert"></div>
+<div style="position: absolute; bottom: 10px; left: 20px;"><a href="#" title="Add Student" onClick="showAddForm();"><img src="<?php echo $root; ?>/images/add-student-button.png" border="0" /></a></div>
 <?php
 mysql_free_result($Equipment);
 ?>

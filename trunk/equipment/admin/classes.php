@@ -23,7 +23,7 @@ function submitForm1(){
 	$('form1').submit();
 }
 function submitForm2(){
-	$('StudentID').disabled = true;
+	$('StudentID').readonly = true;
 	$('filter').value = "yes";
 	$('form1').submit();
 }
@@ -52,11 +52,11 @@ function delEntry(){
 		onComplete: showResponse 
 		});
 //	alert('Send Called');
+	$('alert').style.visibility = "visible";
 	$('alert').innerHTML = "Class Removed";
-	$('form2').submit();
 	}
 function showResponse(req){
-	var t=setTimeout(refreshPage(),5000);
+	setTimeout('refreshPage();',2000);
 }
 function refreshPage(){
 	$('filter').value = "no";
@@ -72,8 +72,8 @@ function refreshPage(){
 ?>
 <form id="form1" name="form1" action="admin.php?page=classes" method="post">
 	<p><strong style="line-height: 30px;">Student ID: </strong>
-	  <input type="textarea" id="StudentID" name="StudentID" style="margin-left: 10px; width: 200px; height: 25px;"  value="<?php if (isset($StudentID)) { echo $StudentID; } else { echo ""; }?>" onKeyPress="return disableEnterKey(event)" />
-	<input id="btn" type="button" style="float: right; margin-right: 35px; height: 26px; margin-top: 2px;" onClick="submitForm1();" value="Submit" onKeyPress="submitForm1();" />
+	  <input type="textarea" id="StudentID" name="StudentID" style="margin-left: 11px; width: 200px; height: 25px;"  value="<?php if (isset($StudentID)) { echo $StudentID; } else { echo ""; }?>" onKeyPress="return disableEnterKey(event)" />
+	<input id="btn" type="button" style="margin-left: 30px; height: 25px;" onClick="submitForm1();" value="Submit" onKeyPress="submitForm1();" />
 
 	</p><hr/ style="border: 0px; height: 3px; background-color: #ffcc00;">
 	<strong style="line-height: 30px;">Student: </strong>
@@ -141,7 +141,7 @@ do {
 	}
 	?>
 	<a id="remClass" href="#" onClick="answer=confirm('Remove this class for this student?');if(answer!=0){$('rmClassID').value=<? echo $row_Recordset2['scID']; ?>;delEntry();}else{alert('Canceled')}" >
-	<img id="remClass" src="images/remove_icn.png" border="0" title="Remove Class" /></a>
+	<img id="remClass" src="<?php echo $root; ?>/images/remove_icn.png" border="0" title="Remove Class" /></a>
 	<? echo $row_Recordset2['Name']; ?><br/> 
 	<?php
 	}
@@ -176,13 +176,12 @@ echo "<FONT COLOR='red'><br>This Student is NOT registered to checkout.</FONT><b
 <br />
 <br />
 <a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
-	<img src="images/cancel-button.png" border="0" title="Cancel" /></a>
+	<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 </div>
 <?php
 //****end if for #showClass
 }
 ?>
-<div id="alert"></div>
 <?php
 mysql_free_result($Students);
 ?>

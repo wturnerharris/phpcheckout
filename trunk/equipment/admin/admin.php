@@ -1,6 +1,6 @@
 <?php 
-require_once('config.php');
-include('includes/heading.html'); 
+require_once('../config.php');
+include('../includes/heading.html'); 
 $page = $_REQUEST['page'];
 
 if (isset($page)){
@@ -72,6 +72,7 @@ if ($page == "general") {
 					<li class="admin-link <?php echo $sState; ?>"><a href="?page=students">Students</a></li>
 				</ul>
 		</div>
+		<div id="alert"></div>
 <?php
-include('includes/footer.html'); 
+include('../includes/footer.html'); 
 ?>
