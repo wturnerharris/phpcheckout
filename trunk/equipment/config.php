@@ -9,9 +9,13 @@ $password_equip = "new-password";
 $equip = mysql_pconnect($hostname_equip, $username_equip, $password_equip) or die(mysql_error());
 
 $weekends = false; // if open weekends, flag this
+$dayClosed1 = "Sun"; // three-digit textual day, usually Sat
+$dayClosed2 = "Mon"; // three-digit textual day, usually Sun
 
+// due back BEFORE time
+$dueHours = "17:00:00"; // 24 hour time, with minutes and seconds 00:00:00
 
-// set your open and close times here. System will only work with Hour arguments, input hour in 24 our time in format HH
+// set your open and close times here. System will only work with Hour arguments, input hour in 24 hour time in format HH
 $monOpen = 00;
 $monClose = 00;
 $tueOpen = 14;
@@ -29,9 +33,9 @@ $sunClose = 00;
 
 
 // fine controls
-$fineAmount = 5.00; // amount of fine
-$fineFreq = 900; // amount of time per fine increment, in seconds
-$maxFine = 100.00; // max amount of fine per kit
+$fineAmount = 1.00; // amount of fine
+$fineFreq = 1800; // amount of time per fine increment, in seconds
+$maxFine = 5.00; // max amount of fine per kit
 
-$root = "http://www.witdesigns.com/equipment";
+$root = "/equipment"; // using absolute paths to the root program folder, with preceding slash and without trailing slash
 ?>

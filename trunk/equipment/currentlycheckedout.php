@@ -46,6 +46,7 @@ if (intval(strtotime($row_Recordset1['ExpectedDateIn'])) < intval(strtotime("now
 echo "<strong><font color=\"#FF0000\"> -- THIS ITEM IS LATE</font></strong>";
 }
 echo '<P>';
+echo '<hr />';
 
  } while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)); 
  } else {

@@ -1,6 +1,6 @@
 <?php 
 require_once('config.php'); 
-include(''.$root.'/includes/heading2.html'); ?>
+include('includes/heading2.html'); ?>
 <div style="margin-left: auto; margin-right: auto; text-align: left; width: 300px;">
 <B><font color="red">You have entered an invalid User Name or Password. Try Again.</font></B>
 
@@ -19,4 +19,4 @@ include(''.$root.'/includes/heading2.html'); ?>
 </form>
 </div>
 <?
-include(''.$root.'/includes/footer.html'); ?>
+include('includes/footer.html'); ?>

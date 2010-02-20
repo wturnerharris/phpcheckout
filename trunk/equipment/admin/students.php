@@ -165,6 +165,21 @@ function Add() {
 	}
 }
 function Modify() {
+	var txtPhone = $('txtPhone');
+   if (!isNumeric(txtPhone.value))
+   { 
+      alert('Only enter the 10-digit phone number.') 
+      txtPhone1.focus(); 
+      txtPhone1.select(); 
+	  return false;
+   }
+   if (txtPhone.value.length < 10)
+   { 
+      alert('Must be a 10-digit phone number.') 
+      txtPhone1.focus(); 
+      txtPhone1.select(); 
+	  return false;
+   }
 	new Ajax.Request("modify-student.php", 
 		{ 
 		method: 'post', 
@@ -172,7 +187,8 @@ function Modify() {
 		onComplete: showResponse 
 		});
 	$('alert').style.visibility = "visible";
-	$('alert').innerHTML = "Student Record Modified";
+	$('alert').innerHTML = "Student Record Added";
+	setTimeout("window.location.href = '../studentinfo.php?StudentID=' + $('txtStudentID1').value;",1000);
 	}
 function delEntry(){
 	new Ajax.Request("remove-student.php", 
@@ -212,19 +228,15 @@ function delEntry(){
 mysql_select_db($database_equip, $equip);
 
 if ($filter == "no") {
-	$echo1 = "SELECT * FROM students ORDER BY students.LastName ASC";
 	$query_S = "SELECT * FROM students ORDER BY students.LastName ASC";
 } else {
 	if ($filter == "yes") {
-		$echo1 = "SELECT * FROM students WHERE $filterBy LIKE '%$filterReq%' ORDER BY students.LastName ASC";
 		$query_S = "SELECT * FROM students WHERE $filterBy LIKE '%$filterReq%' ORDER BY students.LastName ASC";
 	} else {
 		if ($filter == "yesyes") {
-			$echo1 = "SELECT * FROM students WHERE ID = '$SelectedID'";
 			$query_S = "SELECT * FROM students WHERE ID = '$SelectedID'";
 		} else {
 			if ($filter == "add") {
-				$echo1 = "SELECT * FROM students ORDER BY students.LastName ASC";
 				$query_S = "SELECT * FROM students ORDER BY students.LastName ASC";
 			}
 		}
@@ -272,11 +284,11 @@ if ($filter == "yesyes") {
 <br />
 <br />
 <a href="#" style="float: right; margin-right: 35px;" onClick="Modify()">
-	<img src="/<?php echo $root; ?>/images/modify-button.png" border="0" title="Modify" /></a>
+	<img src="<?php echo $root; ?>/images/modify-button.png" border="0" title="Modify" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
-	<img src="/<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
+	<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="answer=confirm('Do you wish to remove <?php echo $row_Students["FirstName"]; ?> <?php echo $row_Students["LastName"]; ?> from the student records?');if(answer!=0){delEntry();}else{alert('Canceled')}">
-	<img src="/<?php echo $root; ?>/images/remove-button.png" border="0" title="Remove" /></a>
+	<img src="<?php echo $root; ?>/images/remove-button.png" border="0" title="Remove" /></a>
 <input id="pID" name="pID" type="hidden" value="<?php echo $row_Students['ID']; ?>" />
 </form>
 </div>
@@ -298,16 +310,16 @@ if ($filter == "add") {
 <br />
 <br />
 <a href="#" style="float: right; margin-right: 35px;" onClick="Add()">
-	<img src="/<?php echo $root; ?>/images/add-button.png" border="0" title="Add" /></a>
+	<img src="<?php echo $root; ?>/images/add-button.png" border="0" title="Add" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
-	<img src="/<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
+	<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 </form>
 </div>
 <?php
 }}
 ?>
 
-<div style="position: absolute; bottom: 10px; left: 20px;"><a href="#" title="Add Student" onClick="showAddForm();"><img src="/<?php echo $root; ?>/images/add-student-button.png" border="0" /></a></div>
+<div style="position: absolute; bottom: 10px; left: 20px;"><a href="#" title="Add Student" onClick="showAddForm();"><img src="<?php echo $root; ?>/images/add-student-button.png" border="0" /></a></div>
 <?php
 mysql_free_result($Students);
 ?>

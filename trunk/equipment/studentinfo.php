@@ -62,7 +62,14 @@ if($row_Recordset1['StudentID']!=""){
 ?>
 Name: <?php echo $row_Recordset1['FirstName']; ?> <?php echo $row_Recordset1['LastName']; ?><br />
 E-mail: <a href="mailto:<?php echo $row_Recordset1['Email']; ?>"><?php echo $row_Recordset1['Email']; ?></a><br />
-Phone: <?php echo $row_Recordset1['Phone']; ?><br /> 
+Phone: <?php 
+if ($row_Recordset1['Phone'] == "") { 
+	echo "<a class='alert' href='admin/admin.php?page=students'>No Phone Number on File</a>";
+} else {
+	$phoneParse = $row_Recordset1['Phone'];
+	echo "(" . substr($phoneParse,0,3).") " . substr($phoneParse,3,3) . "-". substr($phoneParse,6,4);
+}
+	 ?><br /> 
 Student ID: <?php echo $row_Recordset1['StudentID']; ?><br />
 LDAP: <a href="studentinfo.php?StudentID=<?php echo $row_Recordset1['StudentID']; ?>" target="_parent">Lookup Entry</a><br />
 <?php 
@@ -168,7 +175,7 @@ echo "<br/><strong class='alert'>This Student is either NOT registered for check
 if($row_Recordset1['StudentID']!=""){
 
 // ADD STUDENT TO A CLASS
-$classes = mysql_query("SELECT * FROM class") or die(mysql_error());  ?>
+$classes = mysql_query("SELECT * FROM class ORDER by class.Name") or die(mysql_error());  ?>
 
 <form name="form" action="admin/add-class.php" method="post">
 <select name="class" size="1" id="class">

@@ -199,13 +199,15 @@ $ServerCheckHours = 0;
 		$Day = 1;
 	}
 		
-	$returndateSQL = $Year."-".$Month."-".$Day." 17:00:00";
+	$returndateSQL = $Year."-".$Month."-".$Day." ".$dueHours;
 	
 	//IF NOT OPEN weekends
 	if(!$weekends) {
-		if (date("D", strtotime($returndateSQL)) == "Sun") {
+		if (date("D", strtotime($returndateSQL)) == $dayClosed1) {
 			$Day = ($Day + 2);
-			echo "<div id='alert' style='visibility: visible;'>Not open on Sunday, return on Tuesday...</div>";
+			echo "<div id='alert' style='visibility: visible;'>Not open on ";
+			echo $dayClosed1;
+			echo ".<br />Return on next day open...</div>";
 			echo "<script type='text/javascript'>";
 			echo "setTimeout('divClose();',3000);";
 			echo "</script>"; 
@@ -217,12 +219,14 @@ $ServerCheckHours = 0;
 			$Day = 1;
 		}
 		
-		$returndateSQL = $Year."-".$Month."-".$Day." 17:00:00";
+		$returndateSQL = $Year."-".$Month."-".$Day." ".$dueHours;
 		
-		//IF NOT OPEN SUNDAY
-		if (date("D", strtotime($returndateSQL)) == "Sun") {
-			$Day = ($Day + 2);
-			echo "<div id='alert'>Not open on Sunday, return on Tuesday...</div>";
+		//RULES FOR SPECIFC DAY CLOSED
+		if (date("D", strtotime($returndateSQL)) == $dayClosed2) {
+			$Day = ($Day + 1);
+			echo "<div id='alert' style='visibility: visible;'>Closed ";
+			echo $dayClosed2;
+			echo ".<br />Return on next day open...</div>";
 			echo "<script type='text/javascript'>";
 			echo "setTimeout('divClose();',3000);";
 			echo "</script>"; 
@@ -235,7 +239,7 @@ $ServerCheckHours = 0;
 		}
 	}
 	
-	$returndateSQL = $Year."-".$Month."-".$Day." 17:00:00";
+	$returndateSQL = $Year."-".$Month."-".$Day." ".$dueHours;
 	
 	// figure out hours here
 	switch (date("D",strtotime($returndateSQL))) {
@@ -285,7 +289,7 @@ $ServerCheckHours = 0;
 	}
 	
 	//date formate for sql 0000-00-00 00:00:00
-	$returndateSQL = $Year."-".$Month."-".$Day." 17:00:00";
+	$returndateSQL = $Year."-".$Month."-".$Day." ".$dueHours;
 
 ?>
 <span id="changeDate"><? echo date("D, F d", strtotime($returndateSQL));?></span>, BEFORE <? echo date("g:i a", strtotime($returndateSQL));?></div></div>
