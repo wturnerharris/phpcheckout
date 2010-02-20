@@ -7,7 +7,7 @@ $SQL = " AND FinePaid is NULL";
 echo "<center><h1>Unpaid Fines List</h1></center>";
 } else {
 $SQL = " AND checkedout.StudentID = " . $_REQUEST['StudentID'];
-echo "<center><h1>UnPaid Fines List</h1></center>";
+echo "<center><h1>Unpaid Fines List</h1></center>";
 echo "<strong>HISTORY OF FINES FOR STUDENT ID#:</strong> " . $_REQUEST['StudentID'];
 echo "<hr />";
 }

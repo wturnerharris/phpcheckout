@@ -139,11 +139,11 @@ if (isset($SelectedID)) {
 <br />
 <br />
 <a href="#" style="float: right; margin-right: 35px;" onClick="Modify()">
-	<img src="/<?php echo $root; ?>/images/modify-button.png" border="0" title="Modify" /></a>
+	<img src="<?php echo $root; ?>/images/modify-button.png" border="0" title="Modify" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
-	<img src="/<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
+	<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="answer=confirm('Do you wish to remove <?php echo $row_Users["Username"]; ?> from the users?');if(answer!=0){delEntry();}else{alert('Canceled')}">
-	<img src="/<?php echo $root; ?>/images/remove-button.png" border="0" title="Remove" /></a>
+	<img src="<?php echo $root; ?>/images/remove-button.png" border="0" title="Remove" /></a>
 <input id="pID" name="pID" type="hidden" value="<?php echo $row_Users['ID']; ?>" />
 </form>
 </div>
@@ -165,9 +165,9 @@ if (isset($SelectedID)) {
 <br />
 <br />
 <a href="#" style="float: right; margin-right: 35px;" onClick="Add()">
-	<img src="/<?php echo $root; ?>/images/add-button.png" border="0" title="Add" /></a>
+	<img src="<?php echo $root; ?>/images/add-button.png" border="0" title="Add" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
-	<img src="/<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
+	<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 </form>
 </div>
 <?php
@@ -175,7 +175,7 @@ if (isset($SelectedID)) {
 	}
 }
 ?>
-<div style="position: absolute; bottom: 10px; left: 20px;"><a href="#" title="Add Student" onClick="$('SelectedID').value = '0'; $('form1').submit();"><img src="/<?php echo $root; ?>/images/add-student-button.png" border="0" /></a></div>
+<div style="position: absolute; bottom: 10px; left: 20px;"><a href="#" title="Add Student" onClick="$('SelectedID').value = '0'; $('form1').submit();"><img src="<?php echo $root; ?>/images/add-student-button.png" border="0" /></a></div>
 <?php
 mysql_free_result($entry);
 mysql_free_result($Users);

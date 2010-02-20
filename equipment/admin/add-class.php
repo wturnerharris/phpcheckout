@@ -17,7 +17,7 @@ mysql_query($sql, $equip) or die(mysql_error());
 
 ?>
 
-<meta http-equiv="refresh" content="2,../studentinfo.php?StudentID=<?php echo $StudentID; ?>" />
+<meta http-equiv="refresh" content="1,../studentinfo.php?StudentID=<?php echo $StudentID; ?>" />
 <div id="alert" style="visibility:visible">
 Class Added: <? echo $class ?><br />
 <br />
