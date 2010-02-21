@@ -1,5 +1,4 @@
 <?php 
-
 require_once('config.php');
 include('includes/heading.html'); 
 
@@ -17,8 +16,8 @@ if (!(isset($pagenum))) {
 }
 
 $StudentID = $_REQUEST['StudentID'];
-
 $mainQuery = "SELECT kit.ID AS KitID, kit.Name AS KitName, kit.ImageThumb AS KitImageThumb, accessorytype.ID AS AccessoryTypeID, accessorytype.Name AS AccessoryTypeName, kit_accessorytype.ID AS KitAccID, kit_class.ClassID AS kitClassID, class.ID as classID, class.Name as className FROM kit LEFT JOIN kit_accessorytype ON kit_accessorytype.KitID = kit.ID LEFT JOIN accessorytype ON kit_accessorytype.AccessorytypeID = accessorytype.ID LEFT JOIN kit_class ON kit_class.KitID = kit.ID LEFT JOIN class ON kit_class.ClassID = class.ID$insert ORDER BY KitName ASC";
+$NoAccessory = "SELECT kit.ID AS KitID, kit.Name AS KitName, kit.ImageThumb AS KitImageThumb, kit_class.ClassID AS kitClassID, class.ID as classID, class.Name as className FROM kit LEFT JOIN kit_class ON kit_class.KitID = kit.ID LEFT JOIN class ON kit_class.ClassID = class.ID$insert ORDER BY KitName ASC";
 
 mysql_select_db($database_equip, $equip);
 $query_Recordset1 = sprintf("$mainQuery");
@@ -45,7 +44,7 @@ $row_Recordset9 = mysql_fetch_assoc($Recordset9);
 $totalRows_Recordset9 = mysql_num_rows($Recordset9);
 
 //This is the number of results displayed per page
-$page_rows = 10;
+$page_rows = 50;
 
 //This tells us the page number of our last page
 $last = ceil($totalRows_Recordset1/$page_rows);
@@ -66,12 +65,12 @@ $max = 'LIMIT ' .($pagenum - 1) * $page_rows .',' .$page_rows;
 //This is your query again, the same one... the only difference is we add $max into it
 $data_p = mysql_query("$mainQuery $max") or die(mysql_error());
 
-
 $First = $row_Recordset3['FirstName'];
 $Last = $row_Recordset3['LastName'];
 $ServerKitID = $row_Recordset9['KitID'];
 
 $CheckedOutCount = 0;
+//echo $mainQuery;
 ?>
 
 <div align="center"><strong><h1>List of Equipment</h1></strong></div>
@@ -123,10 +122,11 @@ $AccessoryFirstTime = 0;
 	$totalRows_Recordset5 = mysql_num_rows($Recordset5);
 	
 	if (empty($_REQUEST['StudentID'])) { 
-		if ($row_Recordset5['ExpectedDateIn'] != ''){ ?> 
-	<? echo("<br/></td><td bgcolor=\"e6e6e6\" valign=\"top\"><B><font color=\"red\">Checked Out</font></B><br/><em>Unavailable</em>"); ?> </td></tr><tr><td valign="top" CLASS="accessoryText"><br>
+		if ($row_Recordset5['ExpectedDateIn'] != ''){
+		echo("<br/></td><td bgcolor=\"e6e6e6\" valign=\"top\"><B><font color=\"red\">Checked Out</font></B><br/><em>Unavailable</em>"); ?> 
+		</td></tr><tr><td valign="top" CLASS="accessoryText"><br>
 		<?} else { ?>
-		</td><td bgcolor="e6e6e6">Available for <strong><a href="studentid.php" onClick="javascript:alert('No Student ID Selected')">Checkout</a></strong></td></tr><tr><td valign="top" CLASS="accessoryText"><br>
+		</td><td bgcolor="e6e6e6">Available for <strong><a href="studentid.php" onClick="javascript:alert('No Student ID Selected')">Checkout</a></strong></td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
 	<? }} else {
 	// SHOWS IF UNAVAILABLE
 	mysql_select_db($database_kit, $equip);
@@ -144,7 +144,7 @@ $AccessoryFirstTime = 0;
 
 	<?php }
 if (isset($info['KitImageThumb'])){
-	echo "<p><IMG SRC='images/".$info['KitImageThumb']."' align='center'>";
+	echo "<IMG SRC='images/".$info['KitImageThumb']."' align='center'>";
 	echo "</td><td valign='top' CLASS='accessoryText'>";
 } else {
 	echo "</td><td valign='top' CLASS='accessoryText'><br></td>";
