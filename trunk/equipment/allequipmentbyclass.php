@@ -1,6 +1,8 @@
-<?php require_once('config.php');
+<?php 
 
+require_once('config.php');
 include('includes/heading.html'); 
+
 $class = $_REQUEST['class'];
 $pagenum = $_REQUEST['pagenum'];
 $insert = " WHERE class.Name = '$class'";
@@ -76,7 +78,7 @@ $CheckedOutCount = 0;
 <table width="550" border="0" align="center" cellpadding="5" cellspacing="0">
 
 <?php 
-// ADD STUDENT TO A CLASS
+// LIST BY CLASS
 $classes = mysql_query("SELECT * FROM class") or die(mysql_error());  ?>
 
 <form name="form" action="allequipmentbyclass.php" method="post">
@@ -111,7 +113,7 @@ $AccessoryFirstTime = 0;
 ?>
 <tr>
     <td bgcolor="e6e6e6">
-        <strong><a href="#" class="hints" title="<?php echo 'Enrolled for ' .$info['className']; ?>">Equipment:</a></strong> <?php $currentID = $info['KitID']; $checkedID = $info['KitID']; echo $info['KitName']; ?><a href="/<? echo $root; ?>/kithistory.php?KitID=<?php echo $info['KitID']; ?>" > <img src="images/ip_icon_02_Info.png" title="Checkout History" width="18" height="18" border="0" align="absmiddle" /></a><br />
+        <strong><a href="#" class="hints" title="<?php echo 'Enrolled for ' .$info['className']; ?>">Equipment:</a></strong> <?php $currentID = $info['KitID']; $checkedID = $info['KitID']; echo $info['KitName']; ?><a href="<? echo $root; ?>/kithistory.php?KitID=<?php echo $info['KitID']; ?>" > <img src="images/ip_icon_02_Info.png" title="Checkout History" width="18" height="18" border="0" align="absmiddle" /></a><br />
 	<?php	
 	// SHOWS IF UNAVAILABLE
 	mysql_select_db($database_kit, $equip);
