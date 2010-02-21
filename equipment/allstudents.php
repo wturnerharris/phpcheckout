@@ -2,18 +2,45 @@
 require_once('config.php');
 include('includes/heading.html'); 
 
-$StudentID = $_REQUEST['StudentID'];
+$class = $_REQUEST['class'];
 $pagenum = $_REQUEST['pagenum'];
+$insert = " WHERE class.Name = '$class'";
+
+if (empty($class)) {
+	$insert = "";
+}
 
 //This checks to see if there is a page number. If not, it will set it to page 1
 if (!(isset($pagenum)))
 {
 $pagenum = 1;
 }
-
 ?>
 <div align="center"><h1>Student Records</h1></div>
+
 <table width="450" border="0" align="center" cellpadding="5" cellspacing="5">
+<?php
+// LIST BY CLASS
+mysql_select_db($database_equip, $equip);
+$classes = mysql_query("SELECT * FROM class") or die(mysql_error());  ?>
+
+<form name="form" action="allstudents.php" method="post">
+	<select name="class" size="1" id="class" style="margin-left: 10px; margin-bottom: 5px;" onChange="this.form.submit();"> 
+	<option <?php if ($class == "") { echo "selected";} ?> value="" >All Classes</option>
+	<? while($option = mysql_fetch_array( $classes )) {
+		
+		// Print out the contents of each row (class) into an option 
+		if ($class == "$option[Name]") { 
+			$echo = " selected"; 
+		} else { 
+			$echo = ""; 
+		}
+		echo "<option $echo value='$option[Name]'>$option[Name]</option>";
+		} 
+		mysql_free_result($option);
+	?>
+	</select>
+</form> 
 <thead>
 	<tr>
 <!--		<th scope="col">Del</th> -->
@@ -25,7 +52,7 @@ $pagenum = 1;
 <tbody>
 <?php
 mysql_select_db($database_equip, $equip);
-$query_Students = "SELECT * FROM students ORDER BY students.LastName ASC";
+$query_Students = "SELECT students.ID AS ID, students.StudentID AS StudentID, students.FirstName AS FirstName, students.LastName AS LastName, students.Email AS Email, students.Phone AS Phone, students.ContractSigned AS ContractSigned, class.ID AS classID, class.Name AS className, student_class.StudentID as sID, student_class.ClassID AS sClassID FROM students LEFT JOIN student_class ON student_class.StudentID = students.StudentID LEFT JOIN class ON class.ID = student_class.ClassID".$insert." ORDER BY students.LastName ASC";
 $Students = mysql_query($query_Students, $equip) or die(mysql_error());
 $row_Students = mysql_fetch_assoc($Students);
 $totalRows_Students = mysql_num_rows($Students);
@@ -47,7 +74,7 @@ if ($pagenum < 1) {
 $max = 'LIMIT ' .($pagenum - 1) * $page_rows .',' .$page_rows; 
 
 //This is your query again, the same one... the only difference is we add $max into it
-$data_p = mysql_query("SELECT * FROM students ORDER BY students.LastName ASC $max") or die(mysql_error());
+$data_p = mysql_query("$query_Students $max") or die(mysql_error());
 
 //This is where you display your query results
 while($info = mysql_fetch_assoc($data_p)) {
@@ -55,7 +82,6 @@ while($info = mysql_fetch_assoc($data_p)) {
 ?>
 
 <tr>
-  <!-- <td><a href="#" onClick="answer=confirm('Do you wish to remove <?php echo $info['FirstName']; ?> <?php echo $info['LastName']; ?> from the student records?');if(answer!=0){delEntry();}else{alert('Canceled')}"><img src="images/remove_icn.png" border="0" /></a></td> -->
 	<td><a href="studentinfo.php?StudentID=<?php echo $info['StudentID']; ?>"><?php echo $info['StudentID']; ?></a></td>
 	<td><?php echo $info['LastName']; ?>, <?php echo $info['FirstName']; ?></td>
 	<td><?php if ($info['ContractSigned'] != "1"){
@@ -73,7 +99,8 @@ echo "<center><p>";
 // This shows the user what page they are on, and the total number of pages
 echo " --Page $pagenum of $last-- </p>";
 
-// First we check if we are on page one. If we are then we don't need a link to the previous page or the first page so we do nothing. If we aren't then we generate links to the first page, and to the previous page.
+// First we check if we are on page one. If we are then we don't need a link to the previous page 
+// or the first page so we do nothing. If we aren't then we generate links to the first page and to the previous page.
 if ($pagenum == 1)
 {
 echo " <a class='pagenum' title='Beginning of Records'><< First</a> ";
@@ -102,6 +129,5 @@ echo " ";
 echo " <a class='pagenum' href='{$_SERVER['PHP_SELF']}?pagenum=$last'>Last >></a> ";
 echo " </center> ";
 }
-?> 
-<?php mysql_free_result($Students); ?>
-<? include('includes/footer.html');  ?>
+mysql_free_result($Students); 
+include('includes/footer.html');  ?>

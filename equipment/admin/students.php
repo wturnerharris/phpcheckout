@@ -161,7 +161,7 @@ function Add() {
 		});
 	$('alert').style.visibility = "visible";
 	$('alert').innerHTML = "Student Record Added";
-	setTimeout('window.location.href = \"../allstudents.php\";',1000);
+	setTimeout("window.location.href = '../studentinfo.php?StudentID=' + $('txtStudentID1').value;",1000);
 	}
 }
 function Modify() {
@@ -187,8 +187,8 @@ function Modify() {
 		onComplete: showResponse 
 		});
 	$('alert').style.visibility = "visible";
-	$('alert').innerHTML = "Student Record Added";
-	setTimeout("window.location.href = '../studentinfo.php?StudentID=' + $('txtStudentID1').value;",1000);
+	$('alert').innerHTML = "Student Record Modified";
+	setTimeout("window.location.href = '../studentinfo.php?StudentID=' + $('txtStudentID').value;",1000);
 	}
 function delEntry(){
 	new Ajax.Request("remove-student.php", 
@@ -287,7 +287,7 @@ if ($filter == "yesyes") {
 	<img src="<?php echo $root; ?>/images/modify-button.png" border="0" title="Modify" /></a>
 <a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
 	<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
-<a href="#" style="float: right; margin-right: 10px;" onClick="answer=confirm('Do you wish to remove <?php echo $row_Students["FirstName"]; ?> <?php echo $row_Students["LastName"]; ?> from the student records?');if(answer!=0){delEntry();}else{alert('Canceled')}">
+<a href="#" style="float: right; margin-right: 10px;" onClick="answer=confirm('Do you wish to remove <?php echo $row_Students["FirstName"]; ?> <?php echo $row_Students["LastName"]; ?> from the student records?');if(answer!=0){delEntry();}else{alert('Canceled');setTimeout('refreshPage();',500);}">
 	<img src="<?php echo $root; ?>/images/remove-button.png" border="0" title="Remove" /></a>
 <input id="pID" name="pID" type="hidden" value="<?php echo $row_Students['ID']; ?>" />
 </form>
