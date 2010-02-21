@@ -61,6 +61,7 @@ $row_Equipment = mysql_fetch_assoc($Equipment);
 $totalRows_Equipment = mysql_num_rows($Equipment);
 
 //***** LOOP SELECT BOX *****
+mysql_data_seek($Equipment,0);
 while($loop_Equipment = mysql_fetch_assoc($Equipment)) {
 
 ?>
