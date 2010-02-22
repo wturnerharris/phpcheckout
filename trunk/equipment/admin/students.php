@@ -36,9 +36,6 @@ function TxtBoxStart(){
 	$('txtFilter').select();
 	$('btn').disabled = false;
 }
-function EnableButton(){
-	$('btn2').disabled = false;
-}
 function ChangeValue(){
 	$('filter').value = "yes";
 	$('form1').submit();
@@ -272,15 +269,15 @@ if ($filter == "yesyes") {
 ?>
 <div id="showModify">
 <form id="form2" name="form2" action="#" method="post">
-<strong>Student ID: </strong><input type="textarea" id="txtStudentID" name="txtStudentID" value="<?php echo $row_Students['StudentID']; ?>" readonly="true" onClick="this.readOnly = false; this.style.background = '#ffffff'; this.style.color = '#000000'; EnableButton();" onKeyPress="return disableEnterKey(event)"/>
+<strong>Student ID: </strong><input type="textarea" id="txtStudentID" name="txtStudentID" value="<?php echo $row_Students['StudentID']; ?>" readonly="true" onClick="this.readOnly = false; this.style.background = '#ffffff'; this.style.color = '#000000';" onKeyPress="return disableEnterKey(event)"/>
 <br />
-<strong>First Name: </strong><input type="textarea" id="txtFirstName" name="txtFirstName" value="<?php echo $row_Students['FirstName']; ?>" readonly="true" onClick="this.readOnly = false; this.style.background = '#ffffff'; this.style.color = '#000000'; EnableButton();" onKeyPress="return disableEnterKey(event)"/>
+<strong>First Name: </strong><input type="textarea" id="txtFirstName" name="txtFirstName" value="<?php echo $row_Students['FirstName']; ?>" readonly="true" onClick="this.readOnly = false; this.style.background = '#ffffff'; this.style.color = '#000000';" onKeyPress="return disableEnterKey(event)"/>
 <br />
-<strong>Last Name: </strong><input type="textarea" id="txtLastName" name="txtLastName" value="<?php echo $row_Students['LastName']; ?>" readonly="true" onClick="this.readOnly = false; this.style.background = '#ffffff'; this.style.color = '#000000'; EnableButton();" onKeyPress="return disableEnterKey(event)"/>
+<strong>Last Name: </strong><input type="textarea" id="txtLastName" name="txtLastName" value="<?php echo $row_Students['LastName']; ?>" readonly="true" onClick="this.readOnly = false; this.style.background = '#ffffff'; this.style.color = '#000000';" onKeyPress="return disableEnterKey(event)"/>
 <br />
-<strong>Email Address: </strong><input type="textarea" id="txtEmail" name="txtEmail" value="<?php echo $row_Students['Email']; ?>" readonly="true" onClick="this.readOnly = false; this.style.background = '#ffffff'; this.style.color = '#000000'; EnableButton();" onKeyPress="return disableEnterKey(event)"/>
+<strong>Email Address: </strong><input type="textarea" id="txtEmail" name="txtEmail" value="<?php echo $row_Students['Email']; ?>" readonly="true" onClick="this.readOnly = false; this.style.background = '#ffffff'; this.style.color = '#000000';" onKeyPress="return disableEnterKey(event)"/>
 <br />
-<strong>Phone Number: </strong><input type="textarea" id="txtPhone" name="txtPhone" value="<?php echo $row_Students['Phone']; ?>" readonly="true" onClick="this.readOnly = false; this.style.background = '#ffffff'; this.style.color = '#000000'; EnableButton();" onKeyPress="return disableEnterKey(event)"/>
+<strong>Phone Number: </strong><input type="textarea" id="txtPhone" name="txtPhone" value="<?php echo $row_Students['Phone']; ?>" readonly="true" onClick="this.readOnly = false; this.style.background = '#ffffff'; this.style.color = '#000000';" onKeyPress="return disableEnterKey(event)"/>
 <br />
 <br />
 <a href="#" style="float: right; margin-right: 35px;" onClick="Modify()">
