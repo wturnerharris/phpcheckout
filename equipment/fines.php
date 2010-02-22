@@ -18,15 +18,7 @@ $query_Recordset1 = "SELECT FirstName, LastName, checkedout.ID, checkedout.Stude
 $Recordset1 = mysql_query($query_Recordset1, $equip) or die(mysql_error());
 $row_Recordset1 = mysql_fetch_assoc($Recordset1);
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
-?>
-<!-- redundant form
-<form action="fines.php" method="post">
-<strong>Find Student Fines by ID:</strong><br>  
-<input name="StudentID" type="text" value="<? echo $_REQUEST['StudentID'] ?>">
-<input name="" type="submit" Value="Search">
-</form>
--->
-<?php
+
 if (isset($row_Recordset1['StudentID'])) {
 do { 
 
@@ -92,7 +84,7 @@ echo "<P>No Fines Found. Enter a Student ID below.</P>";
 ?>
 <form action="fines.php" method="post">
 <strong>Find Student Fines by ID:</strong><br>  
-<input name="StudentID" class="TextField" type="text" value="<? echo $_REQUEST['StudentID'] ?>">
+<input name="StudentID" id="StudentID" class="TextField" type="text" value="<? echo $_REQUEST['StudentID'] ?>">
 <input name="" type="submit" Value="Search">
 </form>
 <?

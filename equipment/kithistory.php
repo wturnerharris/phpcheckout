@@ -33,7 +33,7 @@ $CheckedOutCount = 0;
 -->
 </style>
 
-<div align="center"><strong>KIT'S CHECKOUT HISTORY</strong><br>
+<div align="center"><h1>Checkout History</h1>
   <br>
 </div>
 <table width="600" border="0" align="center" cellpadding="3" cellspacing="3">
@@ -52,7 +52,7 @@ $AccessoryFirstTime = 0;
 
 ?>
 <tr>
-    <td colspan="2"><strong>Kit Name:</strong> <? echo $row_Recordset1['KitName']; ?></td>
+    <td colspan="2"><strong>Equipment Name:</strong> <? echo $row_Recordset1['KitName']; ?></td>
 
         </tr>
         <tr>
@@ -90,16 +90,14 @@ $FirstTime++;
         </div>
       </blockquote>
 </table>
-
-CHECKOUT HISTORY:
-<p>
-<table border="1" cellpadding="5">
+<h2><blockquote>History Detail:</blockquote></h2>
+<table width="600" border="0" align="center" cellpadding="3" cellspacing="3">
 	<tr>
-		<td>Student Name</td>
-		<td>Date Out</td>
-		<td>By</td>
-		<td>Date In</td>
-		<td>By</td>
+		<td><strong>Student Name</strong></td>
+		<td><strong>Date Out</strong></td>
+		<td><strong>By</strong></td>
+		<td><strong>Date In</strong></td>
+		<td><strong>By</strong></td>
 	</tr>
 	
 		
