@@ -1,6 +1,5 @@
 <?php 
 require_once('config.php'); 
-include('includes/heading.html');
 
 $StudentID = $_POST['StudentID'];
 
@@ -10,12 +9,10 @@ mysql_select_db($database_equip, $equip);
 mysql_query($sql, $equip) or die(mysql_error());
 
 ?>
-
-Contract Signed. Thank you.
-
-Page will refresh automatically.
-
 <meta http-equiv="refresh" content="3,studentinfo.php?StudentID=<? echo $StudentID ?>" />
 <? 
-include 'includes/footer.html';
+include ('studentinfo.php');
+echo "<script type='text/javascript'>setTimeout('$(\'alert\').style.visibility = \'hidden\';',1000);</script>";
+echo "<div id='alert' style='visibility:visible'>Contract Signed. Thank you.<br/>";
+echo "Page will refresh automatically.</div>";
 ?>
