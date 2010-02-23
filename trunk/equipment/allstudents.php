@@ -60,7 +60,7 @@ $query_Students = "SELECT students.ID AS ID, students.StudentID AS StudentID, st
 $Students = mysql_query($query_Students, $equip) or die("Could not perform select query - " . mysql_error());
 $row_Students = mysql_fetch_assoc($Students);
 $totalRows_Students = mysql_num_rows($Students);
-$totalRows = totalRows_Students;
+$totalRows = $totalRows_Students;
 if ($totalRows < 1) {
 	$totalRows = 1;
 }
