@@ -138,7 +138,7 @@ $AccessoryFirstTime = 0;
 	if ($row_Recordset5['ExpectedDateIn'] != ''){ ?> 
 		<? echo("Unavailable</td><td bgcolor=\"e6e6e6\" valign=\"top\"><B><font color=\"red\">Checked Out</font></B>"); ?> </td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
 	<? } else { ?>
-		Available</td><td valign="top" bgcolor="e6e6e6"><strong><a href="checkout.php?KitID=<? echo $currentID;?>&ContractRequired=0&StudentID=<? echo $StudentID; ?>">Checkout</a> for <?php echo $First; ?> <?php echo $Last; ?></strong></td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;11
+		Available</td><td valign="top" bgcolor="e6e6e6"><strong><a href="checkout.php?KitID=<? echo $currentID;?>&ContractRequired=0&StudentID=<? echo $StudentID; ?>">Checkout</a> for <?php echo $First; ?> <?php echo $Last; ?></strong></td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
 	<? } ?>
 
 
