@@ -25,7 +25,7 @@ $pagenum = 1;
 <?php
 // LIST BY CLASS
 mysql_select_db($database_equip, $equip);
-$classes = mysql_query("SELECT * FROM class") or die(mysql_error());  ?>
+$classes = mysql_query("SELECT * FROM class ORDER BY class.Name") or die(mysql_error());  ?>
 
 <form name="form" action="allstudents.php" method="post">
 	<select name="class" size="1" id="class" style="margin-left: 10px; margin-bottom: 5px;" onChange="this.form.submit();"> 
