@@ -124,7 +124,7 @@ $AccessoryFirstTime = 0;
 	if (empty($_REQUEST['StudentID'])) { 
 		if ($row_Recordset5['ExpectedDateIn'] != ''){
 		echo("<br/></td><td bgcolor=\"e6e6e6\" valign=\"top\"><B><font color=\"red\">Checked Out</font></B><br/><em>Unavailable</em>"); ?> 
-		</td></tr><tr><td valign="top" CLASS="accessoryText"><br>
+		</td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
 		<?} else { ?>
 		</td><td bgcolor="e6e6e6">Available for <strong><a href="studentid.php" onClick="javascript:alert('No Student ID Selected')">Checkout</a></strong></td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
 	<? }} else {
@@ -136,9 +136,9 @@ $AccessoryFirstTime = 0;
 	$totalRows_Recordset5 = mysql_num_rows($Recordset5);
 		
 	if ($row_Recordset5['ExpectedDateIn'] != ''){ ?> 
-		<? echo("Unavailable</td><td bgcolor=\"e6e6e6\" valign=\"top\"><B><font color=\"red\">Checked Out</font></B>"); ?> </td></tr><tr><td valign="top" CLASS="accessoryText"><br>
+		<? echo("Unavailable</td><td bgcolor=\"e6e6e6\" valign=\"top\"><B><font color=\"red\">Checked Out</font></B>"); ?> </td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
 	<? } else { ?>
-		Available</td><td valign="top" bgcolor="e6e6e6"><strong><a href="checkout.php?KitID=<? echo $currentID;?>&ContractRequired=0&StudentID=<? echo $StudentID; ?>">Checkout</a> for <?php echo $First; ?> <?php echo $Last; ?></strong></td></tr><tr><td valign="top" CLASS="accessoryText"><br>
+		Available</td><td valign="top" bgcolor="e6e6e6"><strong><a href="checkout.php?KitID=<? echo $currentID;?>&ContractRequired=0&StudentID=<? echo $StudentID; ?>">Checkout</a> for <?php echo $First; ?> <?php echo $Last; ?></strong></td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;11
 	<? } ?>
 
 
@@ -147,7 +147,7 @@ if (isset($info['KitImageThumb'])){
 	echo "<IMG SRC='images/".$info['KitImageThumb']."' align='center'>";
 	echo "</td><td valign='top' CLASS='accessoryText'>";
 } else {
-	echo "</td><td valign='top' CLASS='accessoryText'><br></td>";
+	echo "</td><td valign='top' CLASS='accessoryText'>No Accessories</td>";
 }
 if (isset($info['AccessoryTypeName'])){
 echo '<em><strong>Accessories</strong></em>';
@@ -162,7 +162,7 @@ if (isset($info['AccessoryTypeName'])){
 //echo " - ";
 if($AccessoryCount > 8){
 if($AccessoryFirstTime < 1){
-echo "</td><td valign='top' CLASS='accessoryText'>";
+echo "</td><td valign='top' CLASS='accessoryText'>5";
 $AccessoryFirstTime++;
 }	
 }
