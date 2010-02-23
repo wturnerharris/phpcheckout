@@ -4,10 +4,13 @@ include('includes/heading.html');
 
 $class = $_REQUEST['class'];
 $pagenum = $_REQUEST['pagenum'];
-$insert = " WHERE class.Name = '$class'";
+$insert1 = ", class.ID AS classID, class.Name AS className, student_class.StudentID as sID, student_class.ClassID AS sClassID";
+$insert2 = " LEFT JOIN student_class ON student_class.StudentID = students.StudentID LEFT JOIN class ON class.ID = student_class.ClassID WHERE class.Name = \"$class\"";
+//$insert = " WHERE class.Name = '$class'";
 
 if (empty($class)) {
-	$insert = "";
+	$insert1 = "";
+	$insert2 = "";
 }
 
 //This checks to see if there is a page number. If not, it will set it to page 1
@@ -52,16 +55,20 @@ $classes = mysql_query("SELECT * FROM class") or die(mysql_error());  ?>
 <tbody>
 <?php
 mysql_select_db($database_equip, $equip);
-$query_Students = "SELECT students.ID AS ID, students.StudentID AS StudentID, students.FirstName AS FirstName, students.LastName AS LastName, students.Email AS Email, students.Phone AS Phone, students.ContractSigned AS ContractSigned, class.ID AS classID, class.Name AS className, student_class.StudentID as sID, student_class.ClassID AS sClassID FROM students LEFT JOIN student_class ON student_class.StudentID = students.StudentID LEFT JOIN class ON class.ID = student_class.ClassID".$insert." ORDER BY students.LastName ASC";
-$Students = mysql_query($query_Students, $equip) or die(mysql_error());
+$query_Students = "SELECT students.ID AS ID, students.StudentID AS StudentID, students.FirstName AS FirstName, students.LastName AS LastName, students.Email AS Email, students.Phone AS Phone, students.ContractSigned AS ContractSigned".$insert1." FROM students".$insert2." ORDER BY students.LastName ASC";
+//echo $query_Students ."<br>";
+$Students = mysql_query($query_Students, $equip) or die("Could not perform select query - " . mysql_error());
 $row_Students = mysql_fetch_assoc($Students);
 $totalRows_Students = mysql_num_rows($Students);
-
+$totalRows = totalRows_Students;
+if ($totalRows < 1) {
+	$totalRows = 1;
+}
 //This is the number of results displayed per page
 $page_rows = 20;
 
 //This tells us the page number of our last page
-$last = ceil($totalRows_Students/$page_rows);
+$last = ceil($totalRows/$page_rows);
 
 //this makes sure the page number isn't below one, or more than our maximum pages
 if ($pagenum < 1) {
@@ -72,9 +79,11 @@ if ($pagenum < 1) {
 
 //This sets the range to display in our query
 $max = 'LIMIT ' .($pagenum - 1) * $page_rows .',' .$page_rows; 
-
+if ($totalRows_Students < 1) {
+	echo "<tr><td><span class='alert'>No students found for the selected class</span></td><td>&nbsp;</td><td>&nbsp;</td></tr>";
+} else {
 //This is your query again, the same one... the only difference is we add $max into it
-$data_p = mysql_query("$query_Students $max") or die(mysql_error());
+$data_p = mysql_query("$query_Students $max") or die("Could not perform select query - " . mysql_error());
 
 //This is where you display your query results
 while($info = mysql_fetch_assoc($data_p)) {
@@ -89,7 +98,7 @@ while($info = mysql_fetch_assoc($data_p)) {
 			else { echo "Yes";}	 ?></td>
 </tr>
 
-<?php } ?>
+<?php }} ?>
 
 </tbody>
 </table>
