@@ -16,7 +16,7 @@ if (!(isset($pagenum))) {
 }
 
 $StudentID = $_REQUEST['StudentID'];
-$mainQuery = "SELECT kit.ID AS KitID, kit.Name AS KitName, kit.ImageThumb AS KitImageThumb, accessorytype.ID AS AccessoryTypeID, accessorytype.Name AS AccessoryTypeName, kit_accessorytype.ID AS KitAccID, kit_class.ClassID AS kitClassID, class.ID as classID, class.Name as className FROM kit LEFT JOIN kit_accessorytype ON kit_accessorytype.KitID = kit.ID LEFT JOIN accessorytype ON kit_accessorytype.AccessorytypeID = accessorytype.ID LEFT JOIN kit_class ON kit_class.KitID = kit.ID LEFT JOIN class ON kit_class.ClassID = class.ID$insert ORDER BY KitName ASC";
+$mainQuery = "SELECT kit.ID AS KitID, kit.Name AS KitName, kit.Repair AS Repair, kit.ImageThumb AS KitImageThumb, accessorytype.ID AS AccessoryTypeID, accessorytype.Name AS AccessoryTypeName, kit_accessorytype.ID AS KitAccID, kit_class.ClassID AS kitClassID, class.ID as classID, class.Name as className FROM kit LEFT JOIN kit_accessorytype ON kit_accessorytype.KitID = kit.ID LEFT JOIN accessorytype ON kit_accessorytype.AccessorytypeID = accessorytype.ID LEFT JOIN kit_class ON kit_class.KitID = kit.ID LEFT JOIN class ON kit_class.ClassID = class.ID$insert ORDER BY KitName ASC";
 $NoAccessory = "SELECT kit.ID AS KitID, kit.Name AS KitName, kit.ImageThumb AS KitImageThumb, kit_class.ClassID AS kitClassID, class.ID as classID, class.Name as className FROM kit LEFT JOIN kit_class ON kit_class.KitID = kit.ID LEFT JOIN class ON kit_class.ClassID = class.ID$insert ORDER BY KitName ASC";
 
 mysql_select_db($database_equip, $equip);
@@ -114,7 +114,7 @@ $AccessoryFirstTime = 0;
     <td bgcolor="e6e6e6">
         <strong><a href="#" class="hints" title="<?php echo 'Enrolled for ' .$info['className']; ?>">Equipment:</a></strong> <?php $currentID = $info['KitID']; $checkedID = $info['KitID']; echo $info['KitName']; ?><a href="<? echo $root; ?>/kithistory.php?KitID=<?php echo $info['KitID']; ?>" > <img src="images/ip_icon_02_Info.png" title="Checkout History" width="18" height="18" border="0" align="absmiddle" /></a><br />
 	<?php	
-	// SHOWS IF UNAVAILABLE
+	// SHOWS IF UNAVAILABLE WITHOUT SID SELECTED
 	mysql_select_db($database_kit, $equip);
 	$query_Recordset5 = "SELECT * FROM checkedout WHERE KitID = $currentID AND DateIn = ''";
 	$Recordset5 = mysql_query($query_Recordset5, $equip) or die(mysql_error());
@@ -122,13 +122,17 @@ $AccessoryFirstTime = 0;
 	$totalRows_Recordset5 = mysql_num_rows($Recordset5);
 	
 	if (empty($_REQUEST['StudentID'])) { 
-		if ($row_Recordset5['ExpectedDateIn'] != ''){
-		echo("<br/></td><td bgcolor=\"e6e6e6\" valign=\"top\"><B><font color=\"red\">Checked Out</font></B><br/><em>Unavailable</em>"); ?> 
+		if ($row_Recordset5['ExpectedDateIn'] != '') { ?>
+		</td><td bgcolor="e6e6e6" valign="top"><em>Unavailable -</em><B><font color="red"> Checked Out</font></B>
 		</td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
-		<?} else { ?>
-		</td><td bgcolor="e6e6e6">Available for <strong><a href="studentid.php" onClick="javascript:alert('No Student ID Selected')">Checkout</a></strong></td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
-	<? }} else {
-	// SHOWS IF UNAVAILABLE
+		<? } else { 
+			if ($info['Repair'] != 1) { ?>
+			</td><td bgcolor="e6e6e6">Available for <strong><a href="studentid.php" onClick="javascript:alert('No Student ID Selected')">Checkout</a></strong></td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
+			<? } else { ?>
+				</td><td bgcolor="e6e6e6" valign="top"><em>Unavailable -</em><B><font color="red"> Out For Repairs </font></B>
+				</td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
+<?	}	}	} else {
+	// SHOWS IF UNAVAILABLE WITH SID SELECTED
 	mysql_select_db($database_kit, $equip);
 	$query_Recordset5 = "SELECT * FROM checkedout WHERE KitID = $currentID AND DateIn = ''";
 	$Recordset5 = mysql_query($query_Recordset5, $equip) or die(mysql_error());
@@ -136,18 +140,23 @@ $AccessoryFirstTime = 0;
 	$totalRows_Recordset5 = mysql_num_rows($Recordset5);
 		
 	if ($row_Recordset5['ExpectedDateIn'] != ''){ ?> 
-		<? echo("Unavailable</td><td bgcolor=\"e6e6e6\" valign=\"top\"><B><font color=\"red\">Checked Out</font></B>"); ?> </td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
-	<? } else { ?>
-		Available</td><td valign="top" bgcolor="e6e6e6"><strong><a href="checkout.php?KitID=<? echo $currentID;?>&ContractRequired=0&StudentID=<? echo $StudentID; ?>">Checkout</a> for <?php echo $First; ?> <?php echo $Last; ?></strong></td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
-	<? } ?>
+		</td><td bgcolor="e6e6e6" valign="top"><em>Unavailable -</em><B><font color="red"> Checked Out</font></B>
+		</td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
+<? 	} else {
+		if ($info['Repair'] != 1) { ?>
+		</td><td bgcolor="e6e6e6">Available for <strong><a href="studentid.php" onClick="javascript:alert('No Student ID Selected')">Checkout</a></strong></td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
+		<? } else { ?>
+				</td><td bgcolor="e6e6e6" valign="top"><em>Unavailable -</em><B><font color="red"> Out For Repairs </font></B>
+				</td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
+<?	} 	}	?>
 
 
 	<?php }
 if (isset($info['KitImageThumb'])){
 	echo "<IMG SRC='images/".$info['KitImageThumb']."' align='center'>";
-	echo "</td><td valign='top' CLASS='accessoryText'>";
+	echo "</td><td valign='top' style='padding-left:50px;' CLASS='accessoryText'>";
 } else {
-	echo "</td><td valign='top' CLASS='accessoryText'>No Accessories</td>";
+	echo "</td><td valign='top' style='padding-left:50px;' CLASS='accessoryText'>No Accessories</td>";
 }
 if (isset($info['AccessoryTypeName'])){
 echo '<em><strong>Accessories</strong></em>';
@@ -162,7 +171,7 @@ if (isset($info['AccessoryTypeName'])){
 //echo " - ";
 if($AccessoryCount > 8){
 if($AccessoryFirstTime < 1){
-echo "</td><td valign='top' CLASS='accessoryText'>5";
+echo "</td><td valign='top' style='padding-left:50px;' CLASS='accessoryText'>";
 $AccessoryFirstTime++;
 }	
 }
