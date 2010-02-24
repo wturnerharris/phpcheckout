@@ -31,11 +31,16 @@ $satClose = 17;
 $sunOpen = 00;
 $sunClose = 00;
 
-
 // fine controls
 $fineAmount = 1.00; // amount of fine
 $fineFreq = 1800; // amount of time per fine increment, in seconds
 $maxFine = 5.00; // max amount of fine per kit
 
-$root = "/equipment"; // using absolute paths to the root program folder, with preceding slash and without trailing slash
+$root = "/equipment"; // using absolute paths. from the root to the program folder, with preceding slash and without trailing slash
+$site_root = "http://www.witdesigns.com"; //domain name where your installation of checkout resides, no trailing slash
+
+//admin email for error reporting
+$admin_email1 = "wturnerharris@gmail.com";
+$admin_email2 = "";
+$admin_email3 = "";
 ?>

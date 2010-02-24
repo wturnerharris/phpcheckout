@@ -251,17 +251,16 @@ $totalRows_Recordset5 = mysql_num_rows($Recordset5);
 
 ?>
 
-
-
 <?php do { 
 if($previousID != $row_Recordset3['KitID']){
 ?>
 
 <tr>
-<td><?php if ($row_Recordset5['ExpectedDateIn'] != ''){ ?> <? echo $row_Recordset3['Name']; ?> </td> 
-	<? } else { ?>
+<td><?php if ($row_Recordset5['ExpectedDateIn'] != '') { echo $row_Recordset3['Name']; ?> </td> 
+	<? } else { 
+	if ($row_Recordset3['Repair'] !=1) { ?>
 		<a href="checkout.php?KitID=<?php echo $row_Recordset3['KitID']; ?>&ContractRequired=<?php echo $row_Recordset3['ContractRequired']; ?>&StudentID=<?php echo $row_Recordset1['StudentID']; ?>"><?php echo $row_Recordset3['Name']; ?></a></td>
-	<? } ?>
+	<? } else { echo $row_Recordset3['Name']; }} ?>
 	<?php if ($row_Recordset3['Repair'] !=1) { ?>
 	<td><?php if($row_Recordset5['DateOut'] !=''){ ?> <strong class="alert"> <?php
 					echo date("D, F j, g:i a", strtotime($row_Recordset5['DateOut'])); ?> </strong> <?php
@@ -275,9 +274,6 @@ if($previousID != $row_Recordset3['KitID']){
 }
 $previousID = $row_Recordset3['KitID'];
 } while ($row_Recordset5 = mysql_fetch_assoc($Recordset5)); ?>
-
-
-
 
 <?
 
@@ -293,8 +289,6 @@ mysql_free_result($Recordset3);
 }	
 }
 }
-
-
 
 mysql_free_result($Recordset1);
 

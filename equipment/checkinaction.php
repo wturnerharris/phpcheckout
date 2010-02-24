@@ -19,23 +19,26 @@ $Problem = 1;
 
 $message = "There has been a problem with the checkout of $KitName - $ModelNumber\r\n\r\n$Notes\r\n\r\n";
 
-$message = $message . "$document_root/equipment/kithistory.php?KitID=$KitID";
+$message = $message . "$site_root/$root/kithistory.php?KitID=$KitID";
 
+if (isset($admin_email1)) {
 mail("$admin_email1", "SYSTEM MESSAGE - Checkout Problem with $KitName", $message,
      "From: \"$CheckInUser\" <$admin_email1>\r\n" .
      "Reply-To: \"$CheckInUser\" <$admin_email1>\r\n" .
      "X-Mailer: PHP/" . phpversion());
-     
+}
+if (isset($admin_email2)) {
 mail("$admin_email2", "SYSTEM MESSAGE - Checkout Problem with $KitName", $message,
      "From: \"$CheckInUser\" <$admin_email2>\r\n" .
      "Reply-To: \"$CheckInUser\" <$admin_email2>\r\n" .
      "X-Mailer: PHP/" . phpversion());
-     
+}     
+if (isset($admin_email3)) {
 mail("$admin_email3", "SYSTEM MESSAGE - Checkout Problem with $KitName", $message,
      "From: \"$CheckInUser\" <$admin_email3>\r\n" .
      "Reply-To: \"$CheckInUser\" <$admin_email3>\r\n" .
      "X-Mailer: PHP/" . phpversion());
-     
+}
 echo "Email sent to checkout administrator(s)<p>";
      
 } else {
