@@ -129,5 +129,6 @@ $FirstTime++;
        }
         ?>
 </table>
+<p>Back to <a href="allequipmentbyclass.php">Equipment</a><br />
 
 <? include('includes/footer.html');  ?>
