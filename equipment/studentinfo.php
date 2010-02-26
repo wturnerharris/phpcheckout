@@ -27,7 +27,6 @@ if (empty($_REQUEST['StudentID'])) {
 
 $StudentID = $_REQUEST['StudentID'];
 
-// Bradley Specific
 //if(strlen($StudentID) > 7){
 //$StudentID = substr($StudentID, 0, 14);
 //echo "reset ID = " . $StudentID;
@@ -39,7 +38,6 @@ $Recordset1 = mysql_query($query_Recordset1, $equip) or die(mysql_error());
 $row_Recordset1 = mysql_fetch_assoc($Recordset1);
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 
-
 mysql_select_db($database_equip, $equip);
 $query_Fines = "SELECT * FROM checkedout WHERE (unix_timestamp(DateIn) - $fineFreq) > unix_timestamp(ExpectedDateIn) AND FinePaid IS NULL AND StudentID =  \"$StudentID\"";
 $Fines = mysql_query($query_Fines, $equip) or die(mysql_error());
@@ -48,18 +46,13 @@ $totalRows_Fines = mysql_num_rows($Fines);
 
 include('includes/heading.html');  
 if($fines!=0){
-if(isset($row_Fines['ID'])) {
-
-echo "<h1><strong><font color='#FF0000'>STUDENT OWES FINES!!!</font></strong></h1>";
-}
-}
+	if(isset($row_Fines['ID'])) {
+		echo "<h1><strong><font color='#FF0000'>STUDENT OWES FINES!!!</font></strong></h1>";
+}	}
+// STUDENT INFO AT TOP
 ?>
-
 <center><h1>Student Information</h1></center> 
-
-<?
-if($row_Recordset1['StudentID']!=""){
-?>
+<? if($row_Recordset1['StudentID']!=""){ ?>
 Name: <?php echo $row_Recordset1['FirstName']; ?> <?php echo $row_Recordset1['LastName']; ?><br />
 E-mail: <a href="mailto:<?php echo $row_Recordset1['Email']; ?>"><?php echo $row_Recordset1['Email']; ?></a><br />
 Phone: <?php 
@@ -76,7 +69,6 @@ LDAP: <a href="studentinfo.php?StudentID=<?php echo $row_Recordset1['StudentID']
 
 } else {
 echo "<span class='alert'>There is no student with ID number $StudentID in the system.</span><br><br>";
-////NEW CODE ADDED 2-16-2010
 echo "<strong>To ADD this Student, click <a href='admin/admin.php?page=students&StudentID=$StudentID'>here</a>.</strong>";
 }
 
@@ -112,7 +104,16 @@ $totalRows_Recordset4 = mysql_num_rows($Recordset4);
 </thead>
 <?php do { ?>
 <tr>
-    <td><A HREF="checkin.php?CheckedOutID=<?php echo $row_Recordset4['CheckOutID']; ?>&KitID=<?php echo $row_Recordset4['KitID']; ?>&StudentID=<?php echo $row_Recordset1['StudentID']; ?>"><?php echo $row_Recordset4['Name']; ?></A></td>
+    <td>
+		<ul class="nav">
+		<li><strong><?php echo $row_Recordset4['Name']; ?></strong>
+			<ul>
+			<li><a href="checkin.php?CheckedOutID=<?php echo $row_Recordset4['CheckOutID']; ?>&KitID=<?php echo $row_Recordset4['KitID']; ?>&StudentID=<?php echo $row_Recordset1['StudentID']; ?>" title="Check-in">Check-in</a></li>
+			<li><a href="renew.php?CheckedOutID=<?php echo $row_Recordset4['CheckOutID']; ?>&KitID=<?php echo $row_Recordset4['KitID']; ?>&StudentID=<?php echo $row_Recordset1['StudentID']; ?>" title="Renew">Renew</a></li>
+			</ul>
+		</li>
+		</ul>
+	</td>
 	<td><?php echo date("D, F j, g:i a", strtotime($row_Recordset4['DateOut'])); ?></td>
     <td><?php 
 	if (time() > strtotime($row_Recordset4['ExpectedDateIn'])) {
@@ -156,20 +157,15 @@ do {
 	echo $row_Recordset2['Name'] . "<br>"; 
  } while ($row_Recordset2 = mysql_fetch_assoc($Recordset2));
  
-////NEW CODE ADDED 2-16-2010
+////ADD REMOVE CLASSES LINK
 echo "<br><strong>To add or remove classes for this Student, click <a href=\"admin/admin.php?page=classes&StudentID=$StudentID\">here</a>.</strong>";
- //end addition
 
 mysql_select_db($database_equip, $equip);
 $query_Recordset3 = "SELECT kit.ID AS KitID, kit.Name, kit.ContractRequired, kit.Repair FROM kit_class INNER JOIN kit ON kit_class.KitID = kit.ID WHERE kit_class.ClassID = $ClassIDSQL GROUP BY KitID ORDER BY Name ASC";
-//echo $query_Recordset3;
 $Recordset3 = mysql_query($query_Recordset3, $equip) or die(mysql_error());
 $row_Recordset3 = mysql_fetch_assoc($Recordset3);
 $totalRows_Recordset3 = mysql_num_rows($Recordset3);
- 
 } else {
-
-////NEW CODE ADDED 2-16-2010
 echo "<br/><strong class='alert'>This Student is either NOT registered for checkout or needs to be added to a class.</strong><br>";
 
 if($row_Recordset1['StudentID']!=""){
@@ -188,7 +184,6 @@ echo "<option value='$option[Name]'>$option[Name]</option>";
 <input name="StudentID" type="hidden" value="<?php echo $row_Recordset1['StudentID']; ?>">
 <input type="submit" name="Submit" value="Add Class">
 </form> 
-
 <?
 }
 $NoClasses = 1;
@@ -199,11 +194,7 @@ $query_Recordset3 = "SELECT ID AS KitID, Name, ContractRequired FROM kit";
 $Recordset3 = mysql_query($query_Recordset3, $equip) or die(mysql_error());
 $row_Recordset3 = mysql_fetch_assoc($Recordset3);
 $totalRows_Recordset3 = mysql_num_rows($Recordset3);
-
 }
-
-
-
 ?>
 
 <HR>
@@ -249,10 +240,8 @@ $Recordset5 = mysql_query($query_Recordset5, $equip) or die(mysql_error());
 $row_Recordset5 = mysql_fetch_assoc($Recordset5);
 $totalRows_Recordset5 = mysql_num_rows($Recordset5);
 
-?>
-
-<?php do { 
-if($previousID != $row_Recordset3['KitID']){
+do { 
+	if($previousID != $row_Recordset3['KitID']){
 ?>
 
 <tr>
@@ -268,16 +257,14 @@ if($previousID != $row_Recordset3['KitID']){
     <td><?php if($row_Recordset5['ExpectedDateIn'] !=''){ ?> <strong class="alert"> <?php
 					echo date("D, F j, g:i a", strtotime($row_Recordset5['ExpectedDateIn'])); ?> </strong> <?php
 					} else { echo 'Available'; } ?></td>
-		<?php } else { ?> <td><strong class="alert">Out for Repairs</strong></td><td><strong class="alert">Out for Repairs</strong></td> <?php ;} ?>
+		<?php } else { ?> <td><strong>Out for Repairs</strong></td><td><strong>Out for Repairs</strong></td> <?php ;} ?>
   </tr>
 <?php 
 }
 $previousID = $row_Recordset3['KitID'];
 } while ($row_Recordset5 = mysql_fetch_assoc($Recordset5)); ?>
 
-<?
-
-// }
+<? // }
 mysql_free_result($Recordset5); 
 
  } while ($row_Recordset3 = mysql_fetch_assoc($Recordset3));
@@ -285,19 +272,11 @@ mysql_free_result($Recordset5);
 </table>
 <?php
 mysql_free_result($Recordset3);
-}}
-}	
-}
-}
-
+}	}	}	}	}
 mysql_free_result($Recordset1);
-
 mysql_free_result($Recordset2);
-
 mysql_free_result($Recordset4);
-
 mysql_free_result($Fines);
-
 }
 
 include('includes/footer.html'); ?>
