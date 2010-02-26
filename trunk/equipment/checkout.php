@@ -40,50 +40,77 @@ echo("<b>Student must sign an individual contract for this kit.</b>");
 }
 ?>
 <script type="text/javascript">
+function hide() {
+$('alert').style.visibility = "hidden";
+}
+function changeMonth() {
+	now = new Date();
+	returnDate = $("ReturnDate").value.substr(5,2);
+	originalDate =  $("OriginalDate").value.substr(5,2);
+	if (originalDate - returnDate !=0) {
+		months = new Array(13);
+		months[0]  = "January";
+		months[1]  = "February";
+		months[2]  = "March";
+		months[3]  = "April";
+		months[4]  = "May";
+		months[5]  = "June";
+		months[6]  = "July";
+		months[7]  = "August";
+		months[8]  = "September";
+		months[9]  = "October";
+		months[10] = "November";
+		months[11] = "December";
+		months[12] = "January";
+	var monthnumber = now.getMonth() + 2;
+	var monthname   = months[monthnumber];
+	$('newMonth').firstChild.nodeValue = monthname;
+	} else {
+		months = new Array(13);
+		months[0]  = "January";
+		months[1]  = "February";
+		months[2]  = "March";
+		months[3]  = "April";
+		months[4]  = "May";
+		months[5]  = "June";
+		months[6]  = "July";
+		months[7]  = "August";
+		months[8]  = "September";
+		months[9]  = "October";
+		months[10] = "November";
+		months[11] = "December";
+		months[12] = "January";
+	var monthnumber = now.getMonth() + 1;
+	var monthname   = months[monthnumber];
+	$('newMonth').firstChild.nodeValue = monthname;
+	}
+}
 function modDay0() {
 var date = $("OriginalDate").value;
 $("ReturnDate").value = $("OriginalDate").value;
 $('newDay').firstChild.nodeValue = $('plusNone').value;
-//$('newMonth').firstChild.nodeValue = $('plusNone').value;
 $('newDate').firstChild.nodeValue = date.substr(8,2);
+changeMonth();
 }
-//<input type="hidden" id="plusNone" name="plusNone" value="<? echo date("D", strtotime($returndateSQL)); ?>">
-//<input type="hidden" id="plusOne" name="plusOne" value="<? echo date("D", strtotime($plusOne)); ?>">
-//<input type="hidden" id="plusTwo" name="plusTwo" value="<? echo date("D", strtotime($plusTwo)); ?>">
-//<input type="hidden" id="OriginalDate" name="OriginalDate" value="<? echo $returndateSQL;?>">
-//<input type="hidden" id="ReturnDate" name="ReturnDate" value="<? echo $returndateSQL;?>">
-	//date formate for sql YEAR-MO-DA 00:00:00
-	//date formate for sql 0123-56-89 00:00:00
 function modDay1() 
 {
-var date = $("OriginalDate").value;
-var begin = date.substr(0,8);
-var day = date.substr(8,2);
-var addDay = parseFloat(day)+ 1;
-var end = date.substr(10,9);
-var newDay = $('plusOne').value;
-if (newDay = "Sun") {
-	var addDay = parseFloat(day) + 3;
-	var newDay = "Tue";
-}
-$("ReturnDate").value = begin+addDay+end;
+newDay = $('plusOne').value;
+newDate = $("plusOneDate").value.substr(8,2);
+$("ReturnDate").value = $("plusOneDate").value;
 $('newDay').firstChild.nodeValue = newDay;
+$('newDate').firstChild.nodeValue = newDate;
 //$('newMonth').firstChild.nodeValue = $('plusNone').value;
-$('newDate').firstChild.nodeValue = addDay;
+changeMonth();
 }
 function modDay2() 
 {
-var date = $("OriginalDate").value;
-var begin = date.substr(0,8);
-var day = date.substr(8,2);
-var addDay = parseFloat(day)+ 2;
-var end = date.substr(10,9);
-$("ReturnDate").value = begin+addDay+end;
-var newDay = $('plusTwo').value;
-var Date1 = $('changeDate').firstChild.nodeValue;
-var Date2 = Date1.substr(0,Date1.length-2) +  addDay;
-var newDate = newDay + Date2.substr(3,Date1.length);
-$('changeDate').firstChild.nodeValue = newDate;
+newDay = $('plusTwo').value;
+newDate = $("plusTwoDate").value.substr(8,2);
+$("ReturnDate").value = $("plusTwoDate").value;
+$('newDay').firstChild.nodeValue = newDay;
+$('newDate').firstChild.nodeValue = newDate;
+//$('newMonth').firstChild.nodeValue = $('plusNone').value;
+changeMonth();
 }
 </script>
 <P>
@@ -121,19 +148,19 @@ $ServerCheckHours = 0;
 
 	$Year = date('Y');
 	
-	$Month = date('n');
+	$Month = date('m');
 	
-	if ($Month<10) {
-	$Month = "0".$Month;
-	}
+//	if ($Month<10) {
+//	$Month = "0".$Month;
+//	}
 	
-	$Hours = substr($dueHours,02);
+	$Hours = substr($dueHours,0,2);
 
 	$Minutes = substr($dueHours,3,2);
 	
 	
 	//DUE BACK NEXT DAY / 24 HOURS
-	$Day = date('j');
+	$Day = date('d');
 
 
 	//LOGIC FOR END OF MONTH
@@ -209,7 +236,7 @@ $ServerCheckHours = 0;
 			echo $dayClosed1;
 			echo ".<br />Return on next day open...</div>";
 			echo "<script type='text/javascript'>";
-			echo "setTimeout('divClose();',3000);";
+			echo "setTimeout('hide();',1500);";
 			echo "</script>"; 
 		}
 		
@@ -224,11 +251,11 @@ $ServerCheckHours = 0;
 		//RULES FOR SPECIFC DAY CLOSED (PRESUMABLY SUNDAY)
 		if (date("D", strtotime($returndateSQL)) == $dayClosed2) {
 			$Day = ($Day + 1);
-			echo "<div id='alert' style='visibility: visible;'>Closed ";
+			echo "<div id='alert' >Closed ";
 			echo $dayClosed2;
 			echo ".<br />Return on next day open...</div>";
 			echo "<script type='text/javascript'>";
-			echo "setTimeout('divClose();',3000);";
+			echo "setTimeout('hide();',1500);";
 			echo "</script>"; 
 		}
 		
@@ -312,9 +339,11 @@ $plusTwo = addDate($returndateSQL,2);
 ?>
 <input type="hidden" id="plusNone" name="plusNone" value="<? echo date("D", strtotime($returndateSQL)); ?>">
 <input type="hidden" id="plusOne" name="plusOne" value="<? echo date("D", strtotime($plusOne)); ?>">
+<input type="hidden" id="plusOneDate" name="plusOneDate" value="<? echo date("Y-m-d", strtotime($plusOne))." ".$dueHours; ?>">
 <input type="hidden" id="plusTwo" name="plusTwo" value="<? echo date("D", strtotime($plusTwo)); ?>">
-<input type="hidden" id="OriginalDate" name="OriginalDate" value="<? echo $returndateSQL;?>">
-<input type="hidden" id="ReturnDate" name="ReturnDate" value="<? echo $returndateSQL;?>">
+<input type="hidden" id="plusTwoDate" name="plusTwoDate" value="<? echo date("Y-m-d", strtotime($plusTwo))." ".$dueHours; ?>">
+<input type="hidden" id="OriginalDate" name="OriginalDate" value="<? echo date("Y-m-d H:i:s", strtotime($returndateSQL)); ?>">
+<input type="hidden" id="ReturnDate" name="ReturnDate" value="<? echo date("Y-m-d H:i:s", strtotime($returndateSQL)); ?>">
 </span>
 <? 
 if ($row_Recordset1['FineAmount']!="") { 
@@ -347,12 +376,6 @@ if ($row_Recordset1['FineAmount']!="") {
     <td>Model Number: <?php echo $row_Recordset1['ModelNumber']; ?><br></td>
   </tr>
 </table>
-
-
-
-
-
-
  <br>
  <HR>
 <u><strong>Be sure these accessories are included:</strong></u> <br>
@@ -361,7 +384,6 @@ do not check off.</i>
 
 <input type="hidden" name="KitID" value="<? echo $KitID ?>">
 <input type="hidden" name="StudentID" value="<? echo $StudentID ?>">
-<input type="hidden" name="ReturnDate" value="<? echo $returndateSQL ?>">
 <P>
 <?
 if ($AccessoryName=""){

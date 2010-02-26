@@ -3,7 +3,7 @@
 require_once('config.php'); 
 
 $KitName = $_REQUEST['KitName'];
-$ReturnDate = $_REQUEST['ReturnDate'];
+$ReturnDate = $_POST['ReturnDate'];
 $FirstName = $_REQUEST['FirstName'];
 $LastName = $_REQUEST['LastName'];
 $CheckoutDate = time();
@@ -132,7 +132,7 @@ mysql_query($sql, $equip) or die(mysql_error());
 
 <center><h1>Item Checked Out</h1></center>
 <strong><h2>Summary</h2></strong>
-
+<br>
 <div id="tag-br">
 	<div id="tag-top"><?php echo $FirstName; ?> <?php echo $LastName; ?></div>
 	<div id="tag-info"> has checked out the <?php echo $KitName; ?>.</div>
