@@ -3,7 +3,7 @@ require_once('config.php');
 include('includes/heading.html'); 
 
 mysql_select_db($database_equip, $equip);
-$query_Recordset1 = "SELECT * FROM checkedout  LEFT JOIN students ON students.StudentID = checkedout.StudentID LEFT JOIN kit ON kit.ID = checkedout.KitID WHERE DateIn = '' ORDER BY kit.ID";
+$query_Recordset1 = "SELECT * FROM checkedout  LEFT JOIN students ON students.StudentID = checkedout.StudentID LEFT JOIN kit ON kit.ID = checkedout.KitID WHERE DateIn = '' ORDER BY checkedout.ExpectedDateIn";
 $Recordset1 = mysql_query($query_Recordset1, $equip) or die(mysql_error());
 $row_Recordset1 = mysql_fetch_assoc($Recordset1);
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);

@@ -67,6 +67,7 @@ do {
  <strong>Pay Fine:</strong>  
 <input name="FinePaid" class="TextField" type="text" id="FinePaid" value="<?php echo number_format($fineDue,2); ?>">
 <input name="CheckedOutID" type="hidden" value="<?php echo $row_Recordset1['ID']; ?>">
+<input name="StudentID" type="hidden" value="<? echo $_REQUEST['StudentID']; ?>">
   <input type="submit" name="Submit" value="Pay">
 </form>
 <?php } ?>
@@ -84,7 +85,7 @@ echo "<P>No Fines Found. Enter a Student ID below.</P>";
 ?>
 <form action="fines.php" method="post">
 <strong>Find Student Fines by ID:</strong><br>  
-<input name="StudentID" id="StudentID" class="TextField" type="text" value="<? echo $_REQUEST['StudentID'] ?>">
+<input name="StudentID" id="StudentID" class="TextField" type="text" value="<? echo $_REQUEST['StudentID']; ?>">
 <input name="" type="submit" Value="Search">
 </form>
 <?

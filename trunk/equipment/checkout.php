@@ -40,20 +40,20 @@ echo("<b>Student must sign an individual contract for this kit.</b>");
 }
 ?>
 <script type="text/javascript">
-function modDay0() 
-{
+function modDay0() {
 var date = $("OriginalDate").value;
-var begin = date.substr(0,8);
-var day = date.substr(8,2);
-var end = date.substr(10,9);
 $("ReturnDate").value = $("OriginalDate").value;
-var newDay = $('plusNone').value;
-var Date1 = $('changeDate').firstChild.nodeValue;
-var Date2 = Date1.substr(0,Date1.length-2) +  day;
-var newDate = newDay + Date2.substr(3,Date1.length);
-$('changeDate').firstChild.nodeValue = newDate;
-
+$('newDay').firstChild.nodeValue = $('plusNone').value;
+//$('newMonth').firstChild.nodeValue = $('plusNone').value;
+$('newDate').firstChild.nodeValue = date.substr(8,2);
 }
+//<input type="hidden" id="plusNone" name="plusNone" value="<? echo date("D", strtotime($returndateSQL)); ?>">
+//<input type="hidden" id="plusOne" name="plusOne" value="<? echo date("D", strtotime($plusOne)); ?>">
+//<input type="hidden" id="plusTwo" name="plusTwo" value="<? echo date("D", strtotime($plusTwo)); ?>">
+//<input type="hidden" id="OriginalDate" name="OriginalDate" value="<? echo $returndateSQL;?>">
+//<input type="hidden" id="ReturnDate" name="ReturnDate" value="<? echo $returndateSQL;?>">
+	//date formate for sql YEAR-MO-DA 00:00:00
+	//date formate for sql 0123-56-89 00:00:00
 function modDay1() 
 {
 var date = $("OriginalDate").value;
@@ -61,12 +61,15 @@ var begin = date.substr(0,8);
 var day = date.substr(8,2);
 var addDay = parseFloat(day)+ 1;
 var end = date.substr(10,9);
-$("ReturnDate").value = begin+addDay+end;
 var newDay = $('plusOne').value;
-var Date1 = $('changeDate').firstChild.nodeValue;
-var Date2 = Date1.substr(0,Date1.length-2) +  addDay;
-var newDate = newDay + Date2.substr(3,Date1.length);
-$('changeDate').firstChild.nodeValue = newDate;
+if (newDay = "Sun") {
+	var addDay = parseFloat(day) + 3;
+	var newDay = "Tue";
+}
+$("ReturnDate").value = begin+addDay+end;
+$('newDay').firstChild.nodeValue = newDay;
+//$('newMonth').firstChild.nodeValue = $('plusNone').value;
+$('newDate').firstChild.nodeValue = addDay;
 }
 function modDay2() 
 {
@@ -81,9 +84,6 @@ var Date1 = $('changeDate').firstChild.nodeValue;
 var Date2 = Date1.substr(0,Date1.length-2) +  addDay;
 var newDate = newDay + Date2.substr(3,Date1.length);
 $('changeDate').firstChild.nodeValue = newDate;
-}
-function divClose() {
-	$('alert').style.visibility = "hidden";
 }
 </script>
 <P>
@@ -127,9 +127,9 @@ $ServerCheckHours = 0;
 	$Month = "0".$Month;
 	}
 	
-	$Hours = "17";
+	$Hours = substr($dueHours,02);
 
-	$Minutes = "00";
+	$Minutes = substr($dueHours,3,2);
 	
 	
 	//DUE BACK NEXT DAY / 24 HOURS
@@ -221,7 +221,7 @@ $ServerCheckHours = 0;
 		
 		$returndateSQL = $Year."-".$Month."-".$Day." ".$dueHours;
 		
-		//RULES FOR SPECIFC DAY CLOSED
+		//RULES FOR SPECIFC DAY CLOSED (PRESUMABLY SUNDAY)
 		if (date("D", strtotime($returndateSQL)) == $dayClosed2) {
 			$Day = ($Day + 1);
 			echo "<div id='alert' style='visibility: visible;'>Closed ";
@@ -292,10 +292,10 @@ $ServerCheckHours = 0;
 	$returndateSQL = $Year."-".$Month."-".$Day." ".$dueHours;
 
 ?>
-<span id="changeDate"><? echo date("D, F d", strtotime($returndateSQL));?></span>, BEFORE <? echo date("g:i a", strtotime($returndateSQL));?></div></div>
+<span id="newDay"><? echo date("D", strtotime($returndateSQL));?></span>, <span id="newMonth"><? echo date("F", strtotime($returndateSQL));?></span> <span id="newDate"><? echo date("d", strtotime($returndateSQL));?></span>, BEFORE <? echo date("g:i a", strtotime($returndateSQL));?></div></div>
 <div id="options">
 Options:
-<label><input name="chkBox" type="radio" id="chkBox0" onClick="modDay0();" value="0" checked="checked" />Reset</label>
+<label><input id="chkBox0" name="chkBox" type="radio" value="0" onClick="modDay0();" checked="checked" />Reset</label>
 <label><input id="chkBox1" name="chkBox" type="radio" value="1" onClick="modDay1();" />+1 Day</label>
 <label><input id="chkBox2" name="chkBox" type="radio" value="2" onClick="modDay2();" />+2 Days</label>
 </div>
