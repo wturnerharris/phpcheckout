@@ -1,15 +1,53 @@
 <?php 
-
-/* Things yet to do: check for greatest check out time and default to that
-	multiple kit listing with multiple classes
-	renewal system - reservation system
-*/
-
 require_once('config.php'); 
 include('includes/heading.html');
 
-$KitID = $_REQUEST['KitID'];
+$renew = $_REQUEST['renew'];
+
+$KitName = $_REQUEST['KitName'];
+$ReturnDate = $_POST['ReturnDate'];
+$FirstName = $_REQUEST['FirstName'];
+$LastName = $_REQUEST['LastName'];
 $StudentID = $_REQUEST['StudentID'];
+$KitID = $_REQUEST['KitID'];
+$Accessories = $_REQUEST['Accessories'];
+$Notes = $_REQUEST['Notes'];
+$CheckoutUser = $HTTP_COOKIE_VARS["EquipmentCheckout"];
+
+if (isset($renew)) {
+
+$renewal = "UPDATE checkedout SET ExpectedDateIn='$ReturnDate', Notes='$Notes', Accessories='$Accessories', CheckoutUser='$CheckoutUser' WHERE KitID='$KitID' AND StudentID='$StudentID'";
+mysql_select_db($database_equip, $equip);
+mysql_query($renewal, $equip) or die(mysql_error());
+
+?>
+<meta http-equiv="refresh" content="10;URL=studentinfo.php?StudentID=<? echo $StudentID; ?>">
+
+<center><h1>Item Renewed</h1></center>
+<strong><h2>Summary</h2></strong>
+<br>
+<div id="tag-br">
+	<div id="tag-top"><?php echo $FirstName; ?> <?php echo $LastName; ?></div>
+	<div id="tag-info"> has renewed the <?php echo $KitName; ?>.</div>
+</div>
+<div id="tag-br">
+	<div id="options">With the following accessories: <? if ($Accessories != ""){ echo $Accessories; } else { echo "N/A"; } ?><br/></div>
+</div>
+<div id="tag-br">
+	<div id="tag">Beginning:</div>
+	<div id="tag-info"><? echo date("D, F j, g:i a"); ?></div>
+</div>
+<div id="tag-br">
+	<div id="tag">Due Back:</div>
+	<div id="tag-info"><span id="changeDate"><i class="alert"><? echo date("D, F j", strtotime($ReturnDate)); ?></i></span>, BEFORE <? echo date("g:i a", strtotime($ReturnDate));?></div>
+</div>
+
+<p><em>Please print now for a receipt. Otherwise this page will refresh automatically in 10 seconds. </em></p><br/>
+Return to <a href="studentinfo.php?StudentID=<? echo $StudentID; ?>">Student Info Page</a><br />
+
+<? include('includes/footer.html'); 
+
+} else {
 
 mysql_select_db($database_equip, $equip);
 $query_Recordset1 = sprintf("SELECT * FROM kit WHERE ID = $KitID");
@@ -40,54 +78,81 @@ echo("<b>Student must sign an individual contract for this kit.</b>");
 }
 ?>
 <script type="text/javascript">
-function modDay0() 
-{
+function hide() {
+$('alert').style.visibility = "hidden";
+}
+function changeMonth() {
+	now = new Date();
+	returnDate = $("ReturnDate").value.substr(5,2);
+	originalDate =  $("OriginalDate").value.substr(5,2);
+	if (originalDate - returnDate !=0) {
+		months = new Array(13);
+		months[0]  = "January";
+		months[1]  = "February";
+		months[2]  = "March";
+		months[3]  = "April";
+		months[4]  = "May";
+		months[5]  = "June";
+		months[6]  = "July";
+		months[7]  = "August";
+		months[8]  = "September";
+		months[9]  = "October";
+		months[10] = "November";
+		months[11] = "December";
+		months[12] = "January";
+	var monthnumber = now.getMonth() + 2;
+	var monthname   = months[monthnumber];
+	$('newMonth').firstChild.nodeValue = monthname;
+	} else {
+		months = new Array(13);
+		months[0]  = "January";
+		months[1]  = "February";
+		months[2]  = "March";
+		months[3]  = "April";
+		months[4]  = "May";
+		months[5]  = "June";
+		months[6]  = "July";
+		months[7]  = "August";
+		months[8]  = "September";
+		months[9]  = "October";
+		months[10] = "November";
+		months[11] = "December";
+		months[12] = "January";
+	var monthnumber = now.getMonth() + 1;
+	var monthname   = months[monthnumber];
+	$('newMonth').firstChild.nodeValue = monthname;
+	}
+}
+function modDay0() {
 var date = $("OriginalDate").value;
-var begin = date.substr(0,8);
-var day = date.substr(8,2);
-var end = date.substr(10,9);
 $("ReturnDate").value = $("OriginalDate").value;
-var newDay = $('plusNone').value;
-var Date1 = $('changeDate').firstChild.nodeValue;
-var Date2 = Date1.substr(0,Date1.length-2) +  day;
-var newDate = newDay + Date2.substr(3,Date1.length);
-$('changeDate').firstChild.nodeValue = newDate;
-
+$('newDay').firstChild.nodeValue = $('plusNone').value;
+$('newDate').firstChild.nodeValue = date.substr(8,2);
+changeMonth();
 }
 function modDay1() 
 {
-var date = $("OriginalDate").value;
-var begin = date.substr(0,8);
-var day = date.substr(8,2);
-var addDay = parseFloat(day)+ 1;
-var end = date.substr(10,9);
-$("ReturnDate").value = begin+addDay+end;
-var newDay = $('plusOne').value;
-var Date1 = $('changeDate').firstChild.nodeValue;
-var Date2 = Date1.substr(0,Date1.length-2) +  addDay;
-var newDate = newDay + Date2.substr(3,Date1.length);
-$('changeDate').firstChild.nodeValue = newDate;
+newDay = $('plusOne').value;
+newDate = $("plusOneDate").value.substr(8,2);
+$("ReturnDate").value = $("plusOneDate").value;
+$('newDay').firstChild.nodeValue = newDay;
+$('newDate').firstChild.nodeValue = newDate;
+//$('newMonth').firstChild.nodeValue = $('plusNone').value;
+changeMonth();
 }
 function modDay2() 
 {
-var date = $("OriginalDate").value;
-var begin = date.substr(0,8);
-var day = date.substr(8,2);
-var addDay = parseFloat(day)+ 2;
-var end = date.substr(10,9);
-$("ReturnDate").value = begin+addDay+end;
-var newDay = $('plusTwo').value;
-var Date1 = $('changeDate').firstChild.nodeValue;
-var Date2 = Date1.substr(0,Date1.length-2) +  addDay;
-var newDate = newDay + Date2.substr(3,Date1.length);
-$('changeDate').firstChild.nodeValue = newDate;
-}
-function divClose() {
-	$('alert').style.visibility = "hidden";
+newDay = $('plusTwo').value;
+newDate = $("plusTwoDate").value.substr(8,2);
+$("ReturnDate").value = $("plusTwoDate").value;
+$('newDay').firstChild.nodeValue = newDay;
+$('newDate').firstChild.nodeValue = newDate;
+//$('newMonth').firstChild.nodeValue = $('plusNone').value;
+changeMonth();
 }
 </script>
 <P>
-<form name="frmCheckOut" action="checkoutaction.php" method="post">
+<form name="frmRenew" action="renew.php" method="post">
 
 <input type="hidden" name="FirstName" value="<?php echo $row_Recordset3['FirstName']; ?>">
 <input type="hidden" name="LastName" value="<?php echo $row_Recordset3['LastName']; ?>">
@@ -98,9 +163,9 @@ function divClose() {
 <P>
 <div id="tag-br">
 <div id="tag-top"><?php echo $row_Recordset3['FirstName']; ?> <?php echo $row_Recordset3['LastName']; ?></div>
-<div id="tag-info"> is checking out the <?php echo $row_Recordset1['Name']; ?>.</div></div>
+<div id="tag-info"> is renewing the <?php echo $row_Recordset1['Name']; ?>.</div></div>
 <div id="tag-br">
-<div id="tag">Checking Out:</div>
+<div id="tag">Renewing:</div>
 <div id="tag-info">
 <?php 
 $ServerCheckHours = 0;
@@ -121,19 +186,19 @@ $ServerCheckHours = 0;
 
 	$Year = date('Y');
 	
-	$Month = date('n');
+	$Month = date('m');
 	
-	if ($Month<10) {
-	$Month = "0".$Month;
-	}
+//	if ($Month<10) {
+//	$Month = "0".$Month;
+//	}
 	
-	$Hours = "17";
+	$Hours = substr($dueHours,0,2);
 
-	$Minutes = "00";
+	$Minutes = substr($dueHours,3,2);
 	
 	
 	//DUE BACK NEXT DAY / 24 HOURS
-	$Day = date('j');
+	$Day = date('d');
 
 
 	//LOGIC FOR END OF MONTH
@@ -209,7 +274,7 @@ $ServerCheckHours = 0;
 			echo $dayClosed1;
 			echo ".<br />Return on next day open...</div>";
 			echo "<script type='text/javascript'>";
-			echo "setTimeout('divClose();',3000);";
+			echo "setTimeout('hide();',1500);";
 			echo "</script>"; 
 		}
 		
@@ -221,14 +286,14 @@ $ServerCheckHours = 0;
 		
 		$returndateSQL = $Year."-".$Month."-".$Day." ".$dueHours;
 		
-		//RULES FOR SPECIFC DAY CLOSED
+		//RULES FOR SPECIFC DAY CLOSED (PRESUMABLY SUNDAY)
 		if (date("D", strtotime($returndateSQL)) == $dayClosed2) {
 			$Day = ($Day + 1);
-			echo "<div id='alert' style='visibility: visible;'>Closed ";
+			echo "<div id='alert' >Closed ";
 			echo $dayClosed2;
 			echo ".<br />Return on next day open...</div>";
 			echo "<script type='text/javascript'>";
-			echo "setTimeout('divClose();',3000);";
+			echo "setTimeout('hide();',1500);";
 			echo "</script>"; 
 		}
 		
@@ -292,10 +357,10 @@ $ServerCheckHours = 0;
 	$returndateSQL = $Year."-".$Month."-".$Day." ".$dueHours;
 
 ?>
-<span id="changeDate"><? echo date("D, F d", strtotime($returndateSQL));?></span>, BEFORE <? echo date("g:i a", strtotime($returndateSQL));?></div></div>
+<span id="newDay"><? echo date("D", strtotime($returndateSQL));?></span>, <span id="newMonth"><? echo date("F", strtotime($returndateSQL));?></span> <span id="newDate"><? echo date("d", strtotime($returndateSQL));?></span>, BEFORE <? echo date("g:i a", strtotime($returndateSQL));?></div></div>
 <div id="options">
 Options:
-<label><input name="chkBox" type="radio" id="chkBox0" onClick="modDay0();" value="0" checked="checked" />Reset</label>
+<label><input id="chkBox0" name="chkBox" type="radio" value="0" onClick="modDay0();" checked="checked" />Reset</label>
 <label><input id="chkBox1" name="chkBox" type="radio" value="1" onClick="modDay1();" />+1 Day</label>
 <label><input id="chkBox2" name="chkBox" type="radio" value="2" onClick="modDay2();" />+2 Days</label>
 </div>
@@ -312,9 +377,12 @@ $plusTwo = addDate($returndateSQL,2);
 ?>
 <input type="hidden" id="plusNone" name="plusNone" value="<? echo date("D", strtotime($returndateSQL)); ?>">
 <input type="hidden" id="plusOne" name="plusOne" value="<? echo date("D", strtotime($plusOne)); ?>">
+<input type="hidden" id="plusOneDate" name="plusOneDate" value="<? echo date("Y-m-d", strtotime($plusOne))." ".$dueHours; ?>">
 <input type="hidden" id="plusTwo" name="plusTwo" value="<? echo date("D", strtotime($plusTwo)); ?>">
-<input type="hidden" id="OriginalDate" name="OriginalDate" value="<? echo $returndateSQL;?>">
-<input type="hidden" id="ReturnDate" name="ReturnDate" value="<? echo $returndateSQL;?>">
+<input type="hidden" id="plusTwoDate" name="plusTwoDate" value="<? echo date("Y-m-d", strtotime($plusTwo))." ".$dueHours; ?>">
+<input type="hidden" id="OriginalDate" name="OriginalDate" value="<? echo date("Y-m-d H:i:s", strtotime($returndateSQL)); ?>">
+<input type="hidden" id="ReturnDate" name="ReturnDate" value="<? echo date("Y-m-d H:i:s", strtotime($returndateSQL)); ?>">
+<input type="hidden" id="renew" name="renew" value="yes">
 </span>
 <? 
 if ($row_Recordset1['FineAmount']!="") { 
@@ -347,21 +415,14 @@ if ($row_Recordset1['FineAmount']!="") {
     <td>Model Number: <?php echo $row_Recordset1['ModelNumber']; ?><br></td>
   </tr>
 </table>
-
-
-
-
-
-
  <br>
  <HR>
 <u><strong>Be sure these accessories are included:</strong></u> <br>
-<i>LAB AIDS: Check off all accessories in bags. If accessory is not in the bag
-do not check off.</i>
+<i>LAB AIDS: Check off all accessories in bags. If an accessory is not in the bag
+do not check it off.</i>
 
 <input type="hidden" name="KitID" value="<? echo $KitID ?>">
 <input type="hidden" name="StudentID" value="<? echo $StudentID ?>">
-<input type="hidden" name="ReturnDate" value="<? echo $returndateSQL ?>">
 <P>
 <?
 if ($AccessoryName=""){
@@ -379,7 +440,7 @@ $i++;
 <P>
 Notes:<br>
 <textarea cols=60 rows=5 name="Notes"></textarea><br>
-<input disabled="true" type="submit" name="Submit" value="Check Out">
+<input type="submit" name="Submit" value="Renew">
 
 </form>
 
@@ -389,4 +450,5 @@ mysql_free_result($Recordset1);
 mysql_free_result($Recordset2);
 mysql_free_result($Recordset3);
 mysql_free_result($Recordset4);
+}
 ?>
