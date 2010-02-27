@@ -114,7 +114,7 @@ $AccessoryFirstTime = 0;
     <td bgcolor="e6e6e6">
         <strong><a href="#" class="hints" title="<?php echo 'Enrolled for ' .$info['className']; ?>">Equipment:</a></strong> <?php $currentID = $info['KitID']; $checkedID = $info['KitID']; echo $info['KitName']; ?><a style="text-decoration: none;" href="<? echo $root; ?>/kithistory.php?KitID=<?php echo $info['KitID']; ?>" > <img src="images/ip_icon_02_Info.png" title="Checkout History" width="18" height="18" border="0" align="absmiddle" /></a><br />
 	<?php	
-	// SHOWS IF UNAVAILABLE WITHOUT SID SELECTED
+	// SHOWS AVAILABILITY WITHOUT SID SELECTED
 	mysql_select_db($database_kit, $equip);
 	$query_Recordset5 = "SELECT * FROM checkedout WHERE KitID = $currentID AND DateIn = ''";
 	$Recordset5 = mysql_query($query_Recordset5, $equip) or die(mysql_error());
@@ -132,7 +132,7 @@ $AccessoryFirstTime = 0;
 				</td><td bgcolor="e6e6e6" valign="top"><em>Unavailable -</em><B><font color="red"> Out For Repairs </font></B>
 				</td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
 <?	}	}	} else {
-	// SHOWS IF UNAVAILABLE WITH SID SELECTED
+	// SHOWS AVAILABILITY WITH SID SELECTED
 	mysql_select_db($database_kit, $equip);
 	$query_Recordset5 = "SELECT * FROM checkedout WHERE KitID = $currentID AND DateIn = ''";
 	$Recordset5 = mysql_query($query_Recordset5, $equip) or die(mysql_error());
@@ -144,7 +144,7 @@ $AccessoryFirstTime = 0;
 		</td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
 <? 	} else {
 		if ($info['Repair'] != 1) { ?>
-		</td><td bgcolor="e6e6e6">Available for <strong><a href="studentid.php" onClick="javascript:alert('No Student ID Selected')">Checkout</a></strong></td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
+		</td><td bgcolor="e6e6e6"><strong><a href="checkout.php?KitID=<?php echo $currentID; ?>&StudentID=<?php echo $StudentID; ?>">Checkout</a> for <?php echo $row_Recordset3[FirstName]." ".$row_Recordset3[LastName]; ?></strong></td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;
 		<? } else { ?>
 				</td><td bgcolor="e6e6e6" valign="top"><em>Unavailable -</em><B><font color="red"> Out For Repairs </font></B>
 				</td></tr><tr><td valign="top" CLASS="accessoryText">&nbsp;

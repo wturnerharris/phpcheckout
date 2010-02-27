@@ -5,7 +5,7 @@ include('includes/heading.html');
 $KitID = $_REQUEST['KitID'];
 
 mysql_select_db($database_equip, $equip);
-$query_Recordset1 = sprintf("SELECT kit.ID AS KitID, kit.Name AS KitName, kit.ImageThumb AS KitImageThumb, accessorytype.ID AS AccessoryTypeID, accessorytype.Name AS AccessoryTypeName, kit_accessorytype.ID AS KitAccID FROM kit LEFT JOIN kit_accessorytype ON kit_accessorytype.KitID = kit.ID LEFT JOIN accessorytype ON kit_accessorytype.AccessorytypeID = accessorytype.ID WHERE kit.ID = $KitID");
+$query_Recordset1 = sprintf("SELECT kit.ID AS KitID, kit.Name AS KitName, kit.Image AS KitImage, accessorytype.ID AS AccessoryTypeID, accessorytype.Name AS AccessoryTypeName, kit_accessorytype.ID AS KitAccID FROM kit LEFT JOIN kit_accessorytype ON kit_accessorytype.KitID = kit.ID LEFT JOIN accessorytype ON kit_accessorytype.AccessorytypeID = accessorytype.ID WHERE kit.ID = $KitID");
 $Recordset1 = mysql_query($query_Recordset1, $equip) or die(mysql_error());
 $row_Recordset1 = mysql_fetch_assoc($Recordset1);
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
@@ -58,8 +58,8 @@ $AccessoryFirstTime = 0;
         <tr>
         <td valign='top' CLASS='accessoryText'>
       <?
-if (isset($row_Recordset1['KitImageThumb'])){
-echo "<p><IMG SRC='images/".$row_Recordset1['KitImageThumb']."' align='center'>";
+if (isset($row_Recordset1['KitImage'])){
+echo "<p><IMG SRC='images/".$row_Recordset1['KitImage']."' align='center'>";
 echo "</td><td valign='top' CLASS='accessoryText'>";
 }
 if (isset($row_Recordset1['AccessoryTypeName'])){

@@ -5,6 +5,9 @@ require_once('config.php');
 $Username = $_REQUEST['Username'];
 $Password = $_REQUEST['Password'];
 
+// encrypt password
+$encrypted_mypassword=md5($Password);
+
 //CHECK USERNAME AND PASSWORD
 if (isset($Username)) {
 
@@ -24,7 +27,7 @@ alert('You must enter a valid password. Please try again.');
 		$totalRows_Recordset1 = mysql_num_rows($Recordset1);
 	
 	
-		if ($row_Recordset1['Password'] == $Password) { 
+		if ($row_Recordset1['Password'] == $encrypted_mypassword) { 
 			setcookie("EquipmentCheckout", $Username, time()+60*60*24); 
 			mysql_free_result($Recordset1);
 			echo "<meta http-equiv=\"refresh\" content=\"0;URL=index.php\">";
