@@ -62,21 +62,33 @@ do {
 				}
 				echo number_format($fineDue,2);
 				?>
-	<?php if (empty($row_Recordset1['FinePaid'])) { ?>
-  <form name="form1" method="post" action="finesaction.php">
- <strong>Pay Fine:</strong>  
+	<?php if (empty($row_Recordset1['FinePaid'])) { 
+		
+$username = $_COOKIE["EquipmentCheckout"];
+mysql_select_db($database_equip, $equip);
+
+$access = "SELECT * FROM users WHERE Username = '$username'";
+
+$entry = mysql_query($access, $equip) or die(mysql_error());
+$row_entry = mysql_fetch_assoc($entry);
+$totalRows_entry = mysql_num_rows($entry);
+
+if ($row_entry['Type'] == "Admin") { ?>
+
+<form name="form1" method="post" action="finesaction.php">
+<strong>Pay Fine:</strong>  
 <input name="FinePaid" class="TextField" type="text" id="FinePaid" value="<?php echo number_format($fineDue,2); ?>">
 <input name="CheckedOutID" type="hidden" value="<?php echo $row_Recordset1['ID']; ?>">
 <input name="StudentID" type="hidden" value="<? echo $_REQUEST['StudentID']; ?>">
-  <input type="submit" name="Submit" value="Pay">
+<input type="submit" name="Submit" value="Pay">
 </form>
-<?php } ?>
+<?php 
+} else { ?>
+<br><br><span class="alert">Only an administrator may mark fines as paid.</span>
+<?php }} ?>
 <P>
 <p> 
-  
-
 <HR>
-
 
 <?php } while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)); 
 } else {

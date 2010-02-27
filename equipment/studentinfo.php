@@ -183,6 +183,7 @@ echo "<option value='$option[Name]'>$option[Name]</option>";
 </select>
 <input name="StudentID" type="hidden" value="<?php echo $row_Recordset1['StudentID']; ?>">
 <input type="submit" name="Submit" value="Add Class">
+<br><span class="alert"><?php echo $alert; ?></span>
 </form> 
 <?
 }

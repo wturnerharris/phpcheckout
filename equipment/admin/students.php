@@ -90,6 +90,7 @@ function Add() {
 	var txtLastName1 = $('txtLastName1');
 	var txtEmail1 = $('txtEmail1');
 	var txtPhone1 = $('txtPhone1');
+	var txtContract1 = $('txtContract1');
 	
    if (!(isNumeric(StudentID.value))) 
    { 
@@ -149,7 +150,12 @@ function Add() {
       txtPhone1.focus(); 
       return false; 
    } 
-
+   if(txtContract1.checked == false)) 
+   { 
+      alert('You must check this box if you have collected a Lending Contract.') 
+      txtContract1.focus(); 
+      return false; 
+   } 
 	new Ajax.Request("add-student.php", 
 		{ 
 		method: 'post', 
@@ -305,6 +311,7 @@ if ($filter == "add") {
 <br />
 <strong>Phone Number: </strong><input type="textarea" id="txtPhone1" name="txtPhone1" value="" onKeyPress="return disableEnterKey(event)" />
 <br />
+<strong>Contract Signed: </strong><input type="checkbox" id="txtContract1" name="txtContract1" value="1" onClick="alert('Have you collected the signed contract?');" />
 <br />
 <a href="#" style="float: right; margin-right: 35px;" onClick="Add()">
 	<img src="<?php echo $root; ?>/images/add-button.png" border="0" title="Add" /></a>

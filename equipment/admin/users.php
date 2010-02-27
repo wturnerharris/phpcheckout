@@ -59,15 +59,9 @@ function Add() {
 	$('alert').innerHTML = "User Added";
 	}
 function Modify() {
-//	new Ajax.Request("modify-user.php", 
-//		{ 
-//		method: 'post', 
-//		parameters: $('form2').serialize(true),
-//		onComplete: showResponse 
-//		});
-//	alert('Send Called');
 	$('alert').style.visibility = "visible";
 	$('alert').innerHTML = "<p class='alert'>Must delete, then add new users.</p>";
+	setTimeout('refreshPage();',1000);
 	}
 function delEntry(){
 	new Ajax.Request("remove-user.php", 
@@ -135,7 +129,7 @@ if (isset($SelectedID)) {
 	<option <?php if ($row_Users['Type'] == "LabMon") { echo "selected"; } ?> value="LabMon">Lab Monitor</option>
 </select>
 <br />
-<strong style="line-height: 30px;">Password: </strong><input type="textarea" id="txtPassword" name="txtPassword" style="float: right; width: 225px; height: 25px; margin-right: 35px; margin-top: 5px; line-height:30px;" value="<?php echo $row_Users['Password']; ?>" disabled="true" />
+<strong style="line-height: 30px;">Password: </strong><input type="password" id="txtPassword" name="txtPassword" style="float: right; width: 225px; height: 25px; margin-right: 35px; margin-top: 5px; line-height:30px;" value="<?php echo $row_Users['Password']; ?>" disabled="true" />
 <br />
 <br />
 <a href="#" style="float: right; margin-right: 35px;" onClick="Modify()">

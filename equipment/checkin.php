@@ -65,7 +65,7 @@ Notes:
 <textarea cols=60 rows=5 name="Notes">
 <? echo $row_Recordset1['CheckedOutNotes']; ?>
 </textarea><br />
-<input type="checkbox" name="Problem"> Report a Problem (this sends an email to the check-in adminstrator).<br>
+<p><input type="checkbox" name="Problem"> Report a Problem (this sends an email to the check-in adminstrator).<br></p>
 
 <input type="hidden" name="CheckedOutID" value="<? echo $CheckedOutID ?>">
 <input type="hidden" name="KitID" value="<? echo $KitID ?>">
@@ -75,12 +75,8 @@ Notes:
 <input type="hidden" name="KitName" value="<? echo $row_Recordset1['Name'] ?>">
 <input type="hidden" name="FirstName" value="<? echo $FirstName ?>">
 <input type="hidden" name="LastName" value="<? echo $LastName ?>">
-
-                
-
-
-  <input type="submit" name="Submit" value="Check In">
-  <br>
+<p><input type="submit" name="Submit" value="Check In"> <input type="button" name="back" value="Cancel" onClick="javascript:history.back();"></p>
+<br>
 </form>
 
 <? 

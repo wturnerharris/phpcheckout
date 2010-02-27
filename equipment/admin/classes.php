@@ -160,6 +160,7 @@ echo "<option value='$option[Name]'>$option[Name]</option>";
 </select>
 <input name="StudentID" type="hidden" value="<?php echo $StudentID; ?>">
 <input type="submit" name="Submit" value="Add">
+<br><span class="alert"><?php echo $alert; ?></span>
 </form> 
 
 <?php

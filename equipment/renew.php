@@ -50,6 +50,21 @@ Return to <a href="studentinfo.php?StudentID=<? echo $StudentID; ?>">Student Inf
 } else {
 
 mysql_select_db($database_equip, $equip);
+$query_Lates = sprintf("SELECT * FROM checkedout WHERE StudentID = '$StudentID' AND DateIn = ''");
+$Lates = mysql_query($query_Lates, $equip) or die(mysql_error());
+$row_Lates = mysql_fetch_assoc($Lates);
+$totalRows_Lates = mysql_num_rows($Lates);
+
+if ($totalRows_Lates !=0 && intval(strtotime($row_Lates['ExpectedDateIn'])) < intval(strtotime("now"))) {
+		echo "<meta http-equiv='refresh' content='3;URL=studentinfo.php?StudentID=$StudentID'>";
+		echo "<p><span class='alert'>STUDENT HAS ITEM(S) THAT ARE LATE!</span></p>";
+		echo "<p>No items can be renewed by this student until all LATE items are returned and/or fines have been lifted and paid.</p>";
+		echo "<p><a href='studentinfo.php?StudentID=$StudentID'>Check-in late item(s)</a>";
+		include('includes/footer.html');
+		mysql_free_result($Lates);
+} else {
+
+mysql_select_db($database_equip, $equip);
 $query_Recordset1 = sprintf("SELECT * FROM kit WHERE ID = $KitID");
 $Recordset1 = mysql_query($query_Recordset1, $equip) or die(mysql_error());
 $row_Recordset1 = mysql_fetch_assoc($Recordset1);
@@ -440,7 +455,7 @@ $i++;
 <P>
 Notes:<br>
 <textarea cols=60 rows=5 name="Notes"></textarea><br>
-<input type="submit" name="Submit" value="Renew">
+<p><input type="submit" name="Submit" value="Renew"> <input type="button" name="back" value="Cancel" onClick="javascript:history.back();"></p>
 
 </form>
 
@@ -450,5 +465,5 @@ mysql_free_result($Recordset1);
 mysql_free_result($Recordset2);
 mysql_free_result($Recordset3);
 mysql_free_result($Recordset4);
-}
+}}
 ?>
