@@ -1,15 +1,21 @@
 <?php 
-
-/* Things yet to do: check for greatest check out time and default to that
-	multiple kit listing with multiple classes
-	renewal system - reservation system
-*/
-
 require_once('config.php'); 
-include('includes/heading.html');
 
 $KitID = $_REQUEST['KitID'];
 $StudentID = $_REQUEST['StudentID'];
+$dayDate = date("D");
+$dayToday = date("l");
+
+
+if ($dayDate == $dayClosed1 || $dayDate == $dayClosed2) {
+	echo "<meta http-equiv='refresh' content='3;URL=studentinfo.php?StudentID=$StudentID'>";
+	echo "<div id='alert' style='visibility: visible;'>Not open on $dayToday's<br />";
+	echo "Checkout Unavailable</div>";
+include('studentinfo.php'); 
+
+} else {
+
+include('includes/heading.html');
 
 mysql_select_db($database_equip, $equip);
 $query_Lates = sprintf("SELECT * FROM checkedout WHERE StudentID = '$StudentID' AND DateIn = ''");
@@ -425,5 +431,5 @@ mysql_free_result($Recordset1);
 mysql_free_result($Recordset2);
 mysql_free_result($Recordset3);
 mysql_free_result($Recordset4);
-}
+}}
 ?>

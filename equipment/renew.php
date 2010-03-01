@@ -1,6 +1,5 @@
 <?php 
 require_once('config.php'); 
-include('includes/heading.html');
 
 $renew = $_REQUEST['renew'];
 
@@ -15,6 +14,8 @@ $Notes = $_REQUEST['Notes'];
 $CheckoutUser = $HTTP_COOKIE_VARS["EquipmentCheckout"];
 
 if (isset($renew)) {
+
+include('includes/heading.html');
 
 $renewal = "UPDATE checkedout SET ExpectedDateIn='$ReturnDate', Notes='$Notes', Accessories='$Accessories', CheckoutUser='$CheckoutUser' WHERE KitID='$KitID' AND StudentID='$StudentID'";
 mysql_select_db($database_equip, $equip);
@@ -46,6 +47,17 @@ mysql_query($renewal, $equip) or die(mysql_error());
 Return to <a href="studentinfo.php?StudentID=<? echo $StudentID; ?>">Student Info Page</a><br />
 
 <? include('includes/footer.html'); 
+
+} else {
+
+$dayDate = date("D");
+$dayToday = date("l");
+
+if ($dayDate == $dayClosed1 || $dayDate == $dayClosed2) {
+	echo "<meta http-equiv='refresh' content='3;URL=studentinfo.php?StudentID=$StudentID'>";
+	echo "<div id='alert' style='visibility: visible;'>Not open on $dayToday's<br />";
+	echo "Checkout Unavailable</div>";
+include('studentinfo.php'); 
 
 } else {
 
@@ -465,5 +477,5 @@ mysql_free_result($Recordset1);
 mysql_free_result($Recordset2);
 mysql_free_result($Recordset3);
 mysql_free_result($Recordset4);
-}}
+}}}
 ?>
