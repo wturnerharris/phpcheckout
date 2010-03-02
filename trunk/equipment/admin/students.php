@@ -150,7 +150,7 @@ function Add() {
       txtPhone1.focus(); 
       return false; 
    } 
-   if(txtContract1.checked == false)) 
+   if(txtContract1.checked == false)
    { 
       alert('You must check this box if you have collected a Lending Contract.') 
       txtContract1.focus(); 
