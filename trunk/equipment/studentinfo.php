@@ -26,12 +26,25 @@ if (empty($_REQUEST['StudentID'])) {
 // *******************
 
 $StudentID = $_REQUEST['StudentID'];
-
-//if(strlen($StudentID) > 7){
-//$StudentID = substr($StudentID, 0, 14);
-//echo "reset ID = " . $StudentID;
-//}
-
+if (substr($StudentID, 0, 1) == " ") {
+	$StudentID = substr($StudentID, 1, 14);
+	// echo "reset ID = " . $StudentID;
+	} else {
+		$lengthID = strlen($StudentID) - 1;
+		// echo $lengthID;
+		if (substr($StudentID, $lengthID, 1) == " ") {
+			$StudentID = substr($StudentID, 0, 14);
+		} else { 
+			if (strlen($StudentID) > 14) {
+				unset($StudentID);
+			}
+		}
+	}
+if (!$fines) { 
+	$fine = "Strikes";
+} else {
+	$fine = "Fines";
+}
 mysql_select_db($database_equip, $equip);
 $query_Recordset1 = "SELECT * FROM students WHERE StudentID = \"$StudentID\"";
 $Recordset1 = mysql_query($query_Recordset1, $equip) or die(mysql_error());
@@ -45,9 +58,10 @@ $row_Fines = mysql_fetch_assoc($Fines);
 $totalRows_Fines = mysql_num_rows($Fines);
 
 include('includes/heading.html');  
-if($fines!=0){
+if($Fines!=0){
 	if(isset($row_Fines['ID'])) {
-		echo "<h1><strong><font color='#FF0000'>STUDENT OWES FINES!!!</font></strong></h1>";
+		echo "<div id='alert' style='visibility: visible'><span class='alert'>STUDENT HAS ".strtoupper($fine)."!!!</span><br>";
+		echo "<a href='#' onclick=\"setTimeout('hideDiv();',1000);\">Close</a></div>";
 }	}
 // STUDENT INFO AT TOP
 ?>
@@ -210,7 +224,7 @@ if($NoClasses!=1){
 if($Fines!=0){
 if(isset($row_Fines['ID'])) {
 
-echo "<h3><a class='alert' href='fines.php?StudentID=$StudentID'><strong>This student may not currently check out any equipment. Click here to see outstanding fines on this student.</strong></a></h3>";
+echo "<h3><a class='alert' href='fines.php?StudentID=$StudentID'><strong>This student may not currently check out any equipment. <br>Click here to see outstanding $fine on this student.</strong></a></h3>";
 } else {
 
 if (empty($row_Recordset1['ContractSigned'])) {
