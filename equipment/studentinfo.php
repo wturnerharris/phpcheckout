@@ -42,8 +42,10 @@ if (substr($StudentID, 0, 1) == " ") {
 	}
 if (!$fines) { 
 	$fine = "Strikes";
+	$penalty = "Strikes >= 1";
 } else {
 	$fine = "Fines";
+	$penalty = "FinePaid IS NULL";
 }
 mysql_select_db($database_equip, $equip);
 $query_Recordset1 = "SELECT * FROM students WHERE StudentID = \"$StudentID\"";
@@ -52,17 +54,12 @@ $row_Recordset1 = mysql_fetch_assoc($Recordset1);
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 
 mysql_select_db($database_equip, $equip);
-$query_Fines = "SELECT * FROM checkedout WHERE (unix_timestamp(DateIn) - $fineFreq) > unix_timestamp(ExpectedDateIn) AND FinePaid IS NULL AND StudentID =  \"$StudentID\"";
+$query_Fines = "SELECT * FROM checkedout WHERE (unix_timestamp(DateIn) - $fineFreq) > unix_timestamp(ExpectedDateIn) AND $penalty AND StudentID =  \"$StudentID\"";
 $Fines = mysql_query($query_Fines, $equip) or die(mysql_error());
 $row_Fines = mysql_fetch_assoc($Fines);
 $totalRows_Fines = mysql_num_rows($Fines);
 
 include('includes/heading.html');  
-if($Fines!=0){
-	if(isset($row_Fines['ID'])) {
-		echo "<div id='alert' style='visibility: visible'><span class='alert'>STUDENT HAS ".strtoupper($fine)."!!!</span><br>";
-		echo "<a href='#' onclick=\"setTimeout('hideDiv();',1000);\">Close</a></div>";
-}	}
 // STUDENT INFO AT TOP
 ?>
 <center><h1>Student Information</h1></center> 
@@ -78,8 +75,12 @@ if ($row_Recordset1['Phone'] == "") {
 }
 	 ?><br /> 
 Student ID: <?php echo $row_Recordset1['StudentID']; ?><br />
-LDAP: <a href="studentinfo.php?StudentID=<?php echo $row_Recordset1['StudentID']; ?>" target="_parent">Lookup Entry</a><br />
+LDAP: <a href="studentinfo.php?StudentID=<?php echo $row_Recordset1['StudentID']; ?>" target="_parent">Lookup Entry</a><br /><br/>
 <?php 
+if($Fines!=0){
+	if(isset($row_Fines['ID'])) {
+		echo "<span class='alert'>STUDENT HAS ".strtoupper($fine)."!!!</span><br>";
+}	}
 
 } else {
 echo "<span class='alert'>There is no student with ID number $StudentID in the system.</span><br><br>";
@@ -221,12 +222,44 @@ $totalRows_Recordset3 = mysql_num_rows($Recordset3);
 
 if($NoClasses!=1){
 
-if($Fines!=0){
-if(isset($row_Fines['ID'])) {
+if (!$fines) { //for strikes
+	mysql_select_db($database_kit, $equip);
+	$strikesTotal = "SELECT SUM(Strikes) FROM checkedout WHERE (unix_timestamp(DateIn) - $fineFreq) > unix_timestamp(ExpectedDateIn) AND $fine >= 1 AND StudentID = \"$StudentID\"";
+	$strikesQuery = mysql_query($strikesTotal, $equip) or die(mysql_error());
+	$strikesResult = mysql_result($strikesQuery, 0);
+	echo $strikesResult;
+	if($strikesResult >=1){
+		echo "<div id='alert' style='visibility: visible'><span class='alert'>STUDENT HAS $strikesResult ".strtoupper($fine)."!!!</span><br>";
+		echo "<a href='#' onclick=\"setTimeout('hideDiv();',500);\">Close</a></div>";
+		$penaltyLevel = 0;
+//	if($strikesResult <= 1){
+//		echo "<div id='alert' style='visibility: visible'><span class='alert'>STUDENT HAS $strikesResult ".strtoupper($fine)."!!!</span><br>";
+//		echo "<span class='small'>Warn the student that they have been late. The next lateness will result in a two-week ban from checking out equipment.</span><br/>";
+//		echo "<a href='#' onclick=\"setTimeout('hideDiv();',500);\">Close</a></div>";
+//		$penaltyLevel = 1;
+//	}
+//	if($strikesResult = 2){
+//		echo "<div id='alert' style='visibility: visible'><span class='alert'>STUDENT HAS $strikesResult ".strtoupper($fine)."!!!</span><br>";
+//		echo "<span class='small'>This student is currently in a two-week ban from checking out equipment.</span><br/>";
+//		echo "<a href='#' onclick=\"setTimeout('hideDiv();',500);\">Close</a></div>";
+//		$penaltyLevel = 2;
+//	}
+//	if($strikesResult >= 3){
+//		echo "<div id='alert' style='visibility: visible'><span class='alert'>STUDENT HAS $strikesResult ".strtoupper($fine)."!!!</span><br>";
+//		echo "<span class='small'>This student can no longer check out equipment this semester.</span><br/>";
+//		echo "<a href='#' onclick=\"setTimeout('hideDiv();',500);\">Close</a></div>";
+//		$penaltyLevel = 3;
+//	}
+	}
+} 
 
-echo "<h3><a class='alert' href='fines.php?StudentID=$StudentID'><strong>This student may not currently check out any equipment. <br>Click here to see outstanding $fine on this student.</strong></a></h3>";
-} else {
-
+if($fines) { //for fines
+	if($Fines!=0){
+		if(isset($row_Fines['ID'])) {
+			echo "<h3><a class='alert' href='fines.php?StudentID=$StudentID'><strong>This student may not currently check out any equipment. <br>Click here to see outstanding $fine on this student.</strong></a></h3>";
+		}
+	}
+} 
 if (empty($row_Recordset1['ContractSigned'])) {
 	?>
 	<strong class="alert">This student has not yet signed a contract. After the student has signed a paper contract, click the button below.</strong>
@@ -235,6 +268,9 @@ if (empty($row_Recordset1['ContractSigned'])) {
 	<input type="submit" value="Contract Signed">
 	</form>
 <?php } else {
+		if($strikesResult >1){
+echo "<span class='alert'>Unavailable</span>";
+		}else {
 ?>
 <br>
 <table width="100%" border="0">
@@ -287,7 +323,7 @@ mysql_free_result($Recordset5);
 </table>
 <?php
 mysql_free_result($Recordset3);
-}	}	}	}	}
+}	}	} }
 mysql_free_result($Recordset1);
 mysql_free_result($Recordset2);
 mysql_free_result($Recordset4);

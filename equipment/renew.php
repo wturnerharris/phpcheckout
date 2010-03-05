@@ -64,7 +64,7 @@ include('studentinfo.php');
 include('includes/heading.html');
 
 mysql_select_db($database_equip, $equip);
-$query_Lates = sprintf("SELECT * FROM checkedout WHERE StudentID = '$StudentID' AND DateIn = ''");
+$query_Lates = sprintf("SELECT * FROM checkedout WHERE StudentID = '$StudentID' AND DateIn = '' ORDER BY ExpectedDateIn");
 $Lates = mysql_query($query_Lates, $equip) or die(mysql_error());
 $row_Lates = mysql_fetch_assoc($Lates);
 $totalRows_Lates = mysql_num_rows($Lates);
