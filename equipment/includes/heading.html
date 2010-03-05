@@ -12,6 +12,12 @@ $MetaRefresh = "<meta http-equiv=\"refresh\" content=\"600;URL=".$root."/index.p
 <META HTTP-EQUIV="Pragma" CONTENT="no-cache">
 <META HTTP-EQUIV="Expires" CONTENT="-1">
 <script type="text/javascript" src="<?php echo $root; ?>/includes/prototype.js"></script>
+<script type="text/javascript">
+function hideDiv()
+{
+$('alert').style.visibility = "hidden";
+}
+</script>
 <link href="<?php echo $root; ?>/includes/equip.css" rel="stylesheet" type="text/css">
 </head>
 <?php 
@@ -33,7 +39,7 @@ if ($echo == "login.php" || $echo == "fines.php" || $echo == "tinfo.php") { ?>
 				<li><a href="<?php echo $root; ?>/allstudents.php">Student Records</a></li>
 				<li><a href="<?php echo $root; ?>/allequipmentbyclass.php?StudentID=<? echo $_REQUEST['StudentID'] ?>">List Equipment</a></li>
 				<li><a href="<?php echo $root; ?>/currentlycheckedout.php?StudentID=<? echo $_REQUEST['StudentID'] ?>">Checked Out</a></li>
-				<li><a href="<?php echo $root; ?>/fines.php?StudentID=<?php echo $_REQUEST['StudentID'] ?>">Fines List</a></li>
+				<li><a href="<?php echo $root; ?>/fines.php?StudentID=<?php echo $_REQUEST['StudentID'] ?>"><? if (!$fines) { echo "Strikes"; } else { echo "Fines"; } ?> List</a></li>
 			</ul>
 		</div>
 		<div id="content">

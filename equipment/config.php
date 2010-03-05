@@ -31,10 +31,14 @@ $satClose = 17;
 $sunOpen = 00;
 $sunClose = 00;
 
+//USE FINES OR STRIKES
+$fines = false;
+$strikes = false;
+
 // fine controls
-$fineAmount = 1.00; // amount of fine
-$fineFreq = 86400; // amount of time per fine increment, in seconds
-$maxFine = 3.00; // max amount of fine per kit
+$fineAmount = 1.00; // amount of fine or strike
+$fineFreq = 86400; // amount of time per fine increment, in seconds, default is one day.
+$maxFine = 3.00; // max amount of fine or strike per kit
 
 $root = "/equipment"; // using absolute paths. from the root to the program folder, with preceding slash and without trailing slash
 $site_root = "http://www.yourdomain.com"; //domain name where your installation of checkout resides, no trailing slash

@@ -78,7 +78,7 @@ $CheckedOutCount = 0;
 
 <?php 
 // LIST BY CLASS
-$classes = mysql_query("SELECT * FROM class") or die(mysql_error());  ?>
+$classes = mysql_query("SELECT * FROM class ORDER BY class.Name") or die(mysql_error());  ?>
 
 <form name="form" action="allequipmentbyclass.php" method="post">
 	<select name="class" size="1" id="class" style="margin-left: 10px; margin-bottom: 5px;" onChange="this.form.submit();"> 
