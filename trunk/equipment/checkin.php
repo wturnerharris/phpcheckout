@@ -75,6 +75,9 @@ Notes:
 <input type="hidden" name="KitName" value="<? echo $row_Recordset1['Name'] ?>">
 <input type="hidden" name="FirstName" value="<? echo $FirstName ?>">
 <input type="hidden" name="LastName" value="<? echo $LastName ?>">
+<? if($late){ ?>
+<input type="hidden" name="Late" value="true">
+<? } ?>
 <p><input type="submit" name="Submit" value="Check In"> <input type="button" name="back" value="Cancel" onClick="javascript:history.back();"></p>
 <br>
 </form>
