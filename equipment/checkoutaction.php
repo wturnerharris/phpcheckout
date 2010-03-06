@@ -119,7 +119,7 @@ $i++;
 
 
 $CheckoutUser = $HTTP_COOKIE_VARS["EquipmentCheckout"];
-$sql = "INSERT INTO checkedout (ID , KitID , StudentID , DateOut , ExpectedDateIn , DateIn , FinePaid , Reserved, Accessories, Notes, CheckoutUser) VALUES ('', '$KitID', '$StudentID', NOW(), '$ReturnDate', '', NULL , NULL, '$Accessories', '$Notes', '$CheckoutUser');";
+$sql = "INSERT INTO checkedout (ID , KitID , StudentID , DateOut , ExpectedDateIn , DateIn , FinePaid , BannedDate, Accessories, Notes, CheckoutUser) VALUES ('', '$KitID', '$StudentID', NOW(), '$ReturnDate', '', NULL , NULL, '$Accessories', '$Notes', '$CheckoutUser');";
 //echo $sql;
 mysql_select_db($database_equip, $equip);
 mysql_query($sql, $equip) or die(mysql_error());

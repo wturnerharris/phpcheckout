@@ -16,7 +16,7 @@ echo "<strong>HISTORY OF ".strtoupper($fine)." FOR STUDENT ID #:</strong> " . $_
 echo "<hr />";
 }
 mysql_select_db($database_equip, $equip);
-$query_Recordset1 = "SELECT FirstName, LastName, checkedout.ID, checkedout.StudentID, checkedout.DateOut, checkedout.ExpectedDateIn, checkedout.DateIn, checkedout.kitID, checkedout.FinePaid, kit.Name FROM checkedout LEFT JOIN students ON students.StudentID = checkedout.StudentID LEFT JOIN kit ON checkedout.kitID = kit.ID WHERE (unix_timestamp(DateIn) - $fineFreq) > unix_timestamp(ExpectedDateIn) $SQL";
+$query_Recordset1 = "SELECT FirstName, LastName, checkedout.ID, checkedout.StudentID, checkedout.DateOut, checkedout.ExpectedDateIn, checkedout.DateIn, checkedout.kitID, checkedout.FinePaid, checkedout.Strike, kit.Name FROM checkedout LEFT JOIN students ON students.StudentID = checkedout.StudentID LEFT JOIN kit ON checkedout.kitID = kit.ID WHERE (unix_timestamp(DateIn) - $fineFreq) > unix_timestamp(ExpectedDateIn) $SQL";
 
 
 $Recordset1 = mysql_query($query_Recordset1, $equip) or die(mysql_error());
@@ -41,7 +41,7 @@ do {
   <? if ($fines) { ?>
   <strong>Fine Rate Per <?php echo $fineFreq/60?> Minutes:</strong> <?php echo "$".number_format($fineAmount,2); ?> <br>
   <? } ?>
-  <strong><?php if ($fines) { echo "Amount Due: $"; } else { echo "Strikes: "; } ?></strong>
+  <?php if (!$fines) { echo "<strong>Strikes: </strong>".$row_Recordset1['Strike']; } else { echo "<strong>Amount Due: </strong>$"; ?>
   		<?php $timeDue = date(strtotime($row_Recordset1['ExpectedDateIn']));
 				$timeIn = date(strtotime($row_Recordset1['DateIn']));
 				$diff = abs($timeIn - $timeDue);
@@ -64,7 +64,7 @@ do {
 					}
 					// make this clear the fine from the list (set FinePaid)
 				}
-				if ($fines) { echo number_format($fineDue,2); } else { echo number_format($fineDue,2); }
+				echo number_format($fineDue,2); }
 				if (empty($row_Recordset1['FinePaid'])) { 
 		
 $username = $_COOKIE["EquipmentCheckout"];

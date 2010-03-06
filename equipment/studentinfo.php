@@ -41,8 +41,8 @@ if (substr($StudentID, 0, 1) == " ") {
 		}
 	}
 if (!$fines) { 
-	$fine = "Strikes";
-	$penalty = "Strikes >= 1";
+	$fine = "Strike";
+	$penalty = "Strike >= 1";
 } else {
 	$fine = "Fines";
 	$penalty = "FinePaid IS NULL";
@@ -224,32 +224,12 @@ if($NoClasses!=1){
 
 if (!$fines) { //for strikes
 	mysql_select_db($database_kit, $equip);
-	$strikesTotal = "SELECT SUM(Strikes) FROM checkedout WHERE (unix_timestamp(DateIn) - $fineFreq) > unix_timestamp(ExpectedDateIn) AND $fine >= 1 AND StudentID = \"$StudentID\"";
+	$strikesTotal = "SELECT SUM($fine) FROM checkedout WHERE (unix_timestamp(DateIn) - $fineFreq) > unix_timestamp(ExpectedDateIn) AND $fine >= 1 AND StudentID = \"$StudentID\"";
 	$strikesQuery = mysql_query($strikesTotal, $equip) or die(mysql_error());
 	$strikesResult = mysql_result($strikesQuery, 0);
-	echo $strikesResult;
-	if($strikesResult >=1){
-		echo "<div id='alert' style='visibility: visible'><span class='alert'>STUDENT HAS $strikesResult ".strtoupper($fine)."!!!</span><br>";
-		echo "<a href='#' onclick=\"setTimeout('hideDiv();',500);\">Close</a></div>";
-		$penaltyLevel = 0;
-//	if($strikesResult <= 1){
-//		echo "<div id='alert' style='visibility: visible'><span class='alert'>STUDENT HAS $strikesResult ".strtoupper($fine)."!!!</span><br>";
-//		echo "<span class='small'>Warn the student that they have been late. The next lateness will result in a two-week ban from checking out equipment.</span><br/>";
-//		echo "<a href='#' onclick=\"setTimeout('hideDiv();',500);\">Close</a></div>";
-//		$penaltyLevel = 1;
-//	}
-//	if($strikesResult = 2){
-//		echo "<div id='alert' style='visibility: visible'><span class='alert'>STUDENT HAS $strikesResult ".strtoupper($fine)."!!!</span><br>";
-//		echo "<span class='small'>This student is currently in a two-week ban from checking out equipment.</span><br/>";
-//		echo "<a href='#' onclick=\"setTimeout('hideDiv();',500);\">Close</a></div>";
-//		$penaltyLevel = 2;
-//	}
-//	if($strikesResult >= 3){
-//		echo "<div id='alert' style='visibility: visible'><span class='alert'>STUDENT HAS $strikesResult ".strtoupper($fine)."!!!</span><br>";
-//		echo "<span class='small'>This student can no longer check out equipment this semester.</span><br/>";
-//		echo "<a href='#' onclick=\"setTimeout('hideDiv();',500);\">Close</a></div>";
-//		$penaltyLevel = 3;
-//	}
+	// echo $strikesResult;
+	if ($strikesResult >= 1) {
+	    echo "<p class='alert'>Student has $strikesResult $fine(s)<br><br>";
 	}
 } 
 
@@ -268,9 +248,34 @@ if (empty($row_Recordset1['ContractSigned'])) {
 	<input type="submit" value="Contract Signed">
 	</form>
 <?php } else {
-		if($strikesResult >1){
-echo "<span class='alert'>Unavailable</span>";
-		}else {
+if($strikesResult >=3){
+	echo "<p class='alert'>UNAVAILABLE. Student Banned.</p>";
+	$penaltyLevel == 3;
+	} else {
+		if ($strikesResult == 2) {
+			// ***TODO*** have to first check if banned has been lifted
+			mysql_select_db($database_equip, $equip);
+			$query_Banned = "SELECT BannedDate FROM checkedout WHERE StudentID =  \"$StudentID\" AND BannedDate != \"NULL\"";
+			$Banned = mysql_query($query_Banned, $equip) or die(mysql_error());
+			$row_Banned = mysql_fetch_assoc($Banned);
+			$BannedDate = $row_Banned['BannedDate'];
+			// if current ban in place
+			if (intval(strtotime($BannedDate)) > intval(strtotime("now")) && $row_Banned !=0) {
+			echo "<span class='alert'>This student is currently on a two week ban, which ends: ".date("m-d-Y", strtotime("$BannedDate")).".</span></p>";
+			// THEN set $penaltyLevel
+			$penaltyLevel = 2;
+			} else {
+				//or if ban has expired
+				echo "<span class='alert'>Ban lifted. Next lateness will result being permanently banned for the semester.</span></p>";
+				$penaltyLevel = 1;
+			}
+		} elseif ($strikesResult == 1) {
+			echo "<span class='alert'>Warn Student: The next late return will result in a two-week ban.</span></p>";
+			$penaltyLevel = 1;
+		} elseif ($strikesResult < 1 || $strikesResult == "NULL") {
+			$penaltyLevel = 0;
+		}
+if ($penaltyLevel <= 1) {
 ?>
 <br>
 <table width="100%" border="0">
@@ -323,7 +328,7 @@ mysql_free_result($Recordset5);
 </table>
 <?php
 mysql_free_result($Recordset3);
-}	}	} }
+}	}	} } }
 mysql_free_result($Recordset1);
 mysql_free_result($Recordset2);
 mysql_free_result($Recordset4);

@@ -11,6 +11,13 @@ $StudentID = $_REQUEST['StudentID'];
 $FirstName = $_REQUEST['FirstName'];
 $LastName = $_REQUEST['LastName'];
 $ReturnDate = $_REQUEST['ReturnDate'];
+$late = $_REQUEST['Late'];
+
+if (!isset($late)) {
+	$late = false;
+} else {
+	$late = true;
+}
 
 $CheckInUser = $HTTP_COOKIE_VARS["EquipmentCheckout"];
 
@@ -49,6 +56,16 @@ $sql = "UPDATE checkedout SET DateIn = NOW(), Problem = $Problem, Notes = '$Note
 //echo $sql;
 mysql_select_db($database_equip, $equip);
 $Recordset1 = mysql_query($sql, $equip) or die(mysql_error());
+
+//NOW DO STIKE CHECKING AND EITHER WARN, TEMPORARILY BAN, OR PERMANENTLY BAN
+if ($late) {
+	mysql_select_db($database_kit, $equip);
+	$strikesTotal = "SELECT SUM(Strikes) FROM checkedout WHERE (unix_timestamp(DateIn) - $fineFreq) > unix_timestamp(ExpectedDateIn) AND $fine >= 1 AND StudentID = \"$StudentID\"";
+	$strikesQuery = mysql_query($strikesTotal, $equip) or die(mysql_error());
+	$strikesResult = mysql_result($strikesQuery, 0);
+	//if ($strikesResult
+}
+
 ?>
 <meta http-equiv="refresh" content="10;URL=studentinfo.php?StudentID=<? echo $StudentID; ?>">
 

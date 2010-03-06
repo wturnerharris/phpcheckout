@@ -101,7 +101,7 @@ function changeMonth() {
 		months[10] = "November";
 		months[11] = "December";
 		months[12] = "January";
-	var monthnumber = now.getMonth() + 1;
+	var monthnumber = now.getMonth();
 	var monthname   = months[monthnumber];
 	$('newMonth').firstChild.nodeValue = monthname;
 	}
