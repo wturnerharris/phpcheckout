@@ -33,7 +33,8 @@ $sunClose = 00;
 
 //USE FINES OR STRIKES
 $fines = false;
-$strikes = false;
+//$strikes = false;
+$maxStrike = 3;
 
 // fine controls
 $fineAmount = 1.00; // amount of fine or strike
