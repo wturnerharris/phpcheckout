@@ -11,6 +11,7 @@ $StudentID = $_REQUEST['StudentID'];
 $FirstName = $_REQUEST['FirstName'];
 $LastName = $_REQUEST['LastName'];
 $ReturnDate = $_REQUEST['ReturnDate'];
+$strikeGain = $_REQUEST['strikeGain'];
 $late = $_REQUEST['Late'];
 
 if (!isset($late)) {
@@ -52,25 +53,46 @@ echo "Email sent to checkout administrator(s)<p>";
 $Problem = 0;
 }
 
-$sql = "UPDATE checkedout SET DateIn = NOW(), Problem = $Problem, Notes = '$Notes', CheckInUser = '$CheckInUser' WHERE ID = $CheckedOutID;";
-//echo $sql;
-mysql_select_db($database_equip, $equip);
-$Recordset1 = mysql_query($sql, $equip) or die(mysql_error());
-
 //NOW DO STIKE CHECKING AND EITHER WARN, TEMPORARILY BAN, OR PERMANENTLY BAN
 if ($late) {
-	mysql_select_db($database_kit, $equip);
-	$strikesTotal = "SELECT SUM(Strikes) FROM checkedout WHERE (unix_timestamp(DateIn) - $fineFreq) > unix_timestamp(ExpectedDateIn) AND $fine >= 1 AND StudentID = \"$StudentID\"";
+	mysql_select_db($database_equip, $equip);
+	$strikesTotal = "SELECT SUM(Strike) FROM checkedout WHERE (unix_timestamp(DateIn)) > unix_timestamp(ExpectedDateIn) AND Strike >= 1 AND StudentID = \"$StudentID\"";
 	$strikesQuery = mysql_query($strikesTotal, $equip) or die(mysql_error());
 	$strikesResult = mysql_result($strikesQuery, 0);
-	//if ($strikesResult
+	if (!$strikesResult) {
+	//1st late
+	//$strikeCount = 1;
+	$penaltyNotice = "This is a warning. The next late return will result in a two-week ban.";
+	} elseif ($strikesResult == 1) {
+	//2nd late
+	//$strikeCount = 1;
+	$penaltyNotice = "This student now has a TWO-WEEK BAN.";
+	$banDuration = 14;
+	$BannedDate = date("Y-m-d H:i:s",mktime(17, 0, 0, date("m"), date("d")+$banDuration, date("Y")));
+	} elseif ($strikesResult == 2) {
+	//3rd late
+	//$strikeCount = 1;
+	$penaltyNotice = "This student is banned for the duration of the semester.";
+	}
 }
+
+mysql_select_db($database_equip, $equip);
+$sql = "UPDATE checkedout SET DateIn = NOW(), Problem = $Problem, Notes = '$Notes', BannedDate = '$BannedDate', Strike = '$strikeGain', CheckInUser = '$CheckInUser' WHERE ID = $CheckedOutID;";
+//echo $sql;
+$Recordset1 = mysql_query($sql, $equip) or die(mysql_error());
 
 ?>
 <meta http-equiv="refresh" content="10;URL=studentinfo.php?StudentID=<? echo $StudentID; ?>">
 
 <center><h1>Item Returned</h1></center>
 <strong><h2>Summary</h2></strong>
+<? if ($late) { ?>
+<p class="alert">THIS ITEM WAS LATE</p>
+<p class="alert">This student now has <? echo $strikeGain + $strikesResult; ?> strike(s). <br>NOTICE: <? echo $penaltyNotice; ?></p>
+<? } else {
+echo "<p>".$penaltyNotice."</p>";
+}
+?>
 <p>Equipment: <? echo $KitName; ?><br/>
 Checked out by: <? echo $FirstName; ?> <? echo $LastName; ?><br/>
 Was returned: <? echo date("D, F j, g:i a"); ?>

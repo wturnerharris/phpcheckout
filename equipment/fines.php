@@ -80,10 +80,22 @@ if ($row_entry['Type'] == "Admin") { ?>
 
 <form name="form1" method="post" action="finesaction.php">
 <strong>Clear <? echo $fine; ?>:</strong>  
+<? if ($fines){ ?>
 <input name="FinePaid" class="TextField" type="text" id="FinePaid" value="<?php echo number_format($fineDue,2); ?>">
 <input name="CheckedOutID" type="hidden" value="<?php echo $row_Recordset1['ID']; ?>">
 <input name="StudentID" type="hidden" value="<? echo $_REQUEST['StudentID']; ?>">
-<input type="submit" name="Submit" value="Clear">
+<input type="submit" name="Submit" value="Pay">
+<? } else { ?>
+<select name="FinePaid" class="TextField" id="FinePaid">
+  <option value="0">0</option>
+  <option value="1">1</option>
+  <option value="2">2</option>
+  <option value="3">3</option>
+</select>
+<input name="CheckedOutID" type="hidden" value="<?php echo $row_Recordset1['ID']; ?>">
+<input name="StudentID" type="hidden" value="<? echo $_REQUEST['StudentID']; ?>">
+<input type="submit" name="Submit" value="Set">
+<? } ?>
 </form>
 <?php 
 } else { ?>

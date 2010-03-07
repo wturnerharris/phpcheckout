@@ -22,6 +22,17 @@ $LastName = $row_Recordset2['LastName'];
 
 if (intval(strtotime($row_Recordset1['ExpectedDateIn'])) < intval(strtotime("now"))) {
 $late = true;
+
+//math for strikes
+$timeDue = date(strtotime($row_Recordset1['ExpectedDateIn']));
+$timeIn = date(strtotime("now"));
+$diff = abs($timeIn - $timeDue);
+if ($diff > $fineFreq) {
+	$strikeGain = round($diff/$fineFreq);
+	if ($strikeGain > $maxStrike) { $strikeGain = $maxStrike; }
+		} else {
+			$strikeGain = 1;
+			}
 }
 ?>
 
@@ -77,6 +88,7 @@ Notes:
 <input type="hidden" name="LastName" value="<? echo $LastName ?>">
 <? if($late){ ?>
 <input type="hidden" name="Late" value="true">
+<input type="hidden" name="strikeGain" value="<? echo $strikeGain; ?>">
 <? } ?>
 <p><input type="submit" name="Submit" value="Check In"> <input type="button" name="back" value="Cancel" onClick="javascript:history.back();"></p>
 <br>

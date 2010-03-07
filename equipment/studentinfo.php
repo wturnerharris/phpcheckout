@@ -224,7 +224,7 @@ if($NoClasses!=1){
 
 if (!$fines) { //for strikes
 	mysql_select_db($database_kit, $equip);
-	$strikesTotal = "SELECT SUM($fine) FROM checkedout WHERE (unix_timestamp(DateIn) - $fineFreq) > unix_timestamp(ExpectedDateIn) AND $fine >= 1 AND StudentID = \"$StudentID\"";
+	$strikesTotal = "SELECT SUM($fine) FROM checkedout WHERE (unix_timestamp(DateIn)) > unix_timestamp(ExpectedDateIn) AND $fine >= 1 AND StudentID = \"$StudentID\"";
 	$strikesQuery = mysql_query($strikesTotal, $equip) or die(mysql_error());
 	$strikesResult = mysql_result($strikesQuery, 0);
 	// echo $strikesResult;
@@ -253,20 +253,21 @@ if($strikesResult >=3){
 	$penaltyLevel == 3;
 	} else {
 		if ($strikesResult == 2) {
-			// ***TODO*** have to first check if banned has been lifted
+			// check if banned has been lifted
 			mysql_select_db($database_equip, $equip);
-			$query_Banned = "SELECT BannedDate FROM checkedout WHERE StudentID =  \"$StudentID\" AND BannedDate != \"NULL\"";
+			$query_Banned = "SELECT BannedDate FROM checkedout WHERE StudentID =  \"$StudentID\" AND BannedDate IS NOT NULL";
 			$Banned = mysql_query($query_Banned, $equip) or die(mysql_error());
 			$row_Banned = mysql_fetch_assoc($Banned);
 			$BannedDate = $row_Banned['BannedDate'];
 			// if current ban in place
-			if (intval(strtotime($BannedDate)) > intval(strtotime("now")) && $row_Banned !=0) {
+			if (intval(strtotime("$BannedDate")) > intval(strtotime("now")) && $row_Banned >= 1) {
+			// echo intval(strtotime($BannedDate))." should be greater than ". intval(strtotime("now"))."<br>";
 			echo "<span class='alert'>This student is currently on a two week ban, which ends: ".date("m-d-Y", strtotime("$BannedDate")).".</span></p>";
 			// THEN set $penaltyLevel
 			$penaltyLevel = 2;
 			} else {
 				//or if ban has expired
-				echo "<span class='alert'>Ban lifted. Next lateness will result being permanently banned for the semester.</span></p>";
+				echo "<span class='alert'>Was originally banned until ".date("m-d-Y", strtotime("$BannedDate")).". Next lateness will result in being permanently banned for the duration of the semester.</span></p>";
 				$penaltyLevel = 1;
 			}
 		} elseif ($strikesResult == 1) {
