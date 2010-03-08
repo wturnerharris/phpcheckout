@@ -1,4 +1,4 @@
-<?php require_once('config.php'); 
+<?php require_once('config.php');
 
 // *******************
 // Check for ID 
@@ -231,28 +231,10 @@ if (!$fines) { //for strikes
 	if ($strikesResult >= 1) {
 	    echo "<p class='alert'>Student has $strikesResult $fine(s)<br><br>";
 	}
-} 
-
-if($fines) { //for fines
-	if($Fines!=0){
-		if(isset($row_Fines['ID'])) {
-			echo "<h3><a class='alert' href='fines.php?StudentID=$StudentID'><strong>This student may not currently check out any equipment. <br>Click here to see outstanding $fine on this student.</strong></a></h3>";
-		}
-	}
-} 
-if (empty($row_Recordset1['ContractSigned'])) {
-	?>
-	<strong class="alert">This student has not yet signed a contract. After the student has signed a paper contract, click the button below.</strong>
-	<form action="contractaction.php" method="post">
-	<input name="StudentID" type="hidden" value="<? echo $StudentID ?>">
-	<input type="submit" value="Contract Signed">
-	</form>
-<?php } else {
-if($strikesResult >=3){
-	echo "<p class='alert'>UNAVAILABLE. Student Banned.</p>";
-	$penaltyLevel == 3;
-	} else {
-		if ($strikesResult == 2) {
+	if($strikesResult >=3){
+		echo "<p class='alert'>UNAVAILABLE. Student Banned.</p>";
+		$penaltyLevel = 3;
+		} elseif ($strikesResult == 2) {
 			// check if banned has been lifted
 			mysql_select_db($database_equip, $equip);
 			$query_Banned = "SELECT BannedDate FROM checkedout WHERE StudentID =  \"$StudentID\" AND BannedDate IS NOT NULL";
@@ -261,21 +243,41 @@ if($strikesResult >=3){
 			$BannedDate = $row_Banned['BannedDate'];
 			// if current ban in place
 			if (intval(strtotime("$BannedDate")) > intval(strtotime("now")) && $row_Banned >= 1) {
-			// echo intval(strtotime($BannedDate))." should be greater than ". intval(strtotime("now"))."<br>";
-			echo "<span class='alert'>This student is currently on a two week ban, which ends: ".date("m-d-Y", strtotime("$BannedDate")).".</span></p>";
-			// THEN set $penaltyLevel
-			$penaltyLevel = 2;
-			} else {
-				//or if ban has expired
-				echo "<span class='alert'>Was originally banned until ".date("m-d-Y", strtotime("$BannedDate")).". Next lateness will result in being permanently banned for the duration of the semester.</span></p>";
+				// echo intval(strtotime($BannedDate))." should be greater than ". intval(strtotime("now"))."<br>";
+				echo "<span class='alert'>This student is currently on a two week ban, which ends: ".date("m-d-Y", strtotime("$BannedDate")).".</span></p>";
+				// THEN set $penaltyLevel
+				$penaltyLevel = 2;
+				} else {
+					//or if ban has expired
+					echo "<span class='alert'>Was originally banned until ".date("m-d-Y", strtotime("$BannedDate")).". Next lateness will result in being permanently banned for the duration of the semester.</span></p>";
+					$penaltyLevel = 1;
+					}
+			} elseif ($strikesResult == 1) {
+				echo "<span class='alert'>Warn Student: The next late return will result in a two-week ban.</span></p>";
 				$penaltyLevel = 1;
+			} elseif ($strikesResult < 1 || $strikesResult == "NULL") {
+				$penaltyLevel = 0;
 			}
-		} elseif ($strikesResult == 1) {
-			echo "<span class='alert'>Warn Student: The next late return will result in a two-week ban.</span></p>";
-			$penaltyLevel = 1;
-		} elseif ($strikesResult < 1 || $strikesResult == "NULL") {
-			$penaltyLevel = 0;
+}
+
+if($fines) { //for fines
+	if($Fines!=0){
+		if(isset($row_Fines['ID'])) {
+			echo "<h3><a class='alert' href='fines.php?StudentID=$StudentID'><strong>This student may not currently check out any equipment. <br>Click here to see outstanding $fine on this student.</strong></a></h3>";
+			$penaltyLevel = 3;
 		}
+	}
+}
+
+if (empty($row_Recordset1['ContractSigned'])) {
+	?>
+	<strong class="alert">This student has not yet signed a contract. After the student has signed a paper contract, click the button below.</strong>
+	<form action="contractaction.php" method="post">
+	<input name="StudentID" type="hidden" value="<? echo $StudentID ?>">
+	<input type="submit" value="Contract Signed">
+	</form>
+<?php } else {
+
 if ($penaltyLevel <= 1) {
 ?>
 <br>
@@ -329,7 +331,7 @@ mysql_free_result($Recordset5);
 </table>
 <?php
 mysql_free_result($Recordset3);
-}	}	} } }
+}	}	}  }
 mysql_free_result($Recordset1);
 mysql_free_result($Recordset2);
 mysql_free_result($Recordset4);

@@ -1,10 +1,10 @@
-<?php 
-require_once('config.php'); 
-include('includes/heading.html'); 
-if (!$fines) { 
-	$fine = "Strikes"; 
-	} else { 
-		$fine = "Fines"; 
+<?php
+require_once('config.php');
+include('includes/heading.html');
+if (!$fines) {
+	$fine = "Strikes";
+	} else {
+		$fine = "Fines";
 		}
 if (empty($_REQUEST['StudentID'])) {
 $SQL = " AND FinePaid is NULL";
@@ -24,15 +24,15 @@ $row_Recordset1 = mysql_fetch_assoc($Recordset1);
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 
 if (isset($row_Recordset1['StudentID'])) {
-do { 
+do {
 
 ?>
 <p><font size="2" face="Arial, Helvetica, sans-serif"><strong>Student Name: </strong><?php echo $row_Recordset1['FirstName']; ?> <?php echo $row_Recordset1['LastName']; ?><strong><br>
   Student ID #: </strong><a href="studentinfo.php?StudentID=<?php echo $row_Recordset1['StudentID']; ?>"><?php echo $row_Recordset1['StudentID']; ?></a>
   <br>
     <strong>Returned Late:</strong> Equipment ID #<?php echo $row_Recordset1['kitID']; ?> - <?php echo $row_Recordset1['Name']; ?><strong><br>
-  Date CheckOut:</strong> <?php 
-  //echo $row_Recordset1['DateOut']; 
+  Date Checked Out:</strong> <?php
+  //echo $row_Recordset1['DateOut'];
   echo date("D F j, Y, g:i a", strtotime($row_Recordset1['DateOut']));
   ?>
   <br>
@@ -65,7 +65,7 @@ do {
 					// make this clear the fine from the list (set FinePaid)
 				}
 				echo number_format($fineDue,2); }
-				if (empty($row_Recordset1['FinePaid'])) { 
+				if (empty($row_Recordset1['FinePaid']) || $row_Recordset1['Strike'] >=1) { 
 		
 $username = $_COOKIE["EquipmentCheckout"];
 mysql_select_db($database_equip, $equip);
