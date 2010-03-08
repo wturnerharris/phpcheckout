@@ -149,7 +149,7 @@ while ($row_Recordset2 = mysql_fetch_assoc($Recordset2));
 <?
 //***** ADD CLASS FORM *****
 
-$classes = mysql_query("SELECT * FROM class") or die(mysql_error());  ?>
+$classes = mysql_query("SELECT * FROM class ORDER BY class.Name") or die(mysql_error());  ?>
 <form name="form" action="add-class.php" method="post">
 <select name="class" size="1" id="class">
 <? while($option = mysql_fetch_array( $classes )) {

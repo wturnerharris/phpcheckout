@@ -3,8 +3,10 @@ require_once('config.php');
 include('includes/heading.html');
 if (!$fines) {
 	$fine = "Strikes";
+	$FineOrStrike = "(unix_timestamp(DateIn)) > unix_timestamp(ExpectedDateIn)";
 	} else {
 		$fine = "Fines";
+		$FineOrStrike = "(unix_timestamp(DateIn) - $fineFreq) > unix_timestamp(ExpectedDateIn)";
 		}
 if (empty($_REQUEST['StudentID'])) {
 $SQL = " AND FinePaid is NULL";
@@ -16,7 +18,7 @@ echo "<strong>HISTORY OF ".strtoupper($fine)." FOR STUDENT ID #:</strong> " . $_
 echo "<hr />";
 }
 mysql_select_db($database_equip, $equip);
-$query_Recordset1 = "SELECT FirstName, LastName, checkedout.ID, checkedout.StudentID, checkedout.DateOut, checkedout.ExpectedDateIn, checkedout.DateIn, checkedout.kitID, checkedout.FinePaid, checkedout.Strike, kit.Name FROM checkedout LEFT JOIN students ON students.StudentID = checkedout.StudentID LEFT JOIN kit ON checkedout.kitID = kit.ID WHERE (unix_timestamp(DateIn) - $fineFreq) > unix_timestamp(ExpectedDateIn) $SQL";
+$query_Recordset1 = "SELECT FirstName, LastName, checkedout.ID, checkedout.StudentID, checkedout.DateOut, checkedout.ExpectedDateIn, checkedout.DateIn, checkedout.kitID, checkedout.FinePaid, checkedout.Strike, kit.Name FROM checkedout LEFT JOIN students ON students.StudentID = checkedout.StudentID LEFT JOIN kit ON checkedout.kitID = kit.ID WHERE $FineOrStrike $SQL";
 
 
 $Recordset1 = mysql_query($query_Recordset1, $equip) or die(mysql_error());
