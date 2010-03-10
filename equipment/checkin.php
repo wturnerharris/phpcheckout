@@ -46,18 +46,10 @@ if ($diff > $fineFreq) {
 Checking in a <?php echo $row_Recordset1['Name']; ?> on <? echo date("D, F j, g:i a") ?> 
 
 <br>
-This item  <?
-if($late){
-echo "was due ";
-} else {
-echo "is due "; 
-}
-echo date("D, F j, g:i a", strtotime($row_Recordset1['ExpectedDateIn']));
+This item was due on <? echo date("D, F j, g:i a", strtotime($row_Recordset1['ExpectedDateIn']));
 if($late){
 echo "<P><strong><font color=\"#FF0000\">THIS ITEM IS LATE</font></strong>";
 }
-
-
 ?>
 <br>
 <br>
