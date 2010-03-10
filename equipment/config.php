@@ -35,6 +35,7 @@ $sunClose = 00;
 $fines = false;
 //$strikes = false;
 $maxStrike = 3;
+$gracePeriod = 1800; // grace period in seconds; for strikes as fines ignores the fine unless the full frequency time has passed.
 
 // fine controls
 $fineAmount = 1.00; // amount of fine or strike
