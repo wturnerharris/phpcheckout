@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once('config.php'); 
 include('includes/heading.html');
 
@@ -20,10 +20,16 @@ $totalRows_Recordset2 = mysql_num_rows($Recordset2);
 $FirstName = $row_Recordset2['FirstName'];
 $LastName = $row_Recordset2['LastName'];
 
-if (intval(strtotime($row_Recordset1['ExpectedDateIn'])) < intval(strtotime("now"))) {
+if (!$fines) {
+	$frequency = $gracePeriod;
+} else {
+	$frequency = $fineFreq;
+}
+if (intval(strtotime($row_Recordset1['ExpectedDateIn']) + $frequency) < intval(strtotime("now"))) {
 $late = true;
 
-//math for strikes
+if (!$fines) {
+	//math for strikes
 $timeDue = date(strtotime($row_Recordset1['ExpectedDateIn']));
 $timeIn = date(strtotime("now"));
 $diff = abs($timeIn - $timeDue);
@@ -33,6 +39,7 @@ if ($diff > $fineFreq) {
 		} else {
 			$strikeGain = 1;
 			}
+		}
 }
 ?>
 
@@ -45,7 +52,6 @@ echo "was due ";
 } else {
 echo "is due "; 
 }
-
 echo date("D, F j, g:i a", strtotime($row_Recordset1['ExpectedDateIn']));
 if($late){
 echo "<P><strong><font color=\"#FF0000\">THIS ITEM IS LATE</font></strong>";

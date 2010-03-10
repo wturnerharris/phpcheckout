@@ -43,9 +43,11 @@ if (substr($StudentID, 0, 1) == " ") {
 if (!$fines) { 
 	$fine = "Strike";
 	$penalty = "Strike >= 1";
+	$frequency = $gracePeriod;
 } else {
 	$fine = "Fines";
 	$penalty = "FinePaid IS NULL";
+	$frequency = $fineFreq;
 }
 mysql_select_db($database_equip, $equip);
 $query_Recordset1 = "SELECT * FROM students WHERE StudentID = \"$StudentID\"";
@@ -54,7 +56,7 @@ $row_Recordset1 = mysql_fetch_assoc($Recordset1);
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 
 mysql_select_db($database_equip, $equip);
-$query_Fines = "SELECT * FROM checkedout WHERE (unix_timestamp(DateIn) - $fineFreq) > unix_timestamp(ExpectedDateIn) AND $penalty AND StudentID =  \"$StudentID\"";
+$query_Fines = "SELECT * FROM checkedout WHERE (unix_timestamp(DateIn) - $frequency) > unix_timestamp(ExpectedDateIn) AND $penalty AND StudentID =  \"$StudentID\"";
 $Fines = mysql_query($query_Fines, $equip) or die(mysql_error());
 $row_Fines = mysql_fetch_assoc($Fines);
 $totalRows_Fines = mysql_num_rows($Fines);
@@ -224,7 +226,7 @@ if($NoClasses!=1){
 
 if (!$fines) { //for strikes
 	mysql_select_db($database_kit, $equip);
-	$strikesTotal = "SELECT SUM($fine) FROM checkedout WHERE (unix_timestamp(DateIn)) > unix_timestamp(ExpectedDateIn) AND $fine >= 1 AND StudentID = \"$StudentID\"";
+	$strikesTotal = "SELECT SUM($fine) FROM checkedout WHERE (unix_timestamp(DateIn) - $frequency) > unix_timestamp(ExpectedDateIn) AND $fine >= 1 AND StudentID = \"$StudentID\"";
 	$strikesQuery = mysql_query($strikesTotal, $equip) or die(mysql_error());
 	$strikesResult = mysql_result($strikesQuery, 0);
 	// echo $strikesResult;

@@ -3,7 +3,7 @@ require_once('config.php');
 include('includes/heading.html');
 if (!$fines) {
 	$fine = "Strikes";
-	$FineOrStrike = "(unix_timestamp(DateIn)) > unix_timestamp(ExpectedDateIn)";
+	$FineOrStrike = "(unix_timestamp(DateIn) - $gracePeriod) > unix_timestamp(ExpectedDateIn)";
 	} else {
 		$fine = "Fines";
 		$FineOrStrike = "(unix_timestamp(DateIn) - $fineFreq) > unix_timestamp(ExpectedDateIn)";
