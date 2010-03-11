@@ -45,6 +45,24 @@ function refreshPage(){
 	var location = "admin.php?page=equipment"
 	window.location.href = location;
 }
+function showUpImage(){
+	if ($('upImage').style.display == "none"){
+		$('upImage').style.display = "block";
+//		$('upImage').style.height = "35px";
+	} else if ($('upImage').style.display == "block") {
+		$('upImage').style.display = "none";
+//		$('upImage').style.height = "0";
+	}
+}
+function showUpThumb(){
+	if ($('upThumb').style.display == "none"){
+		$('upThumb').style.display = "block";
+//		$('upThumb').style.height = "35px";
+	} else if ($('upThumb').style.display == "block") {
+		$('upThumb').style.display = "none";
+//		$('upThumb').style.height = "0";
+	}
+}
 </script>
 
 <form id="form1" name="form1" action="admin.php?page=equipment" method="post">
@@ -104,26 +122,38 @@ while($loop_Equipment = mysql_fetch_assoc($Equipment)) {
 //	echo $echo1;
 
 ?>
-<br>
 <?php
 if (empty($EquipmentID)) { if (!$hideButtons) { ?>
-<div style="margin-left: auto; margin-right: auto;">
+<div style="margin-left: 75px; margin-top: 75px;">
 <a href="#" title="Add Equipment" onClick="showAddEquipment();"><img src="<?php echo $root; ?>/images/btn-add-equipment.png" border="0" /></a>
 <a href="#" title="Add Accessories" onClick="showAddAccessory();"><img src="<?php echo $root; ?>/images/btn-add-accessories.png" border="0" /></a>
 </div>
-<? }} else { ?>
-<div id="showModify">
+<? }} else { 
+
+//***** DATABASE *****
+mysql_select_db($database_equip, $equip);
+$equipModQuery = "SELECT * FROM kit WHERE kit.ID = \"$EquipmentID\"";
+$equipMod = mysql_query($equipModQuery, $equip) or die(mysql_error());
+$row_equipMod = mysql_fetch_assoc($equipMod);
+$totalRows_equipMod = mysql_num_rows($equipMod);
+
+?>
+<div id="showModEquip">
+<h2>Modify Equipment</h2>
 <form id="frmModEquip" name="frmModEquip" enctype="multipart/form-data" action="actions-equipment.php" method="POST">
 	<input type="hidden" name="EquipmentID" value="<? echo $EquipmentID; ?>" />
-	<label>Name: </label><input type="text" name="textfield" /><br>
-	<label>Image: </label><input type="file" /><br>
-	<label>Genre: </label><input type="text" name="textfield4" /><br>
-	<label>Check Hours: </label><input type="text" name="textfield5" /><br>
-	<label>Serial #: </label><input type="text" name="textfield6" /><br>
-	<label>Model #: </label><input type="text" name="textfield7" /><br>
-	<label>Thumbnail: </label><input type="file" /><br>
-	<label>Needs Repair: </label><input type="checkbox" name="checkbox2" value="checkbox" /><label>Special Contract Required: </label><input type="checkbox" name="checkbox" value="checkbox" /><br>
-	<label>Notes: </label><textarea name="textarea"></textarea>
+	<label>Name: </label><input id="tb" type="text" name="txtName" value="<?php echo $row_equipMod['Name']; ?>" /><br>
+	<label>Image: </label><input id="tb" type="text" value="<?php echo $row_equipMod['Image']; ?>" /> <a href="#up1" name="up1" onclick="showUpImage();">Upload Image</a><br>
+    <span id="upImage" style="display: none; "><input id="tb" type="file" name="upImage" /> <a href="#up1" onclick="showUpImage();">Cancel</a><br></span>
+	<label>Genre: </label><input id="tb" type="text" name="txtGenre" value="<?php echo $row_equipMod['Genre']; ?>" /><br>
+	<label>Hours: </label><input id="tb" type="text" name="txtHours" value="<?php echo $row_equipMod['CheckHours']; ?>" /><br>
+	<label>Serial No: </label><input id="tb" type="text" name="txtSerial" value="<?php echo $row_equipMod['SerialNumber']; ?>" /><br>
+	<label>Model No: </label><input id="tb" type="text" name="txtModel" value="<?php echo $row_equipMod['ModelNumber']; ?>" /><br>
+	<label>Thumb: </label><input id="tb" type="text" value="<?php echo $row_equipMod['ImageThumb']; ?>" /> <a href="#up2" name="up2" onclick="showUpThumb();">Upload Thumbnail</a><br>
+    <span id="upThumb" style="display: none; "><input id="tb" type="file" name="upThumb" /> <a href="#up2" onclick="showUpThumb();">Cancel</a><br></span>
+	<strong>Needs Repair: </strong><input id="chk" type="checkbox" name="chkRepair" value="checkbox" <?php if ($row_equipMod['Repair'] == 1) { echo "checked='yes'"; } ?> />
+	<strong>Special Contract: </strong><input id="chk" type="checkbox" name="chkContract" value="checkbox" <?php if ($row_equipMod['ContractRequired'] == 1) { echo "checked='yes'"; } ?> /><br>
+	<label>Notes: </label><br/><textarea cols="50" rows="5" name="txtNotes"><?php echo $row_equipMod['Notes']; ?></textarea>
 	<input type="hidden" name="MAX_FILE_SIZE" value="500" />
 	<br />
 	<a href="#" style="float: right; margin-right: 35px;" onClick="Modify()">
@@ -138,16 +168,21 @@ if (empty($EquipmentID)) { if (!$hideButtons) { ?>
 }
 if ($addEquipment) { ?>
 <div id="showAddEquip">
+<h2>Add Equipment</h2>
 <form id="frmAddEquip" name="frmAddEquip" enctype="multipart/form-data" action="actions-equipment.php" method="POST">
-	<label>Name: </label><input type="text" name="textfield" />
-	<label>Image: </label><input type="file" />
-	<label>Genre: </label><input type="text" name="textfield4" />
-	<label>Check Hours: </label><input type="text" name="textfield5" />
-	<label>Serial #: </label><input type="text" name="textfield6" />
-	<label>Model #: </label><input type="text" name="textfield7" />
-	<label>Thumbnail: </label><input type="file" />
-	<label>Needs Repair: </label><input type="checkbox" name="checkbox2" value="checkbox" /><label>Special Contract Required: </label><input type="checkbox" name="checkbox" value="checkbox" />
-	<label>Notes: </label><textarea name="textarea"></textarea>
+	<input type="hidden" name="EquipmentID" value="" />
+	<label>Name: </label><input id="tb" type="text" name="txtName" value="" /><br>
+	<label>Image: </label><input id="tb" type="text" disabled="disabled" /> <a href="#up1" name="up1" onclick="showUpImage();">Upload Image</a><br>
+    <span id="upImage" style="display: none; "><input id="tb" type="file" name="upImage" /> <a href="#up1" onclick="showUpImage();">Cancel</a><br></span>
+	<label>Genre: </label><input id="tb" type="text" name="txtGenre" value="" /><br>
+	<label>Hours: </label><input id="tb" type="text" name="txtHours" value="" /><br>
+	<label>Serial No: </label><input id="tb" type="text" name="txtSerial" value="" /><br>
+	<label>Model No: </label><input id="tb" type="text" name="txtModel" value="" /><br>
+	<label>Thumb: </label><input id="tb" type="text" disabled="disabled" /> <a href="#up2" name="up2" onclick="showUpThumb();">Upload Thumbnail</a><br>
+    <span id="upThumb" style="display: none; "><input id="tb" type="file" name="upThumb" /> <a href="#up2" onclick="showUpThumb();">Cancel</a><br></span>
+	<strong>Needs Repair: </strong><input id="chk" type="checkbox" name="chkRepair" value="checkbox" />
+	<strong>Special Contract: </strong><input id="chk" type="checkbox" name="chkContract" value="checkbox" /><br>
+	<label>Notes: </label><br/><textarea cols="50" rows="5" name="txtNotes"></textarea>
 	<input type="hidden" name="MAX_FILE_SIZE" value="500" />
 	<br />
 	<a href="#" style="float: right; margin-right: 35px;" onClick="Add()">
@@ -160,16 +195,21 @@ if ($addEquipment) { ?>
 }
 if ($addAccessory) { ?>
 <div id="showAddAccessory">
+<h2>Add Accessory</h2>
 <form id="frmAddAccessory" name="frmAddAccessory" enctype="multipart/form-data" action="actions-equipment.php" method="POST">
-	<label>Name: </label><input type="text" name="textfield" />
-	<label>Image: </label><input type="file" />
-	<label>Genre: </label><input type="text" name="textfield4" />
-	<label>Check Hours: </label><input type="text" name="textfield5" />
-	<label>Serial #: </label><input type="text" name="textfield6" />
-	<label>Model #: </label><input type="text" name="textfield7" />
-	<label>Thumbnail: </label><input type="file" />
-	<label>Needs Repair: </label><input type="checkbox" name="checkbox2" value="checkbox" /><label>Special Contract Required: </label><input type="checkbox" name="checkbox" value="checkbox" />
-	<label>Notes: </label><textarea name="textarea"></textarea>
+	<input type="hidden" name="EquipmentID" value="" />
+	<label>Name: </label><input id="tb" type="text" name="txtName" value="" /><br>
+	<label>Image: </label><input id="tb" type="text" disabled="disabled" /> <a href="#up1" name="up1" onclick="showUpImage();">Upload Image</a><br>
+    <span id="upImage" style="display: none; "><input id="tb" type="file" name="upImage" /> <a href="#up1" onclick="showUpImage();">Cancel</a><br></span>
+	<label>Genre: </label><input id="tb" type="text" name="txtGenre" value="" /><br>
+	<label>Hours: </label><input id="tb" type="text" name="txtHours" value="" /><br>
+	<label>Serial No: </label><input id="tb" type="text" name="txtSerial" value="" /><br>
+	<label>Model No: </label><input id="tb" type="text" name="txtModel" value="" /><br>
+	<label>Thumb: </label><input id="tb" type="text" disabled="disabled" /> <a href="#up2" name="up2" onclick="showUpThumb();">Upload Thumbnail</a><br>
+    <span id="upThumb" style="display: none; "><input id="tb" type="file" name="upThumb" /> <a href="#up2" onclick="showUpThumb();">Cancel</a><br></span>
+	<strong>Needs Repair: </strong><input id="chk" type="checkbox" name="chkRepair" value="checkbox" />
+	<strong>Special Contract: </strong><input id="chk" type="checkbox" name="chkContract" value="checkbox" /><br>
+	<label>Notes: </label><br/><textarea cols="50" rows="5" name="txtNotes"></textarea>
 	<input type="hidden" name="MAX_FILE_SIZE" value="500" />
 	<br />
 	<a href="#" style="float: right; margin-right: 35px;" onClick="Add()">

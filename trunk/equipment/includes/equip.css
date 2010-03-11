@@ -65,13 +65,18 @@ img.logout 		{ text-align: left; vertical-align: middle; }
 
 #admin-page { position: relative; padding: 15px; background-color: #ffff99; float: right;
 	height: auto; min-height: 400px; margin: 5 5 5 0; width: 420px; }
-#showModify, #showAdd { line-height: 35px; }
+#showModify, #showAdd , #showModEquip, #showAddEquip, #showAddAccessory { line-height: 35px; }
 #showClass 	{ line-height: 30px; }
 #remClass 	{ float: left; margin-left: 10px; margin-right: 10px; padding-top: 2px; }
 #txtStudentID, #txtFirstName, #txtLastName, #txtEmail, #txtPhone {
 	float: right; height: 25px; width: 250px; margin-right: 35px; margin-top: 5px; color: #999999; background-color: #cccccc; }
 #txtStudentID1, #txtFirstName1, #txtLastName1, #txtEmail1, #txtPhone1 {
 	float: right; height: 25px; width: 250px; margin-right: 35px; margin-top: 5px; }
+#showModEquip label { text-align:left; float: left; font-weight: bold; width: 75px;}
+#showAddEquip label { text-align:left; float: left; font-weight: bold; width: 75px;}
+#showAddAccessory label { text-align:left; float: left; font-weight: bold; width: 75px;}
+#tb { float: left; margin: 8 10 0 0;}
+#chk { float: none; margin-right: 15px;}
 
 /* FOOTER */
 #footer { width: 630; height:20; background-color: #666666; padding-top: 1px; }
