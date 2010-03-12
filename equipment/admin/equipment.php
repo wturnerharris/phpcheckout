@@ -1,4 +1,5 @@
 <?php
+include('../includes/functions.inc');
 
 //variables
 $EquipmentID = $_REQUEST['equipmentList'];
@@ -26,7 +27,6 @@ if ($filterBy  == "no") {
 <script type="text/javascript">
 function Filter(){
 	$('filter').value = "yes";
-//	alert('Submit Called');
 	submitForm1();
 }
 function submitForm1() {
@@ -48,20 +48,54 @@ function refreshPage(){
 function showUpImage(){
 	if ($('upImage').style.display == "none"){
 		$('upImage').style.display = "block";
-//		$('upImage').style.height = "35px";
 	} else if ($('upImage').style.display == "block") {
 		$('upImage').style.display = "none";
-//		$('upImage').style.height = "0";
 	}
 }
 function showUpThumb(){
 	if ($('upThumb').style.display == "none"){
 		$('upThumb').style.display = "block";
-//		$('upThumb').style.height = "35px";
 	} else if ($('upThumb').style.display == "block") {
 		$('upThumb').style.display = "none";
-//		$('upThumb').style.height = "0";
 	}
+}
+
+function startUpload(){
+	$('f1_upload_process').style.visibility = 'visible';
+	return true;
+}
+
+function stopUpload(success){
+	var result = '';
+	if (success == 1){
+		$('result').innerHTML = '<span class="msg">The file was uploaded successfully!<\/span><br/><br/>';
+		} else {
+			$('result').innerHTML = '<span class="emsg">There was an error during file upload!<\/span><br/><br/>';
+			}
+			$('f1_upload_process').style.visibility = 'hidden';
+			return true;
+			}
+function uploadImage(){
+	$('addAccessory').value = "false";
+	$('addEquip').value = "false";
+	$('modEquip').value = "false";
+	$('form2').target = "upload_target";
+	$('form2').submit();
+}
+function Submit(){
+	$('form2').submit();
+}
+function uploadDone() { //Function will be called when iframe is loaded
+	var ret = frames['upload_target'].document.getElementsByTagName("body")[0].innerHTML;
+	var data = eval("ret"); //Parse JSON // Read the below explanations before passing judgment on me
+	
+	if(data.success) { //This part happens when the image gets uploaded.
+		$('image_details').innerHTML = "<img src='../images/" + data.file_name + "' /><br />Size: " + data.size + " KB";
+		alert("success?");
+	}
+	else if(data.failure) { //Upload failed - show user the reason.
+		alert("Upload Failed: " + data.failure);
+	}	
 }
 </script>
 
@@ -140,83 +174,86 @@ $totalRows_equipMod = mysql_num_rows($equipMod);
 ?>
 <div id="showModEquip">
 <h2>Modify Equipment</h2>
-<form id="frmModEquip" name="frmModEquip" enctype="multipart/form-data" action="actions-equipment.php" method="POST">
+<form id="form2" name="form2" enctype="multipart/form-data" action="equipment-form.php" method="POST">
 	<input type="hidden" name="EquipmentID" value="<? echo $EquipmentID; ?>" />
-	<label>Name: </label><input id="tb" type="text" name="txtName" value="<?php echo $row_equipMod['Name']; ?>" /><br>
-	<label>Image: </label><input id="tb" type="text" value="<?php echo $row_equipMod['Image']; ?>" /> <a href="#up1" name="up1" onclick="showUpImage();">Upload Image</a><br>
-    <span id="upImage" style="display: none; "><input id="tb" type="file" name="upImage" /> <a href="#up1" onclick="showUpImage();">Cancel</a><br></span>
-	<label>Genre: </label><input id="tb" type="text" name="txtGenre" value="<?php echo $row_equipMod['Genre']; ?>" /><br>
-	<label>Hours: </label><input id="tb" type="text" name="txtHours" value="<?php echo $row_equipMod['CheckHours']; ?>" /><br>
-	<label>Serial No: </label><input id="tb" type="text" name="txtSerial" value="<?php echo $row_equipMod['SerialNumber']; ?>" /><br>
-	<label>Model No: </label><input id="tb" type="text" name="txtModel" value="<?php echo $row_equipMod['ModelNumber']; ?>" /><br>
-	<label>Thumb: </label><input id="tb" type="text" value="<?php echo $row_equipMod['ImageThumb']; ?>" /> <a href="#up2" name="up2" onclick="showUpThumb();">Upload Thumbnail</a><br>
-    <span id="upThumb" style="display: none; "><input id="tb" type="file" name="upThumb" /> <a href="#up2" onclick="showUpThumb();">Cancel</a><br></span>
+	<label id="lb">Name: </label><input id="tb" type="text" name="txtName" value="<?php echo $row_equipMod['Name']; ?>" /><br>
+	<label id="lb">Image: </label><input id="tb" type="text" name="txtImage" readonly="readonly" value="<?php echo $row_equipMod['Image']; ?>" /> <a href="#up1" name="up1" onclick="showUpImage();">Upload Image</a><br>
+    <span id="upImage" style="display: none; "><input id="tb" type="file" name="upImage" onChange="uploadImage();" /> <a href="#up1" onclick="showUpImage();">Cancel</a><br></span>
+	<label id="lb">Genre: </label><input id="tb" type="text" name="txtGenre" value="<?php echo $row_equipMod['Genre']; ?>" /><br>
+	<label id="lb">Hours: </label><input id="tb" type="text" name="txtHours" value="<?php echo $row_equipMod['CheckHours']; ?>" /><br>
+	<label id="lb">Serial No: </label><input id="tb" type="text" name="txtSerial" value="<?php echo $row_equipMod['SerialNumber']; ?>" /><br>
+	<label id="lb">Model No: </label><input id="tb" type="text" name="txtModel" value="<?php echo $row_equipMod['ModelNumber']; ?>" /><br>
+	<label id="lb">Thumb: </label><input id="tb" type="text" name="txtThumb" readonly="readonly" value="<?php echo $row_equipMod['ImageThumb']; ?>" /> <a href="#up2" name="up2" onclick="showUpThumb();">Upload Thumbnail</a><br>
+    <span id="upThumb" style="display: none; "><input id="tb" type="file" name="upThumb" onChange="uploadImage();" /> <a href="#up2" onclick="showUpThumb();">Cancel</a><br></span>
 	<strong>Needs Repair: </strong><input id="chk" type="checkbox" name="chkRepair" value="checkbox" <?php if ($row_equipMod['Repair'] == 1) { echo "checked='yes'"; } ?> />
 	<strong>Special Contract: </strong><input id="chk" type="checkbox" name="chkContract" value="checkbox" <?php if ($row_equipMod['ContractRequired'] == 1) { echo "checked='yes'"; } ?> /><br>
-	<label>Notes: </label><br/><textarea cols="50" rows="5" name="txtNotes"><?php echo $row_equipMod['Notes']; ?></textarea>
-	<input type="hidden" name="MAX_FILE_SIZE" value="500" />
-	<br />
+	<label id="lb">Notes: </label><br/><textarea cols="50" rows="5" name="txtNotes"><?php echo $row_equipMod['Notes']; ?></textarea>
+	<input type="hidden" name="MAX_FILE_SIZE" value="75" />
+	<input type="hidden" id="modEquip" name="modEquip" value="true" />
+	<input type="hidden" id="addEquip" name="addEquip" value="false" />
+	<input type="hidden" id="addAccessory" name="addAccessory" value="false" />
+<p id="f1_upload_process">Loading...<br/><img src="../images/loader.gif" /></p>
+<p id="result"></p>	<br />
 	<a href="#" style="float: right; margin-right: 35px;" onClick="Modify()">
 		<img src="<?php echo $root; ?>/images/modify-button.png" border="0" title="Modify" /></a>
 	<a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
 		<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
-	<a href="#" style="float: right; margin-right: 10px;" onClick="answer=confirm('Do you wish to remove this record?');if(answer!=0){delEntry();}else{alert('Canceled')}">
+	<a href="#" style="float: right; margin-right: 10px;" onClick="answer=confirm('Do you wish to remove this kit?');if(answer!=0){delEntry();}else{alert('Canceled')}">
 		<img src="<?php echo $root; ?>/images/remove-button.png" border="0" title="Remove" /></a>
 </form>
+<div id="alert"></div>
+<div id="image_details"></div>
+<iframe id="upload_target" name="upload_target" src="" style="width:0;height:0;border:0px solid #fff;"></iframe>
 </div>
 <?
 }
 if ($addEquipment) { ?>
 <div id="showAddEquip">
 <h2>Add Equipment</h2>
-<form id="frmAddEquip" name="frmAddEquip" enctype="multipart/form-data" action="actions-equipment.php" method="POST">
-	<input type="hidden" name="EquipmentID" value="" />
-	<label>Name: </label><input id="tb" type="text" name="txtName" value="" /><br>
-	<label>Image: </label><input id="tb" type="text" disabled="disabled" /> <a href="#up1" name="up1" onclick="showUpImage();">Upload Image</a><br>
-    <span id="upImage" style="display: none; "><input id="tb" type="file" name="upImage" /> <a href="#up1" onclick="showUpImage();">Cancel</a><br></span>
-	<label>Genre: </label><input id="tb" type="text" name="txtGenre" value="" /><br>
-	<label>Hours: </label><input id="tb" type="text" name="txtHours" value="" /><br>
-	<label>Serial No: </label><input id="tb" type="text" name="txtSerial" value="" /><br>
-	<label>Model No: </label><input id="tb" type="text" name="txtModel" value="" /><br>
-	<label>Thumb: </label><input id="tb" type="text" disabled="disabled" /> <a href="#up2" name="up2" onclick="showUpThumb();">Upload Thumbnail</a><br>
-    <span id="upThumb" style="display: none; "><input id="tb" type="file" name="upThumb" /> <a href="#up2" onclick="showUpThumb();">Cancel</a><br></span>
+<form id="form2" name="form2" method="post" enctype="multipart/form-data" action="equipment-form.php" onsubmit="startUpload();">
+	<label id="lb">Name: </label><input id="tb" type="text" name="txtName" value="" /><br>
+	<label id="lb">Image: </label><input id="tb" type="text" readonly="readonly" /> <a href="#up1" name="up1" onclick="showUpImage();">Upload Image</a><br>
+    <span id="upImage" style="display: none; "><input id="tb" type="file" name="upImage" size="30" onChange="Submit();" /> <a href="#up1" onclick="showUpImage();">Cancel</a><br></span>
+	<label id="lb">Genre: </label><input id="tb" type="text" name="txtGenre" value="" /><br>
+	<label id="lb">Hours: </label><input id="tb" type="text" name="txtHours" value="" /><br>
+	<label id="lb">Serial No: </label><input id="tb" type="text" name="txtSerial" value="" /><br>
+	<label id="lb">Model No: </label><input id="tb" type="text" name="txtModel" value="" /><br>
+	<label id="lb">Thumb: </label><input id="tb" type="text" readonly="readonly" /> <a href="#up2" name="up2" onclick="showUpThumb();">Upload Thumbnail</a><br>
+    <span id="upThumb" style="display: none; "><input id="tb" type="file" name="upThumb" size="30" onChange="uploadImage();" /> <a href="#up2" onclick="showUpThumb();">Cancel</a><br></span>
 	<strong>Needs Repair: </strong><input id="chk" type="checkbox" name="chkRepair" value="checkbox" />
 	<strong>Special Contract: </strong><input id="chk" type="checkbox" name="chkContract" value="checkbox" /><br>
-	<label>Notes: </label><br/><textarea cols="50" rows="5" name="txtNotes"></textarea>
-	<input type="hidden" name="MAX_FILE_SIZE" value="500" />
-	<br />
-	<a href="#" style="float: right; margin-right: 35px;" onClick="Add()">
+	<label id="lb">Notes: </label><br/><textarea cols="50" rows="5" name="txtNotes"></textarea>
+	<input type="hidden" id="modEquip" name="modEquip" value="false" />
+	<input type="hidden" id="addEquip" name="addEquip" value="true" />
+	<input type="hidden" id="addAccessory" name="addAccessory" value="false" />
+<p id="f1_upload_process">Loading...<br/><img src="../images/loader.gif" /></p>
+<p id="result"></p>	<br />
+	<a href="#" style="float: right; margin-right: 35px;" onClick="Submit();">
 		<img src="<?php echo $root; ?>/images/add-button.png" border="0" title="Add" /></a>
 	<a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
 		<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 </form>
+<div id="alert"></div>
+<div id="image_details"></div>
+<iframe id="upload_target" name="upload_target" src="" style="width:0;height:0;border:0px solid #fff;"></iframe>
 </div>
 <?php
 }
 if ($addAccessory) { ?>
 <div id="showAddAccessory">
 <h2>Add Accessory</h2>
-<form id="frmAddAccessory" name="frmAddAccessory" enctype="multipart/form-data" action="actions-equipment.php" method="POST">
-	<input type="hidden" name="EquipmentID" value="" />
-	<label>Name: </label><input id="tb" type="text" name="txtName" value="" /><br>
-	<label>Image: </label><input id="tb" type="text" disabled="disabled" /> <a href="#up1" name="up1" onclick="showUpImage();">Upload Image</a><br>
-    <span id="upImage" style="display: none; "><input id="tb" type="file" name="upImage" /> <a href="#up1" onclick="showUpImage();">Cancel</a><br></span>
-	<label>Genre: </label><input id="tb" type="text" name="txtGenre" value="" /><br>
-	<label>Hours: </label><input id="tb" type="text" name="txtHours" value="" /><br>
-	<label>Serial No: </label><input id="tb" type="text" name="txtSerial" value="" /><br>
-	<label>Model No: </label><input id="tb" type="text" name="txtModel" value="" /><br>
-	<label>Thumb: </label><input id="tb" type="text" disabled="disabled" /> <a href="#up2" name="up2" onclick="showUpThumb();">Upload Thumbnail</a><br>
-    <span id="upThumb" style="display: none; "><input id="tb" type="file" name="upThumb" /> <a href="#up2" onclick="showUpThumb();">Cancel</a><br></span>
-	<strong>Needs Repair: </strong><input id="chk" type="checkbox" name="chkRepair" value="checkbox" />
-	<strong>Special Contract: </strong><input id="chk" type="checkbox" name="chkContract" value="checkbox" /><br>
-	<label>Notes: </label><br/><textarea cols="50" rows="5" name="txtNotes"></textarea>
-	<input type="hidden" name="MAX_FILE_SIZE" value="500" />
+<form id="form2" name="form2" action="equipment-form.php" method="POST">
+	<label id="lb">Name: </label><input id="tb" type="text" name="txtName" value="" /><br>
+	<input type="hidden" id="modEquip" name="modEquip" value="false" />
+	<input type="hidden" id="addEquip" name="addEquip" value="false" />
+	<input type="hidden" id="addAccessory" name="addAccessory" value="true" />
 	<br />
 	<a href="#" style="float: right; margin-right: 35px;" onClick="Add()">
 		<img src="<?php echo $root; ?>/images/add-button.png" border="0" title="Add" /></a>
 	<a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
 		<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 </form>
+<div id="alert"></div>
 </div>
 <?php
 }
