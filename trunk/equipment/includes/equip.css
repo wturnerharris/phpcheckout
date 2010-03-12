@@ -72,11 +72,12 @@ img.logout 		{ text-align: left; vertical-align: middle; }
 	float: right; height: 25px; width: 250px; margin-right: 35px; margin-top: 5px; color: #999999; background-color: #cccccc; }
 #txtStudentID1, #txtFirstName1, #txtLastName1, #txtEmail1, #txtPhone1 {
 	float: right; height: 25px; width: 250px; margin-right: 35px; margin-top: 5px; }
-#showModEquip label { text-align:left; float: left; font-weight: bold; width: 75px;}
-#showAddEquip label { text-align:left; float: left; font-weight: bold; width: 75px;}
-#showAddAccessory label { text-align:left; float: left; font-weight: bold; width: 75px;}
+#lb { text-align:left; float: left; font-weight: bold; width: 75px; }
 #tb { float: left; margin: 8 10 0 0;}
 #chk { float: none; margin-right: 15px;}
+#f1_upload_process { z-index:100; position:absolute; visibility:hidden; text-align:center; width:400px; margin:0px; padding:0px; background-color:#fff; border:1px solid #ccc; }
+
+
 
 /* FOOTER */
 #footer { width: 630; height:20; background-color: #666666; padding-top: 1px; }
