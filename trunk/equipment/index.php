@@ -1,9 +1,14 @@
 <?php 
 require_once('config.php');
 include('includes/heading.html'); 
-
+if($dueToday) {
+	$now = date("Y-m-d ", strtotime('now')).$dueHours;
+	$onlyToday = "AND ExpectedDateIn <= '$now'";
+} else {
+	$onlyToday = "";
+}
 mysql_select_db($database_equip, $equip);
-$query_Recordset1 = "SELECT * FROM checkedout  LEFT JOIN students ON students.StudentID = checkedout.StudentID LEFT JOIN kit ON kit.ID = checkedout.KitID WHERE DateIn = '' ORDER BY checkedout.ExpectedDateIn";
+$query_Recordset1 = "SELECT * FROM checkedout  LEFT JOIN students ON students.StudentID = checkedout.StudentID LEFT JOIN kit ON kit.ID = checkedout.KitID WHERE DateIn = '' $onlyToday ORDER BY checkedout.ExpectedDateIn";
 $Recordset1 = mysql_query($query_Recordset1, $equip) or die(mysql_error());
 $row_Recordset1 = mysql_fetch_assoc($Recordset1);
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
@@ -20,9 +25,11 @@ $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 
   <?php
 if($row_Recordset1['ID']>0) {  
-
-echo "<font color=\"#FF0000\"><strong><u>Equipment Currently Checked Out</u></strong><p></font>";
-
+if($dueToday){
+	echo "<font color=\"#FF0000\"><strong><u>Equipment Due Back Today</u></strong><p></font>";
+} else {
+	echo "<font color=\"#FF0000\"><strong><u>Equipment Currently Checked Out</u></strong><p></font>";
+}
 do { 
 	$StudentID = $row_Recordset1['StudentID'];
 	mysql_select_db($database_kit, $equip);
