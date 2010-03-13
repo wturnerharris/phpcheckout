@@ -13,8 +13,11 @@ $EquipmentID = $_REQUEST['EquipmentID'];
 $KitName = $_REQUEST['txtName'];
 $Image = $_REQUEST['txtImage'];
 $Genre = $_REQUEST['txtGenre'];
-//$CheckHours = $_REQUEST['txtHours']; disabled
-$CheckHours = "NULL";
+if ($checkHours){
+	$CheckHours = $_REQUEST['txtHours'];
+} else {
+	$CheckHours = "NULL";
+}
 $SerialNumber = $_REQUEST['txtSerial'];
 $ModelNumber = $_REQUEST['txtModel'];
 $ImageThumb = $_REQUEST['txtThumb'];
@@ -28,13 +31,16 @@ if($modEquip == "add"){
 if($modEquip== "mod"){
 	$modify = true;
 }
+if($modEquip == "rem"){
+	$remove = true;
+}
 if($modEquip == "acc"){
 	$accessory = true;
 }
 if ($modEquip == "img"){
 	$image = true;
 }
-//$image = true;
+//for image upload
 if($image){
 	$var = $_FILES[$file]["type"];
 if ((($var == "image/gif") || ($var == "image/jpeg") || ($var == "image/pjpeg") || ($var == "image/jpg")) && ($_FILES[$file]["size"] < 80000)) {
@@ -58,6 +64,9 @@ if($add){
 	mysql_query($query_Equip, $equip) or die(mysql_error());
 }
 if($accessory){
+	$query_Equip = "INSERT INTO accessorytype (Name) VALUES ('$KitName')";
+	mysql_select_db($database_equip, $equip);
+	mysql_query($query_Equip, $equip) or die(mysql_error());
 }
 if($modify){
 	//***** DATABASE ***** modify

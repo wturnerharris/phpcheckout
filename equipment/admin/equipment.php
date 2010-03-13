@@ -49,7 +49,7 @@ function showUpImage(link){
 	var imgType = link;
 	if ($(link).style.display == "none"){
 		$(link).style.display = "block";
-	} else if ($('link').style.display == "block") {
+	} else if ($(link).style.display == "block") {
 		$(link).style.display = "none";
 	}
 }
@@ -69,7 +69,9 @@ function stopUpload(success){
 			}
 function modTxt(name){
 	var box = "txt"+finishedType;
+	var upBox = "up"+finishedType;
 	$(box).value = name;
+	showUpImage(upBox);
 }
 function uploadImage(type){
 	finishedType = type;
@@ -108,6 +110,49 @@ function Modify(){
 	$('alert').style.visibility = "visible";
 	$('alert').innerHTML = "Equipment Kit Modified";
 }
+function Add(){
+	$('modEquip').value = "add";
+   var name = $F('txtName');
+   var image = $F('txtImage');
+   var genre = $F('txtGenre');
+   var thumb = $F('txtThumb');
+   if (IsEmpty(name) || IsEmpty(image) || IsEmpty(genre) || IsEmpty(thumb))
+   {
+	  $$('label.im').invoke('setStyle', { color: 'red' });
+	  return false;
+   }
+	new Ajax.Request("equipment-form.php",
+		{
+		method: 'post',
+		parameters: $('form2').serialize(true),
+		onComplete: showResponse 
+		});
+	$('alert').style.visibility = "visible";
+	$('alert').innerHTML = "Equipment Kit Added";
+}
+function delEntry(){
+	$('modEquip').value = "rem";
+	new Ajax.Request("equipment-form.php",
+		{
+		method: 'post',
+		parameters: $('form2').serialize(true),
+		onComplete: showResponse 
+		});
+	$('alert').style.visibility = "visible";
+	$('alert').innerHTML = "Equipment Kit Deleted";
+}
+function addAccessory(){
+	$('modEquip').value = "acc";
+	new Ajax.Request("equipment-form.php",
+		{
+		method: 'post',
+		parameters: $('form2').serialize(true),
+		onComplete: showResponse 
+		});
+	$('alert').style.visibility = "visible";
+	$('alert').innerHTML = "Accessory Added";
+}
+
 </script>
 
 <form id="form1" name="form1" action="admin.php?page=equipment" method="post">
@@ -135,7 +180,7 @@ function Modify(){
 
 //***** DATABASE *****
 mysql_select_db($database_equip, $equip);
-
+//SELECT DISTINCT Image, ImageThumb FROM kit ORDER BY Image;
 if ($filter == "no") {
 	$query_E = "SELECT * FROM kit ORDER BY kit.Name ASC";
 } else {
@@ -185,7 +230,7 @@ $totalRows_equipMod = mysql_num_rows($equipMod);
 ?>
 <div id="showModEquip">
 <h2>Modify Equipment</h2>
-<form id="form2" name="form2" enctype="multipart/form-data" action="equipment-form.php" method="POST">
+<form id="form2" name="form2" method="post" enctype="multipart/form-data" action="equipment-form.php">
 	<input type="hidden" name="EquipmentID" value="<? echo $EquipmentID; ?>" />
 	<label class="lb im">Name: </label><input name="txtName" id="txtName" class="tb" type="text" value="<?php echo $row_equipMod['Name']; ?>" /><br>
 	<label class="lb im">Image: </label><input name="txtImage" id="txtImage" class="tb" type="text" readonly="readonly" value="<?php echo $row_equipMod['Image']; ?>" /> <a href="#up1" name="up1" onclick="showUpImage('upImage');">Upload Image</a><br>
@@ -204,9 +249,9 @@ $totalRows_equipMod = mysql_num_rows($equipMod);
 	<input type="hidden" id="modEquip" name="modEquip" value="mod" />
 <p id="f1_upload_process">Loading...<br/><img src="../images/loader.gif" /></p>
 <p id="result"></p>	<br />
-	<a href="#" style="float: right; margin-right: 35px;" onClick="Modify()">
+	<a href="#" style="float: right; margin-right: 35px;" onClick="Modify();">
 		<img src="<?php echo $root; ?>/images/modify-button.png" border="0" title="Modify" /></a>
-	<a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
+	<a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage();">
 		<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 	<a href="#" style="float: right; margin-right: 10px;" onClick="answer=confirm('Do you wish to remove this kit?');if(answer!=0){delEntry();}">
 		<img src="<?php echo $root; ?>/images/remove-button.png" border="0" title="Remove" /></a>
@@ -220,7 +265,7 @@ $totalRows_equipMod = mysql_num_rows($equipMod);
 if ($addEquipment) { ?>
 <div id="showAddEquip">
 <h2>Add Equipment</h2>
-<form id="form2" name="form2" method="post" enctype="multipart/form-data" action="equipment-form.php" onsubmit="startUpload();">
+<form id="form2" name="form2" method="post" enctype="multipart/form-data" action="equipment-form.php">
 	<label class="lb im">Name: </label><input name="txtName" id="txtName" class="tb" type="text" value="" /><br>
 	<label class="lb im">Image: </label><input name="txtImage" id="txtImage" class="tb" type="text" readonly="readonly" /> <a href="#up1" name="up1" onclick="showUpImage('upImage');">Upload Image</a><br>
     <span id="upImage" style="display: none; "><input name="upImage" class="tb" type="file" size="30" onChange="uploadImage('Image');" /> <a href="#up1" onclick="showUpImage('upImage');">Cancel</a><br></span>
@@ -240,7 +285,7 @@ if ($addEquipment) { ?>
 <p id="result"></p>	<br />
 	<a href="#" style="float: right; margin-right: 35px;" onClick="Add();">
 		<img src="<?php echo $root; ?>/images/add-button.png" border="0" title="Add" /></a>
-	<a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
+	<a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage();">
 		<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 </form>
 <div id="alert"></div>
@@ -252,13 +297,13 @@ if ($addEquipment) { ?>
 if ($addAccessory) { ?>
 <div id="showAddAccessory">
 <h2>Add Accessory</h2>
-<form id="form2" name="form2" action="equipment-form.php" method="POST">
-	<label class="lb">Name: </label><input class="tb" type="text" name="txtName" value="" /><br>
+<form id="form2" name="form2" method="post" action="equipment-form.php">
+	<label class="lb">Name: </label><input name="txtName" id="txtName" class="tb" type="text" value="" /><br>
 	<input type="hidden" id="modEquip" name="modEquip" value="acc" />
 	<br />
-	<a href="#" style="float: right; margin-right: 35px;" onClick="addAccessory()">
+	<a href="#" style="float: right; margin-right: 35px;" onClick="addAccessory();">
 		<img src="<?php echo $root; ?>/images/add-button.png" border="0" title="Add" /></a>
-	<a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage()">
+	<a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage();">
 		<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 </form>
 <div id="alert"></div>

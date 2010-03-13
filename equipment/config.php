@@ -8,6 +8,9 @@ $username_equip = "root";
 $password_equip = "new-password";
 $equip = mysql_pconnect($hostname_equip, $username_equip, $password_equip) or die(mysql_error());
 
+//options
+$checkHours = false; //to enable kit-specific due date change to true
+$dueToday = true; //only shows items due today on index page, false shows all
 $weekends = false; // if open weekends, flag this
 $dayClosed1 = "Sun"; // three-digit textual day, usually Sat
 $dayClosed2 = "Mon"; // three-digit textual day, usually Sun

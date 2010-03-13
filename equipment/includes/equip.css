@@ -75,7 +75,7 @@ img.logout 		{ text-align: left; vertical-align: middle; }
 .lb { text-align:left; float: left; font-weight: bold; width: 75px; }
 .tb { float: left; margin: 8 10 0 0;}
 .chk { float: none; margin-right: 15px;}
-#f1_upload_process { z-index:100; position:absolute; visibility:hidden; text-align:center; width:400px; margin:0px; padding:0px; background-color:#fff; border:1px solid #ccc; }
+#f1_upload_process { z-index:100; position:absolute; visibility:hidden; text-align:center; width:200px; margin:0px; padding:0px; border:1px solid #ccc; }
 
 
 
