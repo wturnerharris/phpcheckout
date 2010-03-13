@@ -7,31 +7,31 @@ if ($_FILES['upImage']['name']) {
 if ($_FILES['upThumb']['name']) {
 	$file = "upThumb";
 }
-$addEquip = $_REQUEST['addEquip'];
+//  form variables
 $modEquip = $_REQUEST['modEquip'];
-$addAccessory = $_REQUEST['addAccessory'];
 $EquipmentID = $_REQUEST['EquipmentID'];
 $KitName = $_REQUEST['txtName'];
 $Image = $_REQUEST['txtImage'];
 $Genre = $_REQUEST['txtGenre'];
-$CheckHours = $_REQUEST['txtHours'];
-$Serial = $_REQUEST['txtSerial'];
+//$CheckHours = $_REQUEST['txtHours']; disabled
+$CheckHours = "NULL";
+$SerialNumber = $_REQUEST['txtSerial'];
 $ModelNumber = $_REQUEST['txtModel'];
 $ImageThumb = $_REQUEST['txtThumb'];
 $Repair = $_REQUEST['chkRepair'];
 $Contract = $_REQUEST['chkContract'];
 $Notes = $_REQUEST['txtNotes'];
 
-if($addEquip == "true"){
+if($modEquip == "add"){
 	$add = true;
 }
-if($modEquip== "true"){
+if($modEquip== "mod"){
 	$modify = true;
 }
-if($addAccessory == "true"){
+if($modEquip == "acc"){
 	$accessory = true;
 }
-if (!$add && !$modify && !$accessory){
+if ($modEquip == "img"){
 	$image = true;
 }
 //$image = true;
@@ -52,12 +52,24 @@ if ((($var == "image/gif") || ($var == "image/jpeg") || ($var == "image/pjpeg") 
 	}
 }
 if($add){
+	//***** DATABASE ***** add
+	$query_Equip = "INSERT INTO kit (Name, Image, Repair, Genre, CheckHours, SerialNumber, ModelNumber, ImageThumb, ContractRequired, Notes) VALUES ('$KitName', '$Image', '$Repair', '$Genre', '$CheckHours', '$SerialNumber', '$ModelNumber', '$ImageThumb', '$Contract', '$Notes')";
+	mysql_select_db($database_equip, $equip);
+	mysql_query($query_Equip, $equip) or die(mysql_error());
 }
 if($accessory){
 }
 if($modify){
+	//***** DATABASE ***** modify
+	$query_Equip = "UPDATE kit SET Name='$KitName', Image='$Image', Repair='$Repair', Genre='$Genre', CheckHours=$CheckHours, SerialNumber='$SerialNumber', ModelNumber='$ModelNumber', ImageThumb='$ImageThumb', ContractRequired='$Contract', Notes='$Notes' WHERE ID='$EquipmentID'";
+	mysql_select_db($database_equip, $equip);
+	mysql_query($query_Equip, $equip) or die(mysql_error());
 }
 if($remove){
+	//***** DATABASE ***** remove
+	$query_Equip = "DELETE FROM kit WHERE ID='$EquipmentID'";
+	mysql_select_db($database_equip, $equip);
+	mysql_query($query_Equip, $equip) or die(mysql_error());
 }
 ?>
 <script language="javascript" type="text/javascript">window.top.window.stopUpload(<?php echo $result; ?>);window.top.window.modTxt("<?php echo $name; ?>");</script>

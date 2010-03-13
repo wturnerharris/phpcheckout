@@ -32,7 +32,7 @@ $Problem = 1;
 
 $message = "There has been a problem with the checkout of $KitName - $ModelNumber\r\n\r\n$Notes\r\n\r\n";
 
-$message = $message . "$site_root/$root/kithistory.php?KitID=$KitID";
+$message = $message . "".$site_root.$root."/kithistory.php?KitID=$KitID";
 
 if (isset($admin_email1)) {
 mail("$admin_email1", "SYSTEM MESSAGE - Checkout Problem with $KitName", $message,
@@ -87,7 +87,7 @@ if (isset($BannedDate)) {
 	 $insertBan = "BannedDate = '$BannedDate',";
 } else {
 	$insertBan = "";
-}	
+}
 $sql = "UPDATE checkedout SET DateIn = NOW(), Problem = $Problem, Notes = '$Notes',$insertBan Strike = '$strikeGain', CheckInUser = '$CheckInUser' WHERE ID = $CheckedOutID;";
 //echo $sql;
 $Recordset1 = mysql_query($sql, $equip) or die(mysql_error());
