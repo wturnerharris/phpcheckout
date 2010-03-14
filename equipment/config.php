@@ -36,15 +36,14 @@ $sunClose = 00;
 
 //USE FINES OR STRIKES
 $fines = false;
-//$strikes = false;
+//if $fines is false, strikes are enabled
 $maxStrike = 3;
 $gracePeriod = 1800; // grace period in seconds; for strikes as fines ignores the fine unless the full frequency time has passed.
-
-// fine controls
 $fineAmount = 1.00; // amount of fine or strike
 $fineFreq = 86400; // amount of time per fine increment, in seconds, default is one day.
 $maxFine = 3.00; // max amount of fine or strike per kit
 
+//Directory info
 $root = "/equipment"; // using absolute paths. from the root to the program folder, with preceding slash and without trailing slash
 $site_root = "http://www.yourdomain.com"; //domain name where your installation of checkout resides, no trailing slash
 
