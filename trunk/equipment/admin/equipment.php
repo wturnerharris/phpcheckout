@@ -60,9 +60,9 @@ function startUpload(){
 function stopUpload(success){
 	var result = '';
 	if (success == 1){
-		$('result').innerHTML = '<span class="msg">The file was uploaded successfully!<\/span><br/><br/>';
+		$('result').innerHTML = '<span class="alert">The file was uploaded successfully!<\/span><br/><br/>';
 		} else {
-			$('result').innerHTML = '<span class="emsg">There was an error during file upload!<\/span><br/><br/>';
+			$('result').innerHTML = '<span class="alert">There was an error during file upload!<\/span><br/><br/>';
 			}
 			$('f1_upload_process').style.visibility = 'hidden';
 			return true;
@@ -70,7 +70,13 @@ function stopUpload(success){
 function modTxt(name){
 	var box = "txt"+finishedType;
 	var upBox = "up"+finishedType;
-	$(box).value = name;
+	var newOpt = document.createElement("option");
+	newOpt.value = name;
+	newOpt.text = name;
+//	$(box).value = name;
+	$(box).add(newOpt, null);
+	var num = $(box).length;
+	$(box).selected = num;
 	showUpImage(upBox);
 }
 function uploadImage(type){
@@ -92,11 +98,12 @@ function showResponse(req){
 }
 function Modify(){
 	$('modEquip').value = "mod";
-   var name = $F('txtName');
-   var image = $F('txtImage');
-   var genre = $F('txtGenre');
-   var thumb = $F('txtThumb');
-   if (IsEmpty(name) || IsEmpty(image) || IsEmpty(genre) || IsEmpty(thumb))
+   var name = $('txtName');
+   var image = $('txtImage');
+   var genre = $('txtGenre');
+   var thumb = $('txtThumb');
+   var selIndex = thumb.selectedIndex;
+   if (IsEmpty(name.value) || IsEmpty(image.value) || IsEmpty(genre.value) || IsEmpty(thumb.options[selIndex].value))
    {
 	  $$('label.im').invoke('setStyle', { color: 'red' });
 	  return false;
@@ -169,18 +176,14 @@ function addAccessory(){
 	<input id="btn" type="button" style="margin-left: 30px; height: 25px; width: 65px;" onClick="Filter();" value="Filter" onKeyPress="Filter();" />
 	</p><hr/ style="border: 0px; height: 3px; background-color: #ffcc00;">
 	<strong style="line-height: 30px;">Equipment: </strong>
-	
 	<input type="hidden" name="addEquipment" id="addEquipment" value="">
 	<input type="hidden" name="addAccessory" id="addAccessory" value="">
 	<input id="filter" name="filter" type="hidden" value="<?php echo $filter; ?>" />
 	<select name="equipmentList" id="equipmentList" style="float: right; width: 300px; height: 25px; margin-right: 35px; margin-top: 5px;" onChange="submitForm1();">
 		<option selected value="">Select the equipment...</option>
-
 <?php
-
 //***** DATABASE *****
 mysql_select_db($database_equip, $equip);
-//SELECT DISTINCT Image, ImageThumb FROM kit ORDER BY Image;
 if ($filter == "no") {
 	$query_E = "SELECT * FROM kit ORDER BY kit.Name ASC";
 } else {
@@ -188,37 +191,27 @@ if ($filter == "no") {
 		$query_E = "SELECT * FROM kit WHERE kit.Genre = \"$filterBy\" ORDER BY kit.Name ASC";
 	}
 }
-
 $Equipment = mysql_query($query_E, $equip) or die(mysql_error());
 $row_Equipment = mysql_fetch_assoc($Equipment);
 $totalRows_Equipment = mysql_num_rows($Equipment);
 
 //***** LOOP SELECT BOX *****
 mysql_data_seek($Equipment,0);
-while($loop_Equipment = mysql_fetch_assoc($Equipment)) {
-
-?>
-		<option value="<?php echo $loop_Equipment['ID']; ?>"><?php echo $loop_Equipment['Name']. ", " .$loop_Equipment['Genre']; ?></option>
-<?php 
-} 
-?>
-  </select>
+while($loop_Equipment = mysql_fetch_assoc($Equipment)) { ?>
+<option value="<?php echo $loop_Equipment['ID']; ?>"><?php echo $loop_Equipment['Name']. ", " .$loop_Equipment['Genre']; ?></option>
+<?php } ?>
+	  </select>
 </form>
 	<hr/ style="border: 0px; height: 3px; background-color: #ffcc00;">
-
-<?php 
+<?php
 
 //***** RECORD FORM *****
-//	echo $echo1;
-
-?>
-<?php
 if (empty($EquipmentID)) { if (!$hideButtons) { ?>
 <div style="margin-left: 75px; margin-top: 75px;">
 <a href="#" title="Add Equipment" onClick="showAddEquipment();"><img src="<?php echo $root; ?>/images/btn-add-equipment.png" border="0" /></a>
 <a href="#" title="Add Accessories" onClick="showAddAccessory();"><img src="<?php echo $root; ?>/images/btn-add-accessories.png" border="0" /></a>
 </div>
-<? }} else { 
+<? }} else {
 
 //***** DATABASE *****
 mysql_select_db($database_equip, $equip);
@@ -233,7 +226,26 @@ $totalRows_equipMod = mysql_num_rows($equipMod);
 <form id="form2" name="form2" method="post" enctype="multipart/form-data" action="equipment-form.php">
 	<input type="hidden" name="EquipmentID" value="<? echo $EquipmentID; ?>" />
 	<label class="lb im">Name: </label><input name="txtName" id="txtName" class="tb" type="text" value="<?php echo $row_equipMod['Name']; ?>" /><br>
-	<label class="lb im">Image: </label><input name="txtImage" id="txtImage" class="tb" type="text" readonly="readonly" value="<?php echo $row_equipMod['Image']; ?>" /> <a href="#up1" name="up1" onclick="showUpImage('upImage');">Upload Image</a><br>
+	<label class="lb im">Image: </label>
+	<select name="txtImage" id="txtImage" class="tb" >
+<?php
+
+//***** DATABASE ***** for image loop
+mysql_select_db($database_equip, $equip);
+$imageQuery = "SELECT DISTINCT Image FROM kit ORDER BY Image";
+
+$Image = mysql_query($imageQuery, $equip) or die(mysql_error());
+$totalRows_Image = mysql_num_rows($Image);
+if ($totalRows_Image < 1) {
+	echo "<option selected  value='large-default.jpg'>large-default.jpg</option>";
+} else {
+
+//***** LOOP SELECT BOX ***** for image
+mysql_data_seek($Image,0);
+while($loop_Image = mysql_fetch_assoc($Image)) { ?>
+    <option <?php if ($row_equipMod['Image'] == $loop_Image['Image']) { echo "selected";} ?>  value="<?php echo $loop_Image['Image']; ?>"><?php echo $loop_Image['Image']; ?></option>
+<?php }} ?>
+    </select> <a href="#up1" name="up1" onclick="showUpImage('upImage');">Upload Image</a><br>
     <span id="upImage" style="display: none; "><input name="upImage" class="tb" type="file" onChange="uploadImage('Image');" /> <a href="#up1" onclick="showUpImage('upImage');">Cancel</a><br></span>
 	<label class="lb im">Genre: </label><input name="txtGenre" id="txtGenre" class="tb" type="text" value="<?php echo $row_equipMod['Genre']; ?>" /><br>
 <? if ($checkHours) { ?>
@@ -241,8 +253,26 @@ $totalRows_equipMod = mysql_num_rows($equipMod);
 <? } ?>
 	<label class="lb">Serial No: </label><input name="txtSerial" id="txtSerial" class="tb" type="text" value="<?php echo $row_equipMod['SerialNumber']; ?>" /><br>
 	<label class="lb">Model No: </label><input name="txtModel" id="txtModel" class="tb" type="text" value="<?php echo $row_equipMod['ModelNumber']; ?>" /><br>
-	<label class="lb im">Thumb: </label><input name="txtThumb" id="txtThumb" class="tb" type="text" readonly="readonly" value="<?php echo $row_equipMod['ImageThumb']; ?>" /> <a href="#up2" name="up2" onclick="showUpImage('upThumb');">Upload Thumbnail</a><br>
-    <span id="upThumb" style="display: none; "><input name="upThumb" class="tb" type="file" onChange="uploadImage('Thumb');" /> <a href="#up2" onclick="showUpThumb('upThumb');">Cancel</a><br></span>
+	<label class="lb im">Thumb: </label>
+	<select name="txtThumb" id="txtThumb" class="tb" >
+<?php
+//***** DATABASE ***** for thumb loop
+mysql_select_db($database_equip, $equip);
+$thumbQuery = "SELECT DISTINCT ImageThumb FROM kit ORDER BY ImageThumb";
+
+$Thumb = mysql_query($thumbQuery, $equip) or die(mysql_error());
+$totalRows_Thumb = mysql_num_rows($Thumb);
+if ($totalRows_Thumb < 1 )  {
+	echo "<option selected  value='thumb-default.jpg'>thumb-default.jpg</option>";
+} else {
+
+//***** LOOP SELECT BOX ***** for thumb
+mysql_data_seek($Thumb,0);
+while($loop_Thumb = mysql_fetch_assoc($Thumb)) { ?>
+    <option <?php if ($row_equipMod['ImageThumb'] == $loop_Thumb['ImageThumb']) { echo "selected";} ?>  value="<?php echo $loop_Thumb['ImageThumb']; ?>"><?php echo $loop_Thumb['ImageThumb']; ?></option>
+<?php }} ?>
+    </select> <a href="#up2" name="up2" onclick="showUpImage('upThumb');">Upload Thumbnail</a><br>
+    <span id="upThumb" style="display: none; "><input name="upThumb" class="tb" type="file" onChange="uploadImage('Thumb');" /> <a href="#up2" onclick="showUpImage('upThumb');">Cancel</a><br></span>
 	<strong>Needs Repair: </strong><input name="chkRepair" id="chkRepair" class="chk" type="checkbox" value="1" <?php if ($row_equipMod['Repair'] == 1) { echo "checked='yes'"; } ?> />
 	<strong>Special Contract: </strong><input name="chkContract" id="chkContract" class="chk" type="checkbox" value="1" <?php if ($row_equipMod['ContractRequired'] == 1) { echo "checked='yes'"; } ?> /><br>
 	<label class="lb">Notes: </label><br/><textarea cols="50" rows="5" name="txtNotes" id="txtNotes"><?php echo $row_equipMod['Notes']; ?></textarea>
@@ -256,7 +286,6 @@ $totalRows_equipMod = mysql_num_rows($equipMod);
 	<a href="#" style="float: right; margin-right: 10px;" onClick="answer=confirm('Do you wish to remove this kit?');if(answer!=0){delEntry();}">
 		<img src="<?php echo $root; ?>/images/remove-button.png" border="0" title="Remove" /></a>
 </form>
-<div id="alert"></div>
 <div id="image_details"></div>
 <iframe id="upload_target" name="upload_target" src="" style="width:0;height:0;border:0px solid #fff;"></iframe>
 </div>
@@ -267,7 +296,26 @@ if ($addEquipment) { ?>
 <h2>Add Equipment</h2>
 <form id="form2" name="form2" method="post" enctype="multipart/form-data" action="equipment-form.php">
 	<label class="lb im">Name: </label><input name="txtName" id="txtName" class="tb" type="text" value="" /><br>
-	<label class="lb im">Image: </label><input name="txtImage" id="txtImage" class="tb" type="text" readonly="readonly" /> <a href="#up1" name="up1" onclick="showUpImage('upImage');">Upload Image</a><br>
+	<label class="lb im">Image: </label>
+	<select name="txtImage" id="txtImage" class="tb" >
+<?php
+
+//***** DATABASE ***** for image loop
+mysql_select_db($database_equip, $equip);
+$imageQuery = "SELECT DISTINCT Image FROM kit ORDER BY Image";
+
+$Image = mysql_query($imageQuery, $equip) or die(mysql_error());
+$totalRows_Image = mysql_num_rows($Image);
+if ($totalRows_Image < 1) {
+	echo "<option selected  value='large-default.jpg'>large-default.jpg</option>";
+} else {
+
+//***** LOOP SELECT BOX ***** for image
+mysql_data_seek($Image,0);
+while($loop_Image = mysql_fetch_assoc($Image)) { ?>
+    <option <?php if ($row_equipMod['Image'] == $loop_Image['Image']) { echo "selected";} ?>  value="<?php echo $loop_Image['Image']; ?>"><?php echo $loop_Image['Image']; ?></option>
+<?php }} ?>
+    </select> <a href="#up1" name="up1" onclick="showUpImage('upImage');">Upload Image</a><br>
     <span id="upImage" style="display: none; "><input name="upImage" class="tb" type="file" size="30" onChange="uploadImage('Image');" /> <a href="#up1" onclick="showUpImage('upImage');">Cancel</a><br></span>
 	<label class="lb im">Genre: </label><input name="txtGenre" id="txtGenre" class="tb" type="text" value="" /><br>
 <? if ($checkHours) { ?>
@@ -275,7 +323,25 @@ if ($addEquipment) { ?>
 <? } ?>
 	<label class="lb">Serial No: </label><input name="txtSerial" id="txtSerial" class="tb" type="text" value="" /><br>
 	<label class="lb">Model No: </label><input name="txtModel" id="txtModel" class="tb" type="text" value="" /><br>
-	<label class="lb im">Thumb: </label><input name="txtThumb" id="txtThumb" class="tb" type="text" readonly="readonly" /> <a href="#up2" name="up2" onclick="showUpImage('upThumb');">Upload Thumbnail</a><br>
+	<label class="lb im">Thumb: </label>
+	<select name="txtThumb" id="txtThumb" class="tb" >
+<?php
+//***** DATABASE ***** for thumb loop
+mysql_select_db($database_equip, $equip);
+$thumbQuery = "SELECT DISTINCT ImageThumb FROM kit ORDER BY ImageThumb";
+
+$Thumb = mysql_query($thumbQuery, $equip) or die(mysql_error());
+$totalRows_Thumb = mysql_num_rows($Thumb);
+if ($totalRows_Thumb < 1) {
+	echo "<option selected  value='thumb-default.jpg'>thumb-default.jpg</option>";
+} else {
+
+//***** LOOP SELECT BOX ***** for thumb
+mysql_data_seek($Thumb,0);
+while($loop_Thumb = mysql_fetch_assoc($Thumb)) { ?>
+    <option <?php if ($row_equipMod['ImageThumb'] == $loop_Thumb['ImageThumb']) { echo "selected";} ?>  value="<?php echo $loop_Thumb['ImageThumb']; ?>"><?php echo $loop_Thumb['ImageThumb']; ?></option>
+<?php }} ?>
+    </select> <a href="#up2" name="up2" onclick="showUpImage('upThumb');">Upload Thumbnail</a><br>
     <span id="upThumb" style="display: none; "><input name="upThumb" class="tb" type="file" size="30" onChange="uploadImage('Thumb');" /> <a href="#up2" onclick="showUpImage('upThumb');">Cancel</a><br></span>
 	<strong>Needs Repair: </strong><input name="chkRepair" id="chkRepair" class="chk" type="checkbox" value="checkbox" />
 	<strong>Special Contract: </strong><input name="chkContract" id="chkContract" class="chk" type="checkbox" value="checkbox" /><br>
@@ -288,7 +354,6 @@ if ($addEquipment) { ?>
 	<a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage();">
 		<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 </form>
-<div id="alert"></div>
 <div id="image_details"></div>
 <iframe id="upload_target" name="upload_target" src="" style="width:0;height:0;border:0px solid #fff;"></iframe>
 </div>
@@ -306,7 +371,6 @@ if ($addAccessory) { ?>
 	<a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage();">
 		<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 </form>
-<div id="alert"></div>
 </div>
 <?php
 }
