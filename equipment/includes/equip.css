@@ -65,7 +65,7 @@ img.logout 		{ text-align: left; vertical-align: middle; }
 
 #admin-page { position: relative; padding: 15px; background-color: #ffff99; float: right;
 	height: auto; min-height: 400px; margin: 5 5 5 0; width: 420px; }
-#showModify, #showAdd , #showModEquip, #showAddEquip, #showAddAccessory { line-height: 35px; }
+#showModify, #showAdd , #showModEquip, #showAddEquip, #showAddAccessory, #showAddClass { line-height: 35px; }
 #showClass 	{ line-height: 30px; }
 #remClass 	{ float: left; margin-left: 10px; margin-right: 10px; padding-top: 2px; }
 #txtStudentID, #txtFirstName, #txtLastName, #txtEmail, #txtPhone {
