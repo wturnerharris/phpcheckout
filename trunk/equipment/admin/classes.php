@@ -1,18 +1,22 @@
-<?php 
+<?php
 
 //variables
 $filter = $_REQUEST['filter'];
-if (isset($filter)) {
-} else {
+if (!isset($filter)) {
 	$filter = "no";
 }
 $StudentID = $_REQUEST['StudentID'];
 if (empty($_REQUEST['StudentID'])) {
 	$StudentID = $_REQUEST['studentList'];
 }
-if (isset($StudentID)) {
+if (isset($StudentID) && $StudentID != "") {
 	$filter = "yes";
 	}
+if ($filter == "addNewClass"){
+    $hideButtons = true;
+    $addNewClass = true;
+}
+
 //global javascript
 ?>
 
@@ -38,6 +42,10 @@ function showAddForm(){
 	$('filter').value = "add";
 	$('form1').submit();
 }
+function showAddClass(){
+	$('filter').value = "addNewClass";
+	$('form1').submit();
+}
 function disableEnterKey(e){
      var key;
      if(window.event)
@@ -59,7 +67,17 @@ function delEntry(){
 	$('alert').style.visibility = "visible";
 	$('alert').innerHTML = "Class Removed";
 	}
-</script>		
+function Add(){
+	new Ajax.Request("add-class.php",
+		{ 
+		method: 'post', 
+		parameters: $('form2').serialize(true),
+		onComplete: showResponse 
+		});
+	$('alert').style.visibility = "visible";
+	$('alert').innerHTML = "Class Added";
+	}
+</script>
 <?php
 // **DEBUG
 //echo "filter : ".$filter ."<BR>";
@@ -75,7 +93,7 @@ function delEntry(){
 	<strong style="line-height: 30px;">Student: </strong>
 	
 	<input id="filter" name="filter" type="hidden" value="<?php echo $filter; ?>" />
-	<select id="studentList" name="studentList" style="float: right; width: 300px; height: 25px; margin-right: 35px; margin-top: 5px;" onChange="submitForm2();">
+	<select id="studentList" name="studentList" style="float: right; width: 300px; height: 25px; margin-right: 35px; margin-top: 5px;" onChange="submitForm1();">
 		<option <?php if (isset($StudentID)) { echo ""; } else { echo "selected"; } ?> value="">Select a student...</option>
 <?php
 
@@ -111,6 +129,11 @@ while($loop_Students = mysql_fetch_assoc($Students)) {
 </form>
 	<hr/ style="border: 0px; height: 3px; background-color: #ffcc00;">
 <?php 
+if (empty($StudentID)) { if (!$hideButtons) { ?>
+<div style="display: block; margin-top: 75px; margin-left: auto; margin-right: auto; width: 135px;">
+<a href="#" title="Add Classes" onClick="showAddClass();"><img src="<?php echo $root; ?>/images/btn-add-class.png" border="0" /></a>
+</div>
+<? }} else {
 
 //***** RECORD FORM *****
 if ($filter == "yes") {
@@ -178,7 +201,22 @@ echo "<FONT COLOR='red'><br>This Student is NOT registered to checkout.</FONT><b
 <?php
 //****end if for #showClass
 }
-?>
+
+mysql_free_result($Students); }
+if ($addNewClass) { ?>
+<div id="showAddClass">
+<h2>Add Classes</h2>
+<form id="form2" name="form2" method="post" action="add-class.php">
+	  <p>
+	<label class="lb im">Class: </label><input name="txtClass" id="txtClass" class="tb" type="text" value="" /><br>
+	<input type="hidden" id="addNewClass" name="addNewClass" value="true" /></p>
+	<br />
+	<a href="#" style="float: right; margin-right: 35px;" onClick="Add();">
+		<img src="<?php echo $root; ?>/images/add-button.png" border="0" title="Add" /></a>
+	<a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage();">
+		<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
+</form>
+</div>
 <?php
-mysql_free_result($Students);
+}
 ?>

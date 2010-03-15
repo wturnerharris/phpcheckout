@@ -98,12 +98,13 @@ function showResponse(req){
 }
 function Modify(){
 	$('modEquip').value = "mod";
-   var name = $('txtName');
-   var image = $('txtImage');
-   var genre = $('txtGenre');
-   var thumb = $('txtThumb');
-   var selIndex = thumb.selectedIndex;
-   if (IsEmpty(name.value) || IsEmpty(image.value) || IsEmpty(genre.value) || IsEmpty(thumb.options[selIndex].value))
+   var name = $F('txtName');
+   var image = $F('txtImage');
+   var genre = $F('txtGenre');
+   var thumb = $F('txtThumb');
+//   var selIndex = thumb.selectedIndex;
+   if (IsEmpty(name) || IsEmpty(image) || IsEmpty(genre) || IsEmpty(thumb))
+   // || IsEmpty(thumb.options[selIndex].value)
    {
 	  $$('label.im').invoke('setStyle', { color: 'red' });
 	  return false;
@@ -207,7 +208,7 @@ while($loop_Equipment = mysql_fetch_assoc($Equipment)) { ?>
 
 //***** RECORD FORM *****
 if (empty($EquipmentID)) { if (!$hideButtons) { ?>
-<div style="margin-left: 75px; margin-top: 75px;">
+<div style="margin-left: auto; margin-right: auto; margin-top: 75px; width: 265px;">
 <a href="#" title="Add Equipment" onClick="showAddEquipment();"><img src="<?php echo $root; ?>/images/btn-add-equipment.png" border="0" /></a>
 <a href="#" title="Add Accessories" onClick="showAddAccessory();"><img src="<?php echo $root; ?>/images/btn-add-accessories.png" border="0" /></a>
 </div>
