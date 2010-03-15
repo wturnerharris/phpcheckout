@@ -278,6 +278,8 @@ while($loop_Thumb = mysql_fetch_assoc($Thumb)) { ?>
 	<strong>Special Contract: </strong><input name="chkContract" id="chkContract" class="chk" type="checkbox" value="1" <?php if ($row_equipMod['ContractRequired'] == 1) { echo "checked='yes'"; } ?> /><br>
 	<label class="lb">Notes: </label><br/><textarea cols="50" rows="5" name="txtNotes" id="txtNotes"><?php echo $row_equipMod['Notes']; ?></textarea>
 	<input type="hidden" id="modEquip" name="modEquip" value="mod" />
+	<a href="#">View Associated Classes</a><div id="assocClass"></div>
+	<a href="#">View Associated Accessories</a><div id="assocAccess"></div>
 <p id="f1_upload_process">Loading...<br/><img src="../images/loader.gif" /></p>
 <p id="result"></p>	<br />
 	<a href="#" style="float: right; margin-right: 35px;" onClick="Modify();">
