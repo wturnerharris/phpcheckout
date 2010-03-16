@@ -4,12 +4,14 @@
 # HTTP="true"
 $hostname_equip = "localhost";
 $database_equip = "equipment";
-$username_equip = "root";
+$username_equip = "witdesig_equip";
 $password_equip = "new-password";
 $equip = mysql_pconnect($hostname_equip, $username_equip, $password_equip) or die(mysql_error());
 
 //options
 $checkHours = false; //to enable kit-specific due date change to true
+$defaultHours = 48; //default hours allowed per kit
+$overnights = 2; //number of nights allowed out
 $dueToday = true; //only shows items due today on index page, false shows all
 $weekends = false; // if open weekends, flag this
 $dayClosed1 = "Sun"; // three-digit textual day, usually Sat
