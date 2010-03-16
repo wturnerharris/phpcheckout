@@ -91,8 +91,7 @@ function IsEmpty(obj) {
 function showResponse(req){
 	setTimeout('refreshPage();',1000);
 }
-function Modify(){
-	$('modEquip').value = "mod";
+function checkForm(){
    var name = $F('txtName');
    var image = $F('txtImage');
    var genre = $F('txtGenre');
@@ -104,76 +103,41 @@ function Modify(){
 	  $$('label.im').invoke('setStyle', { color: 'red' });
 	  return false;
    }
-	new Ajax.Request("equipment-form.php",
-		{
-		method: 'post',
-		parameters: $('form2').serialize(true),
-		onComplete: showResponse 
-		});
-	$('alert').style.visibility = "visible";
-	$('alert').innerHTML = "Equipment Kit Modified";
 }
-function Add(){
-	$('modEquip').value = "add";
-   var name = $F('txtName');
-   var image = $F('txtImage');
-   var genre = $F('txtGenre');
-   var thumb = $F('txtThumb');
-   if (IsEmpty(name) || IsEmpty(image) || IsEmpty(genre) || IsEmpty(thumb))
-   {
-	  $$('label.im').invoke('setStyle', { color: 'red' });
-	  return false;
-   }
-	new Ajax.Request("equipment-form.php",
+function doAjaxSubmit(page,form){
+	new Ajax.Request(page,
 		{
 		method: 'post',
-		parameters: $('form2').serialize(true),
+		parameters: $(form).serialize(true),
 		onComplete: showResponse 
-		});
+		});	
 	$('alert').style.visibility = "visible";
-	$('alert').innerHTML = "Equipment Kit Added";
 }
-function delEntry(){
-	$('modEquip').value = "rem";
-	new Ajax.Request("equipment-form.php",
-		{
-		method: 'post',
-		parameters: $('form2').serialize(true),
-		onComplete: showResponse 
-		});
-	$('alert').style.visibility = "visible";
-	$('alert').innerHTML = "Equipment Kit Deleted";
+function addOrModify(which){
+	$('modEquip').value = which;
+	checkForm();
+	doAjaxSubmit('equipment-form.php','form2');
+	$('alert').innerHTML = "Equipment Kit "+ which;
 }
-function addAccessory(){
-	$('modEquip').value = "acc";
-	new Ajax.Request("equipment-form.php",
-		{
-		method: 'post',
-		parameters: $('form2').serialize(true),
-		onComplete: showResponse 
-		});
-	$('alert').style.visibility = "visible";
-	$('alert').innerHTML = "Accessory Added";
+function delOrAddAccessory(which){
+	$('modEquip').value = which;
+	doAjaxSubmit('equipment-form.php','form2');
+	$('alert').innerHTML = "Equipment Kit "+ which;
 }
 function addClassAction(){
 	new Ajax.Request("add-class.php",
 		{
 		method: 'post',
 		parameters: $('form3').serialize(true),
-		onComplete: showResponse 
+		onComplete: addOrModify('mod') 
 		});
+	doAjaxSubmit('add-class.php','form2');
 	$('alert').style.visibility = "visible";
 	$('alert').innerHTML = "Class Added";
 }
 function delClass(numero){
     $('rkClassID').value = numero;
-	new Ajax.Request("remove-class.php",
-		{
-		method: 'post',
-		parameters: $('form3').serialize(true),
-		onComplete: showResponse 
-		});
-	$('alert').style.visibility = "visible";
+	doAjaxSubmit('remove-class.php','form3');
 	$('alert').innerHTML = "Class Removed";
 }
 function slideDiv(e){
@@ -298,7 +262,7 @@ while($loop_Thumb = mysql_fetch_assoc($Thumb)) { ?>
 	<input type="hidden" id="modEquip" name="modEquip" value="mod" />
 </form>
 	<a href="#aC" name="aC" onClick="slideDiv('assocClass');">View Associated Classes</a><br/>
-	<div id="assocClass" style="display: none; border:1px solid #000; padding: 15px;">
+	<div id="assocClass" style="display: none; border:1px solid #000; padding-left: 15px;">
 <strong>Registered Classes:</strong><br>
 
 <?php //show class records for selected kit
@@ -341,17 +305,17 @@ if ($totalRows_Recordset2==0) {
     } ?>
     </select>
     <input name="EquipmentID" type="hidden" value="<?php echo $EquipmentID; ?>">
-    <input type="button" name="AddClass" value="AddClass" onClick="addClassAction();">
+    <input type="button" name="AddClass" value="Add Class" onClick="addClassAction();">
     </form>
 	</div>
 	<a href="#">View Associated Accessories</a><div id="assocAccess" style="visibility: hidden;"></div>
 <p id="f1_upload_process">Loading...<br/><img src="../images/loader.gif" /></p>
 <p id="result"></p>	<br />
-	<a href="#" style="float: right; margin-right: 35px;" onClick="Modify();">
+	<a href="#" style="float: right; margin-right: 35px;" onClick="addOrModify('mod');">
 		<img src="<?php echo $root; ?>/images/modify-button.png" border="0" title="Modify" /></a>
 	<a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage();">
 		<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
-	<a href="#" style="float: right; margin-right: 10px;" onClick="answer=confirm('Do you wish to remove this kit?');if(answer!=0){delEntry();}">
+	<a href="#" style="float: right; margin-right: 10px;" onClick="answer=confirm('Do you wish to remove this kit?');if(answer!=0){delOrAddAccessory('rem');}">
 		<img src="<?php echo $root; ?>/images/remove-button.png" border="0" title="Remove" /></a>
 <div id="image_details"></div>
 <iframe id="upload_target" name="upload_target" src="" style="width:0;height:0;border:0px solid #fff;"></iframe>
@@ -382,8 +346,8 @@ mysql_data_seek($Image,0);
 while($loop_Image = mysql_fetch_assoc($Image)) { ?>
     <option <?php if ($row_equipMod['Image'] == $loop_Image['Image']) { echo "selected";} ?>  value="<?php echo $loop_Image['Image']; ?>"><?php echo $loop_Image['Image']; ?></option>
 <?php }} ?>
-    </select> <a href="#" name="up1" onclick="slideDiv('upImage');">Upload Image</a><br>
-    <span id="upImage" style="display: none; "><input name="upImage" class="tb" type="file" size="30" onChange="uploadImage('Image');" /> <a href="#" onclick="slideDiv('upImage');">Cancel</a><br></span>
+    </select> <a href="#" onclick="slideDiv('upImage');">Upload Image</a><br>
+    <div id="upImage" style="display: none; "><input name="upImage" class="tb" type="file" size="30" onChange="uploadImage('Image');" /> <a href="#" onclick="slideDiv('upImage');">Cancel</a><br></div>
 	<label class="lb im">Genre: </label><input name="txtGenre" id="txtGenre" class="tb" type="text" value="" /><br>
 <? if ($checkHours) { ?>
 	<label class="lb">Hours: </label><input name="txtHours" id="txtHours" class="tb" type="text" value="" /><br>
@@ -408,15 +372,15 @@ mysql_data_seek($Thumb,0);
 while($loop_Thumb = mysql_fetch_assoc($Thumb)) { ?>
     <option <?php if ($row_equipMod['ImageThumb'] == $loop_Thumb['ImageThumb']) { echo "selected";} ?>  value="<?php echo $loop_Thumb['ImageThumb']; ?>"><?php echo $loop_Thumb['ImageThumb']; ?></option>
 <?php }} ?>
-    </select> <a href="#" name="up2" onclick="slideDiv('upThumb');">Upload Thumbnail</a><br>
-    <span id="upThumb" style="display: none; "><input name="upThumb" class="tb" type="file" size="30" onChange="uploadImage('Thumb');" /> <a href="#" onclick="slideDiv('upThumb');">Cancel</a><br></span>
+    </select> <a href="#" onclick="slideDiv('upThumb');">Upload Thumbnail</a><br>
+    <div id="upThumb" style="display: none; "><input name="upThumb" class="tb" type="file" size="30" onChange="uploadImage('Thumb');" /> <a href="#" onclick="slideDiv('upThumb');">Cancel</a><br></div>
 	<strong>Needs Repair: </strong><input name="chkRepair" id="chkRepair" class="chk" type="checkbox" value="checkbox" />
 	<strong>Special Contract: </strong><input name="chkContract" id="chkContract" class="chk" type="checkbox" value="checkbox" /><br>
 	<label class="lb">Notes: </label><br/><textarea cols="50" rows="5" name="txtNotes" id="txtNotes"></textarea>
 	<input type="hidden" id="modEquip" name="modEquip" value="add" />
 <p id="f1_upload_process">Loading...<br/><img src="../images/loader.gif" /></p>
 <p id="result"></p>	<br />
-	<a href="#" style="float: right; margin-right: 35px;" onClick="Add();">
+	<a href="#" style="float: right; margin-right: 35px;" onClick="addOrModify('add');">
 		<img src="<?php echo $root; ?>/images/add-button.png" border="0" title="Add" /></a>
 	<a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage();">
 		<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
@@ -433,7 +397,7 @@ if ($addAccessory) { ?>
 	<label class="lb">Name: </label><input name="txtName" id="txtName" class="tb" type="text" value="" /><br>
 	<input type="hidden" id="modEquip" name="modEquip" value="acc" />
 	<br />
-	<a href="#" style="float: right; margin-right: 35px;" onClick="addAccessory();">
+	<a href="#" style="float: right; margin-right: 35px;" onClick="delOrAddAccessory('acc');">
 		<img src="<?php echo $root; ?>/images/add-button.png" border="0" title="Add" /></a>
 	<a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage();">
 		<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
