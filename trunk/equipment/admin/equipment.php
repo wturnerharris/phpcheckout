@@ -23,6 +23,9 @@ if ($filterBy  == "no") {
 		}
 //global javascript
 ?>
+<script type="text/javascript" src="../includes/scriptaculous.js"></script>
+<script type="text/javascript" src="../includes/slider.js"></script>
+<script type="text/javascript" src="../includes/effects.js"></script>
 
 <script type="text/javascript">
 function Filter(){
@@ -44,14 +47,6 @@ function refreshPage(){
 //	$('filter').value = "no";
 	var location = "admin.php?page=equipment"
 	window.location.href = location;
-}
-function showUpImage(link){
-	var imgType = link;
-	if ($(link).style.display == "none"){
-		$(link).style.display = "block";
-	} else if ($(link).style.display == "block") {
-		$(link).style.display = "none";
-	}
 }
 function startUpload(){
 	$('f1_upload_process').style.visibility = 'visible';
@@ -77,7 +72,7 @@ function modTxt(name){
 	$(box).add(newOpt, null);
 	var num = $(box).length;
 	$(box).selected = num;
-	showUpImage(upBox);
+	slideDiv(upBox);
 }
 function uploadImage(type){
 	finishedType = type;
@@ -160,7 +155,30 @@ function addAccessory(){
 	$('alert').style.visibility = "visible";
 	$('alert').innerHTML = "Accessory Added";
 }
-
+function addClassAction(){
+	new Ajax.Request("add-class.php",
+		{
+		method: 'post',
+		parameters: $('form3').serialize(true),
+		onComplete: showResponse 
+		});
+	$('alert').style.visibility = "visible";
+	$('alert').innerHTML = "Class Added";
+}
+function delClass(numero){
+    $('rkClassID').value = numero;
+	new Ajax.Request("remove-class.php",
+		{
+		method: 'post',
+		parameters: $('form3').serialize(true),
+		onComplete: showResponse 
+		});
+	$('alert').style.visibility = "visible";
+	$('alert').innerHTML = "Class Removed";
+}
+function slideDiv(e){
+    Effect.toggle(e, 'Blind', {duration:1});
+}
 </script>
 
 <form id="form1" name="form1" action="admin.php?page=equipment" method="post">
@@ -246,8 +264,8 @@ mysql_data_seek($Image,0);
 while($loop_Image = mysql_fetch_assoc($Image)) { ?>
     <option <?php if ($row_equipMod['Image'] == $loop_Image['Image']) { echo "selected";} ?>  value="<?php echo $loop_Image['Image']; ?>"><?php echo $loop_Image['Image']; ?></option>
 <?php }} ?>
-    </select> <a href="#up1" name="up1" onclick="showUpImage('upImage');">Upload Image</a><br>
-    <span id="upImage" style="display: none; "><input name="upImage" class="tb" type="file" onChange="uploadImage('Image');" /> <a href="#up1" onclick="showUpImage('upImage');">Cancel</a><br></span>
+    </select> <a href="#" onclick="slideDiv('upImage');">Upload Image</a><br>
+    <div id="upImage" style="display: none; "><input name="upImage" class="tb" type="file" onChange="uploadImage('Image');" /> <a href="#" onclick="slideDiv('upImage');">Cancel</a><br></div>
 	<label class="lb im">Genre: </label><input name="txtGenre" id="txtGenre" class="tb" type="text" value="<?php echo $row_equipMod['Genre']; ?>" /><br>
 <? if ($checkHours) { ?>
 	<label class="lb">Hours: </label><input name="txtHours" id="txtHours" class="tb" type="text" value="<?php echo $row_equipMod['CheckHours']; ?>" /><br>
@@ -272,14 +290,61 @@ mysql_data_seek($Thumb,0);
 while($loop_Thumb = mysql_fetch_assoc($Thumb)) { ?>
     <option <?php if ($row_equipMod['ImageThumb'] == $loop_Thumb['ImageThumb']) { echo "selected";} ?>  value="<?php echo $loop_Thumb['ImageThumb']; ?>"><?php echo $loop_Thumb['ImageThumb']; ?></option>
 <?php }} ?>
-    </select> <a href="#up2" name="up2" onclick="showUpImage('upThumb');">Upload Thumbnail</a><br>
-    <span id="upThumb" style="display: none; "><input name="upThumb" class="tb" type="file" onChange="uploadImage('Thumb');" /> <a href="#up2" onclick="showUpImage('upThumb');">Cancel</a><br></span>
+    </select> <a href="#" onclick="slideDiv('upThumb');">Upload Thumbnail</a><br>
+    <div id="upThumb" style="display: none; "><input name="upThumb" class="tb" type="file" onChange="uploadImage('Thumb');" /> <a href="#" onclick="slideDiv('upThumb');">Cancel</a><br></div>
 	<strong>Needs Repair: </strong><input name="chkRepair" id="chkRepair" class="chk" type="checkbox" value="1" <?php if ($row_equipMod['Repair'] == 1) { echo "checked='yes'"; } ?> />
 	<strong>Special Contract: </strong><input name="chkContract" id="chkContract" class="chk" type="checkbox" value="1" <?php if ($row_equipMod['ContractRequired'] == 1) { echo "checked='yes'"; } ?> /><br>
 	<label class="lb">Notes: </label><br/><textarea cols="50" rows="5" name="txtNotes" id="txtNotes"><?php echo $row_equipMod['Notes']; ?></textarea>
 	<input type="hidden" id="modEquip" name="modEquip" value="mod" />
-	<a href="#">View Associated Classes</a><div id="assocClass"></div>
-	<a href="#">View Associated Accessories</a><div id="assocAccess"></div>
+</form>
+	<a href="#aC" name="aC" onClick="slideDiv('assocClass');">View Associated Classes</a><br/>
+	<div id="assocClass" style="display: none; border:1px solid #000; padding: 15px;">
+<strong>Registered Classes:</strong><br>
+
+<?php //show class records for selected kit
+    mysql_select_db($database_equip, $equip);
+    $query_rc2 = "SELECT kit_class.ID AS kcID, kit_class.KitID, kit_class.ClassID, class.Name FROM kit_class INNER JOIN class ON kit_class.ClassID = class.ID WHERE KitID = '$EquipmentID'";
+    $query_Recordset2 = sprintf($query_rc2);
+    $Recordset2 = mysql_query($query_Recordset2, $equip) or die(mysql_error());
+    $row_Recordset2 = mysql_fetch_assoc($Recordset2);
+    $totalRows_Recordset2 = mysql_num_rows($Recordset2);
+if (isset($row_Recordset2['ClassID'])) {
+do {
+	if (empty($ClassIDSQL)){
+		$ClassIDSQL = $row_Recordset2['ClassID'];
+	} else {
+		$ClassIDSQL = $ClassIDSQL . " OR kit_class.ClassID = " . $row_Recordset2['ClassID'] ;
+	}
+?>
+	<a id="remClass" href="#" onClick="answer=confirm('Remove this class?');if(answer!=0){delClass(<? echo $row_Recordset2['kcID']; ?>);}else{alert('Canceled')}" >
+	<img id="remClass" src="<?php echo $root; ?>/images/remove_icn.png" border="0" title="Remove Class" /></a>
+	<? echo $row_Recordset2['Name']; ?><br/> 
+<?php
+	}
+while ($row_Recordset2 = mysql_fetch_assoc($Recordset2));
+}
+if ($totalRows_Recordset2==0) {
+    echo "<span class='alert'>No classes registered. Add from the selection below.</span>";
+}
+ ?>
+  	<!-- ***********add/remove class form*********** -->
+
+    <form id="form3" name="form3" action="classes.php" method="post">
+    <input id="rkClassID" name="rkClassID" type="hidden" value="null" />
+    <select name="class" size="1" id="class" style='margin-left: 20px;'>
+<?
+  	//***** ADD CLASS FORM *****
+	$classes = mysql_query("SELECT * FROM class ORDER BY class.Name") or die(mysql_error());
+	while($option = mysql_fetch_array( $classes )) {
+    // Print out the contents of each row into an option
+    echo "<option value='$option[Name]'>$option[Name]</option>";
+    } ?>
+    </select>
+    <input name="EquipmentID" type="hidden" value="<?php echo $EquipmentID; ?>">
+    <input type="button" name="AddClass" value="AddClass" onClick="addClassAction();">
+    </form>
+	</div>
+	<a href="#">View Associated Accessories</a><div id="assocAccess" style="visibility: hidden;"></div>
 <p id="f1_upload_process">Loading...<br/><img src="../images/loader.gif" /></p>
 <p id="result"></p>	<br />
 	<a href="#" style="float: right; margin-right: 35px;" onClick="Modify();">
@@ -288,7 +353,6 @@ while($loop_Thumb = mysql_fetch_assoc($Thumb)) { ?>
 		<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
 	<a href="#" style="float: right; margin-right: 10px;" onClick="answer=confirm('Do you wish to remove this kit?');if(answer!=0){delEntry();}">
 		<img src="<?php echo $root; ?>/images/remove-button.png" border="0" title="Remove" /></a>
-</form>
 <div id="image_details"></div>
 <iframe id="upload_target" name="upload_target" src="" style="width:0;height:0;border:0px solid #fff;"></iframe>
 </div>
@@ -318,8 +382,8 @@ mysql_data_seek($Image,0);
 while($loop_Image = mysql_fetch_assoc($Image)) { ?>
     <option <?php if ($row_equipMod['Image'] == $loop_Image['Image']) { echo "selected";} ?>  value="<?php echo $loop_Image['Image']; ?>"><?php echo $loop_Image['Image']; ?></option>
 <?php }} ?>
-    </select> <a href="#up1" name="up1" onclick="showUpImage('upImage');">Upload Image</a><br>
-    <span id="upImage" style="display: none; "><input name="upImage" class="tb" type="file" size="30" onChange="uploadImage('Image');" /> <a href="#up1" onclick="showUpImage('upImage');">Cancel</a><br></span>
+    </select> <a href="#" name="up1" onclick="slideDiv('upImage');">Upload Image</a><br>
+    <span id="upImage" style="display: none; "><input name="upImage" class="tb" type="file" size="30" onChange="uploadImage('Image');" /> <a href="#" onclick="slideDiv('upImage');">Cancel</a><br></span>
 	<label class="lb im">Genre: </label><input name="txtGenre" id="txtGenre" class="tb" type="text" value="" /><br>
 <? if ($checkHours) { ?>
 	<label class="lb">Hours: </label><input name="txtHours" id="txtHours" class="tb" type="text" value="" /><br>
@@ -344,8 +408,8 @@ mysql_data_seek($Thumb,0);
 while($loop_Thumb = mysql_fetch_assoc($Thumb)) { ?>
     <option <?php if ($row_equipMod['ImageThumb'] == $loop_Thumb['ImageThumb']) { echo "selected";} ?>  value="<?php echo $loop_Thumb['ImageThumb']; ?>"><?php echo $loop_Thumb['ImageThumb']; ?></option>
 <?php }} ?>
-    </select> <a href="#up2" name="up2" onclick="showUpImage('upThumb');">Upload Thumbnail</a><br>
-    <span id="upThumb" style="display: none; "><input name="upThumb" class="tb" type="file" size="30" onChange="uploadImage('Thumb');" /> <a href="#up2" onclick="showUpImage('upThumb');">Cancel</a><br></span>
+    </select> <a href="#" name="up2" onclick="slideDiv('upThumb');">Upload Thumbnail</a><br>
+    <span id="upThumb" style="display: none; "><input name="upThumb" class="tb" type="file" size="30" onChange="uploadImage('Thumb');" /> <a href="#" onclick="slideDiv('upThumb');">Cancel</a><br></span>
 	<strong>Needs Repair: </strong><input name="chkRepair" id="chkRepair" class="chk" type="checkbox" value="checkbox" />
 	<strong>Special Contract: </strong><input name="chkContract" id="chkContract" class="chk" type="checkbox" value="checkbox" /><br>
 	<label class="lb">Notes: </label><br/><textarea cols="50" rows="5" name="txtNotes" id="txtNotes"></textarea>
