@@ -28,7 +28,16 @@ alert('You must enter a valid password. Please try again.');
 	
 	
 		if ($row_Recordset1['Password'] == $encrypted_mypassword) { 
-			setcookie("EquipmentCheckout", $Username, time()+60*60*24); 
+			//session_name('EquipmentCheckout');
+			//start the session and register a variable
+			session_name("EquipmentCheckout");
+			session_start();
+			session_register($Username);
+			// this sets variables in the session
+			$_SESSION['user'] = $Username;
+			$_SESSION['auth'] = 'true';
+			$_SESSION['time'] = time();
+			//setcookie("EquipmentCheckout", $Username, time()+60*60*24); 
 			mysql_free_result($Recordset1);
 			echo "<meta http-equiv=\"refresh\" content=\"0;URL=index.php\">";
 		} else {
@@ -46,7 +55,7 @@ alert('You must enter a valid password. Please try again.');
 <div style="margin-left: auto; margin-right: auto; text-align: left; width: 300px;">
 <p><strong>Enter your user name and password to login.</strong></p>
 
-<form name="form" action="login.php" method="post">
+<form name="form" action="<?php echo $PHP_SELF; ?>" method="post">
 <p>
   Username:
     <input name="Username" type="text" id="Username">

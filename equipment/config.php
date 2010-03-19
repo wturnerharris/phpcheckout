@@ -49,6 +49,9 @@ $maxFine = 3.00; // max amount of fine or strike per kit
 $root = "/equipment"; // using absolute paths. from the root to the program folder, with preceding slash and without trailing slash
 $site_root = "http://www.yourdomain.com"; //domain name where your installation of checkout resides, no trailing slash
 
+//admin name for clearing and paying strikes
+$adminName = "admin";
+
 //admin email(s) for error reporting
 $admin_email1 = "youradmin@email.com";
 $admin_email2 = "";

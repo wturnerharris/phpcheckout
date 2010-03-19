@@ -1,5 +1,5 @@
 <?php 
-$username = $_COOKIE["EquipmentCheckout"];
+//$username = $_COOKIE["EquipmentCheckout"];
 mysql_select_db($database_equip, $equip);
 
 $access = "SELECT * FROM users WHERE Username = '$username'";
@@ -8,7 +8,8 @@ $entry = mysql_query($access, $equip) or die(mysql_error());
 $row_entry = mysql_fetch_assoc($entry);
 $totalRows_entry = mysql_num_rows($entry);
 
-if ($row_entry['Type'] == "LabMon") {
+//if ($row_entry['Type'] == "LabMon") {
+if ($Username != $adminName) {
 	echo "<strong class='alert'>You do not have permission to modify these settings.</strong>";
 	echo "<br><br><strong>To add students to checkout, you must click the Students tab.</strong>";
 } else {
