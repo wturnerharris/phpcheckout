@@ -1,6 +1,7 @@
 <?php
 require_once('config.php');
 include('includes/heading.html');
+$StudentID = $_REQUEST['StudentID'];
 if (!$fines) {
 	$fine = "Strikes";
 	$FineOrStrike = "(unix_timestamp(DateIn) - $gracePeriod) > unix_timestamp(ExpectedDateIn)";
@@ -12,22 +13,26 @@ if (empty($_REQUEST['StudentID'])) {
 $SQL = " AND FinePaid is NULL";
 echo "<center><h1>Current $fine List</h1></center>";
 } else {
-$SQL = " AND checkedout.StudentID = " . $_REQUEST['StudentID'];
+$SQL = " AND checkedout.StudentID = " . $StudentID;
 echo "<center><h1>Current $fine List</h1></center>";
-echo "<strong>HISTORY OF ".strtoupper($fine)." FOR STUDENT ID #:</strong> " . $_REQUEST['StudentID'];
+echo "<strong>HISTORY OF ".strtoupper($fine)." FOR STUDENT ID #:</strong> " . $StudentID;
 echo "<hr />";
 }
+
 mysql_select_db($database_equip, $equip);
 $query_Recordset1 = "SELECT FirstName, LastName, checkedout.ID, checkedout.StudentID, checkedout.DateOut, checkedout.ExpectedDateIn, checkedout.DateIn, checkedout.kitID, checkedout.FinePaid, checkedout.Strike, kit.Name FROM checkedout LEFT JOIN students ON students.StudentID = checkedout.StudentID LEFT JOIN kit ON checkedout.kitID = kit.ID WHERE $FineOrStrike $SQL";
-
-
 $Recordset1 = mysql_query($query_Recordset1, $equip) or die(mysql_error());
 $row_Recordset1 = mysql_fetch_assoc($Recordset1);
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 
-if (isset($row_Recordset1['StudentID'])) {
+if(!$fines && $totalRows_Recordset1 >0){
+	$doNoFines = true;
+} else if($fines && isset($row_Recordset1['StudentID'])){
+	$doFines = true;
+}
+if (isset($row_Recordset1['StudentID'])){
 do {
-
+if ($row_Recordset1['Strike'] >0 || $doFines){
 ?>
 <p><font size="2" face="Arial, Helvetica, sans-serif"><strong>Student Name: </strong><?php echo $row_Recordset1['FirstName']; ?> <?php echo $row_Recordset1['LastName']; ?><strong><br>
   Student ID #: </strong><a href="studentinfo.php?StudentID=<?php echo $row_Recordset1['StudentID']; ?>"><?php echo $row_Recordset1['StudentID']; ?></a>
@@ -68,17 +73,17 @@ do {
 				}
 				echo number_format($fineDue,2); }
 				if (empty($row_Recordset1['FinePaid']) || $row_Recordset1['Strike'] >=1) { 
-		
-$username = $_COOKIE["EquipmentCheckout"];
-mysql_select_db($database_equip, $equip);
+//old auth method		
+//$username = $_COOKIE["EquipmentCheckout"];
+//mysql_select_db($database_equip, $equip);
 
-$access = "SELECT * FROM users WHERE Username = '$username'";
+//$access = "SELECT * FROM users WHERE Username = '$username'";
 
-$entry = mysql_query($access, $equip) or die(mysql_error());
-$row_entry = mysql_fetch_assoc($entry);
-$totalRows_entry = mysql_num_rows($entry);
+//$entry = mysql_query($access, $equip) or die(mysql_error());
+//$row_entry = mysql_fetch_assoc($entry);
+//$totalRows_entry = mysql_num_rows($entry);
 
-if ($row_entry['Type'] == "Admin") { ?>
+if ($Username == $adminName) { ?>
 
 <form name="form1" method="post" action="finesaction.php">
 <strong>Clear <? echo $fine; ?>:</strong>  
@@ -107,7 +112,9 @@ if ($row_entry['Type'] == "Admin") { ?>
 <p> 
 <HR>
 
-<?php } while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)); 
+<?php }} while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)); 
+
+
 } else {
 echo "<P>No $fine Found. Enter a Student ID below.</P>";
 }

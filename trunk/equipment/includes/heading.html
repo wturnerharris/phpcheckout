@@ -1,8 +1,17 @@
-<?php if (strlen($_COOKIE["EquipmentCheckout"]) < 1) { 
-header('location:'.$root.'/login.php');
-}  else { 
+<?php 
+//start the session
+session_name("EquipmentCheckout");
+session_start();
+$Username = $_SESSION['user'];
+$auth = $_SESSION['auth'];
+
+//check to make sure the session variable is registered
+if(session_is_registered($Username) && ($auth =="true")){
+
+//the session variable is registered, the user is allowed to see anything that follows
 $MetaRefresh = "<meta http-equiv=\"refresh\" content=\"600;URL=".$root."/index.php\">";
-} ?>
+
+ ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
@@ -21,14 +30,15 @@ $('alert').style.visibility = "hidden";
 <link href="<?php echo $root; ?>/includes/equip.css" rel="stylesheet" type="text/css">
 </head>
 <?php 
-$l = $_SERVER['PHP_SELF'].length;
-$start = $l - 9;
-$echo = substr($_SERVER['PHP_SELF'],$start,9);
-if ($echo == "login.php" || $echo == "fines.php" || $echo == "tinfo.php") { ?>
+$echo = basename($_SERVER['PHP_SELF'],php);
+if ($echo == "login" || $echo == "fines" || $echo == "studentinfo") { ?>
 <BODY OnLoad=$('StudentID').focus();>
 <?php } else { ?>
 <body>
-<?php } ?>
+<?php } 
+Print_r ($_SESSION);
+?>
+
 <div id="logout"><a class="logout" href="<?php echo $root; ?>/logout.php"><img src="<?php echo $root; ?>/images/logout_icon.png">&nbsp;<strong>Logout</strong></a></div>
 <div id="main">
 		<div id="gray-bar"></div>
@@ -43,3 +53,8 @@ if ($echo == "login.php" || $echo == "fines.php" || $echo == "tinfo.php") { ?>
 			</ul>
 		</div>
 		<div id="content">
+<? 
+} else {
+	header('location:'.$root.'/login.php');
+}
+?>
