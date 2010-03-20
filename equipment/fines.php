@@ -83,7 +83,7 @@ if ($row_Recordset1['Strike'] >0 || $doFines){
 //$row_entry = mysql_fetch_assoc($entry);
 //$totalRows_entry = mysql_num_rows($entry);
 
-if ($Username == $adminName) { ?>
+if ($Username == $adminName['name']) { ?>
 
 <form name="form1" method="post" action="finesaction.php">
 <strong>Clear <? echo $fine; ?>:</strong>  

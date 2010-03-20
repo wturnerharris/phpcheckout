@@ -61,9 +61,12 @@ echo "<strong><font color=\"#FF0000\"> -- THIS ITEM IS LATE</font></strong>";
 echo '<P>';
 
  } while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)); 
- } else {
- 
-echo "<center><strong>ALL KITS CURRENTLY CHECKED IN</strong></center><p>";
+	 } else {
+	if($dueToday) { 
+		echo "<center><strong>NOTHING DUE BACK TODAY</strong></center><p>";
+	} else {
+		echo "<center><strong>ALL EQUIPMENT CURRENTLY CHECKED IN</strong></center><p>";
+	}
  }
 
 mysql_free_result($Recordset1);

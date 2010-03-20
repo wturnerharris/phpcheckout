@@ -4,9 +4,13 @@
 # HTTP="true"
 $hostname_equip = "localhost";
 $database_equip = "equipment";
-$username_equip = "witdesig_equip";
+$username_equip = "root";
 $password_equip = "new-password";
 $equip = mysql_pconnect($hostname_equip, $username_equip, $password_equip) or die(mysql_error());
+
+//auth methods, either database or ldap for checkout users only
+//all students must be added to database manually or imported to mysql
+$ldap_enabled = true; 
 
 //options
 $checkHours = false; //to enable kit-specific due date change to true
@@ -49,14 +53,21 @@ $maxFine = 3.00; // max amount of fine or strike per kit
 $root = "/equipment"; // using absolute paths. from the root to the program folder, with preceding slash and without trailing slash
 $site_root = "http://www.yourdomain.com"; //domain name where your installation of checkout resides, no trailing slash
 
-//admin name for clearing and paying strikes
-$adminName = "admin";
+//admin name for clearing and paying strikes, also for adding users
+$adminName['name'][] = "admin1";
+$adminName['name'][] = "admin2";
+$adminName['name'][] = "admin3";
 
-//admin email(s) for error reporting
-$admin_email1 = "youradmin@email.com";
+//admin email for error reporting
+$admin_email1 = "youradmin@domain.com";
 $admin_email2 = "";
 $admin_email3 = "";
 
-//alerts for adding classes. this is only if you wish to remind lab monitors of anything when they are adding classes to student records.
-$alert = "";
+//City College Note Specific
+$alert['classes'] = "Do NOT add any students to any of the Photo Classes without permission from Chase Browder.";
+$alert['else1'] = "Do NOT add any students to any of the Photo Classes without permission from Chase Browder.";
+$alert['else2'] = "Do NOT add any students to any of the Photo Classes without permission from Chase Browder.";
+$alert['else3'] = "Do NOT add any students to any of the Photo Classes without permission from Chase Browder.";
+$alert['else4'] = "Do NOT add any students to any of the Photo Classes without permission from Chase Browder.";
+
 ?>
