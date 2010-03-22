@@ -60,10 +60,9 @@ if (isset($Action) && ($Action == "SetName"))
     {
     	//FAILURE!!
 		include('includes/heading2.html'); 
-      	echo "<p class='alert'>User Not authenticated.</p>\n";
+      	echo "<span class='alert'>User Not authenticated.</span>";
+      	printLoginForm($TargetURL);
 		include('includes/footer.html'); 
-
-     printLoginForm($TargetURL);
 
       exit();
     }
