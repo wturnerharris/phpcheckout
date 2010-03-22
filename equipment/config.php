@@ -53,7 +53,7 @@ $maxFine = 3.00; // max amount of fine or strike per kit
 $root = "/equipment"; // using absolute paths. from the root to the program folder, with preceding slash and without trailing slash
 $site_root = "http://www.yourdomain.com"; //domain name where your installation of checkout resides, no trailing slash
 
-//admin name for clearing and paying strikes, also for adding users
+//admin name for clearing and paying strikes, also for adding users; if ldap enabled, must be a valid ldap user
 $adminName['name'][] = "admin1";
 $adminName['name'][] = "admin2";
 $adminName['name'][] = "admin3";
@@ -64,10 +64,7 @@ $admin_email2 = "";
 $admin_email3 = "";
 
 //City College Note Specific
-$alert['classes'] = "Do NOT add any students to any of the Photo Classes without permission from Chase Browder.";
-$alert['else1'] = "Do NOT add any students to any of the Photo Classes without permission from Chase Browder.";
-$alert['else2'] = "Do NOT add any students to any of the Photo Classes without permission from Chase Browder.";
-$alert['else3'] = "Do NOT add any students to any of the Photo Classes without permission from Chase Browder.";
-$alert['else4'] = "Do NOT add any students to any of the Photo Classes without permission from Chase Browder.";
+$alert['classes'] = "Do NOT add any students to any of the Photo Classes without permission from manager.";
+$alert['else1'] = "";
 
 ?>

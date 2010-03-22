@@ -153,36 +153,32 @@ function authValidateUser($user, $pass)
       // use this to confirm that the user/password pair
       if ($dn && @ldap_bind($ldap, $dn, $pass))
       {
-         //try group filter
-		 if ($group_filter) 
-		 {
-		 	$group = @ldap_search($ldap, $groupdn, "(&($group_attr=$user))", array() );
-		 	if (@ldap_count_entries($ldap, $group) > 0) 
-		 	{
-		 		@ldap_unbind($ldap);
-		 		return 1;
-            }
-		 }
-		 // however if there is a filter check that the
-         // user is part of the group defined by the filter
-        if (!$ldap_filter || !$group_filter)
-        {
+        //try group filter
+				if ($group_filter)
+				{
+          $group = @ldap_search($ldap, $groupdn, "(&($group_attr=$user))", array() );
+					if (@ldap_count_entries($ldap, $group) > 0)
+					{
+            @ldap_unbind($ldap);
+						return 1;
+					}
+				}
+				elseif (!$ldap_filter && !$group_filter)
+				{
           @ldap_unbind($ldap);
           return 1;
-        }
-        if ($ldap_filter || !$group_filter)
-        {
-          $res = @ldap_search($ldap,
-                              $dn, //$dn,
-                              "(&($filter))",
-                              array()
-                             );
+				}
+				// however if there is a filter check that the
+				// user is part of the group defined by the filter
+				elseif ($ldap_filter && !$group_filter)
+				{
+          $res = @ldap_search($ldap, $dn, "(&($ldap_filter))", array());
           if (@ldap_count_entries($ldap, $res) > 0)
           {
             @ldap_unbind($ldap);
-            return 1;
+    				return 1;
           }
-        }
+				}
       }
     }
     @ldap_unbind($ldap);

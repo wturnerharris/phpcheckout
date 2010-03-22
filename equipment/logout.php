@@ -1,4 +1,7 @@
 <?
-setcookie("EquipmentCheckout", "", time()+600);
+//start the session
+session_name("EquipmentCheckout");
+session_start();
+session_destroy();
 header('location:login.php');
 ?>
