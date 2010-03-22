@@ -232,7 +232,7 @@ echo "<option value='$option[Name]'>$option[Name]</option>";
 <? if (!$equipment) { ?>
 <input name="StudentID" type="hidden" value="<?php echo $StudentID; ?>">
 <input type="submit" name="Submit" value="Add">
-<br><span class="alert"><?php echo $alert; ?></span>
+<br><span class="alert"><?php echo $alert['classes']; ?></span>
 <? } else { ?>
 <input name="EquipmentID" type="hidden" value="<?php echo $EquipmentID; ?>">
 <input type="submit" name="Submit" value="Add">
