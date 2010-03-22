@@ -8,10 +8,11 @@ $dayToday = date("l");
 
 
 if ($dayDate == $dayClosed1 || $dayDate == $dayClosed2) {
+	include('studentinfo.php');
 	echo "<meta http-equiv='refresh' content='3;URL=studentinfo.php?StudentID=$StudentID'>";
 	echo "<div id='alert' style='visibility: visible;'>Not open on ".$dayToday."s<br />";
 	echo "Checkout Unavailable</div>";
-include('studentinfo.php'); 
+
 
 } else {
 
