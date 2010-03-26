@@ -56,22 +56,21 @@ function stopUpload(success){
 	var result = '';
 	if (success == 1){
 		$('result').innerHTML = '<span class="alert">The file was uploaded successfully!<\/span><br/><br/>';
-		} else {
-			$('result').innerHTML = '<span class="alert">There was an error during file upload!<\/span><br/><br/>';
-			}
-			$('f1_upload_process').style.visibility = 'hidden';
-			return true;
-			}
+	} else {
+		$('result').innerHTML = '<span class="alert">There was an error during file upload!<\/span><br/><br/>';
+	}
+	$('f1_upload_process').style.visibility = 'hidden';
+	return true;
+}
 function modTxt(name){
 	var box = "txt"+finishedType;
 	var upBox = "up"+finishedType;
 	var newOpt = document.createElement("option");
 	newOpt.value = name;
 	newOpt.text = name;
-//	$(box).value = name;
 	$(box).add(newOpt, null);
 	var num = $(box).length;
-	$(box).selected = num;
+	$(box).selectedIndex = num-1;
 	slideDiv(upBox);
 }
 function uploadImage(type){
@@ -119,14 +118,15 @@ function addOrModify(which){
 	doAjaxSubmit('equipment-form.php','form2');
 	$('alert').innerHTML = "Equipment Kit "+ which;
 }
-function delOrAddAccessory(which){
+function delKit(which){
+	$('modEquip').value = which;
+	doAjaxSubmit('equipment-form.php','form2');
+	$('alert').innerHTML = "Kit Deleted";
+}
+function AddAccessory(which){
 	$('modEquip').value = which;
 	doAjaxSubmit('add-accessory.php','form2');
-	if (which == "acc"){
-		$('alert').innerHTML = "Accessory Added";
-	} else if (which == "rem"){
-		$('alert').innerHTML = "Kit Deleted";
-	}
+	$('alert').innerHTML = "Accessory Added";
 }
 function addClassAction(){
 	doAjaxSubmit('add-class.php','form3');
@@ -342,7 +342,7 @@ do {
 	}
 while ($row_Recordset9 = mysql_fetch_assoc($Recordset9));
 }
-if ($totalRows_Recordset9==0) {
+if ($totalRows_Recordset9==0 && $EquipmentID != "") {
     echo "<span class='alert'>No Accessories registered. Add from the selection below.</span>";
 }
  ?>
@@ -369,7 +369,7 @@ if ($totalRows_Recordset9==0) {
 		<img src="<?php echo $root; ?>/images/modify-button.png" border="0" title="Modify" /></a>
 	<a href="#" style="float: right; margin-right: 10px;" onClick="refreshPage();">
 		<img src="<?php echo $root; ?>/images/cancel-button.png" border="0" title="Cancel" /></a>
-	<a href="#" style="float: right; margin-right: 10px;" onClick="answer=confirm('Do you wish to remove this kit?');if(answer!=0){delOrAddAccessory('rem');}">
+	<a href="#" style="float: right; margin-right: 10px;" onClick="answer=confirm('Do you wish to remove this kit?');if(answer!=0){delKit('rem');}">
 		<img src="<?php echo $root; ?>/images/remove-button.png" border="0" title="Remove" /></a>
 <div id="image_details"></div>
 <iframe id="upload_target" name="upload_target" src="" style="width:0;height:0;border:0px solid #fff;"></iframe>
