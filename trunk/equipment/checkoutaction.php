@@ -2,6 +2,7 @@
 
 require_once('config.php'); 
 
+$CheckoutUser = $_REQUEST['User'];
 $KitName = $_REQUEST['KitName'];
 $ReturnDate = $_POST['ReturnDate'];
 $FirstName = $_REQUEST['FirstName'];
@@ -118,7 +119,7 @@ $i++;
 } while ($i < 50); 
 
 
-$CheckoutUser = $HTTP_COOKIE_VARS["EquipmentCheckout"];
+//$CheckoutUser = $HTTP_COOKIE_VARS["EquipmentCheckout"];
 $sql = "INSERT INTO checkedout (ID , KitID , StudentID , DateOut , ExpectedDateIn , DateIn , FinePaid , BannedDate, Accessories, Notes, CheckoutUser) VALUES ('', '$KitID', '$StudentID', NOW(), '$ReturnDate', '', NULL , NULL, '$Accessories', '$Notes', '$CheckoutUser');";
 //echo $sql;
 mysql_select_db($database_equip, $equip);
