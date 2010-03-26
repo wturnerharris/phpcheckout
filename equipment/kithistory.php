@@ -59,7 +59,7 @@ $AccessoryFirstTime = 0;
         <td valign='top' CLASS='accessoryText'>
       <?
 if (isset($row_Recordset1['KitImage'])){
-echo "<p><IMG SRC='images/".$row_Recordset1['KitImage']."' align='center'>";
+echo "<p><IMG SRC='images/".$row_Recordset1['KitImage']."' width='85%' height='85%' align='center'>";
 echo "</td><td valign='top' CLASS='accessoryText'>";
 }
 if (isset($row_Recordset1['AccessoryTypeName'])){

@@ -13,7 +13,6 @@ if ($dayDate == $dayClosed1 || $dayDate == $dayClosed2) {
 	echo "<div id='alert' style='visibility: visible;'>Not open on ".$dayToday."s<br />";
 	echo "Checkout Unavailable</div>";
 
-
 } else {
 
 include('includes/heading.html');
@@ -386,7 +385,7 @@ if ($row_Recordset1['FineAmount']!="") {
     <? 
     $Image = $row_Recordset1['Image'];
     if($Image!=""){ 
-    echo("<IMG SRC=\"images/$Image\">");
+    echo("<IMG SRC=\"images/$Image\" width='85%' height='85%'>");
     }?>
     <br>
     </div></td>

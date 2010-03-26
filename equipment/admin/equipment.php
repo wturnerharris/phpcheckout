@@ -96,49 +96,57 @@ function checkForm(){
    var image = $F('txtImage');
    var genre = $F('txtGenre');
    var thumb = $F('txtThumb');
-//   var selIndex = thumb.selectedIndex;
+   // var selIndex = thumb.selectedIndex;
    if (IsEmpty(name) || IsEmpty(image) || IsEmpty(genre) || IsEmpty(thumb))
    // || IsEmpty(thumb.options[selIndex].value)
    {
 	  $$('label.im').invoke('setStyle', { color: 'red' });
 	  return false;
-   }
+   } else { return true; }
 }
 function doAjaxSubmit(page,form){
 	new Ajax.Request(page,
 		{
 		method: 'post',
 		parameters: $(form).serialize(true),
-		onComplete: showResponse 
+		onComplete: submitForm1 
 		});	
 	$('alert').style.visibility = "visible";
 }
 function addOrModify(which){
+	if (checkForm() == false) { return false; }
 	$('modEquip').value = which;
-	checkForm();
 	doAjaxSubmit('equipment-form.php','form2');
 	$('alert').innerHTML = "Equipment Kit "+ which;
 }
 function delOrAddAccessory(which){
 	$('modEquip').value = which;
-	doAjaxSubmit('equipment-form.php','form2');
-	$('alert').innerHTML = "Equipment Kit "+ which;
+	doAjaxSubmit('add-accessory.php','form2');
+	if (which == "acc"){
+		$('alert').innerHTML = "Accessory Added";
+	} else if (which == "rem"){
+		$('alert').innerHTML = "Kit Deleted";
+	}
 }
 function addClassAction(){
-	new Ajax.Request("add-class.php",
-		{
-		method: 'post',
-		parameters: $('form3').serialize(true),
-		onComplete: addOrModify('mod') 
-		});
-	doAjaxSubmit('add-class.php','form2');
+	doAjaxSubmit('add-class.php','form3');
 	$('alert').style.visibility = "visible";
 	$('alert').innerHTML = "Class Added";
+}
+function addAccAction(){
+	doAjaxSubmit('add-accessory.php','form4');
+	$('alert').style.visibility = "visible";
+	$('alert').innerHTML = "Accessory Added";
 }
 function delClass(numero){
     $('rkClassID').value = numero;
 	doAjaxSubmit('remove-class.php','form3');
 	$('alert').innerHTML = "Class Removed";
+}
+function delAcc(numero){
+    $('AccessorytypeID').value = numero;
+	doAjaxSubmit('add-accessory.php','form4');
+	$('alert').innerHTML = "Accessory Removed";
 }
 function slideDiv(e){
     Effect.toggle(e, 'Blind', {duration:1});
@@ -163,7 +171,7 @@ function slideDiv(e){
 	<input type="hidden" name="addAccessory" id="addAccessory" value="">
 	<input id="filter" name="filter" type="hidden" value="<?php echo $filter; ?>" />
 	<select name="equipmentList" id="equipmentList" style="float: right; width: 300px; height: 25px; margin-right: 35px; margin-top: 5px;" onChange="submitForm1();">
-		<option selected value="">Select the equipment...</option>
+		<option <?php if (!isset($EquipmentID)) { echo "selected"; } ?> value="">Select the equipment...</option>
 <?php
 //***** DATABASE *****
 mysql_select_db($database_equip, $equip);
@@ -181,7 +189,7 @@ $totalRows_Equipment = mysql_num_rows($Equipment);
 //***** LOOP SELECT BOX *****
 mysql_data_seek($Equipment,0);
 while($loop_Equipment = mysql_fetch_assoc($Equipment)) { ?>
-<option value="<?php echo $loop_Equipment['ID']; ?>"><?php echo $loop_Equipment['Name']. ", " .$loop_Equipment['Genre']; ?></option>
+<option <?php if ($EquipmentID == $loop_Equipment['ID']) { echo "selected"; } ?> value="<?php echo $loop_Equipment['ID']; ?>"><?php echo $loop_Equipment['Name']. ", " .$loop_Equipment['Genre']; ?></option>
 <?php } ?>
 	  </select>
 </form>
@@ -294,7 +302,7 @@ if ($totalRows_Recordset2==0) {
   	<!-- ***********add/remove class form*********** -->
 
     <form id="form3" name="form3" action="classes.php" method="post">
-    <input id="rkClassID" name="rkClassID" type="hidden" value="null" />
+    <input id="rkClassID" name="rkClassID" type="hidden" />
     <select name="class" size="1" id="class" style='margin-left: 20px;'>
 <?
   	//***** ADD CLASS FORM *****
@@ -308,7 +316,53 @@ if ($totalRows_Recordset2==0) {
     <input type="button" name="AddClass" value="Add Class" onClick="addClassAction();">
     </form>
 	</div>
-	<a href="#">View Associated Accessories</a><div id="assocAccess" style="visibility: hidden;"></div>
+	<a href="#aA" name="aA" onClick="slideDiv('assocAccess');">View Associated Accessories</a><br/>
+	<div id="assocAccess" style="display: none; border:1px solid #000; padding-left: 15px;">
+<strong>Registered Accessories:</strong><br>
+
+<?php //show class records for selected kit
+    mysql_select_db($database_equip, $equip);
+    $query_rc9 = "SELECT kit_accessorytype.ID AS kaID, kit_accessorytype.KitID, kit_accessorytype.AccessorytypeID, accessorytype.Name FROM kit_accessorytype INNER JOIN accessorytype ON kit_accessorytype.AccessorytypeID = accessorytype.ID WHERE KitID = '$EquipmentID'";
+    $query_Recordset9 = sprintf($query_rc9);
+    $Recordset9 = mysql_query($query_Recordset9, $equip) or die(mysql_error());
+    $row_Recordset9 = mysql_fetch_assoc($Recordset9);
+    $totalRows_Recordset9 = mysql_num_rows($Recordset9);
+if (isset($row_Recordset9['AccessorytypeID'])) {
+do {
+	if (empty($AccessorytypeIDSQL)){
+		$AccessorytypeIDSQL = $row_Recordset9['AccessorytypeID'];
+	} else {
+		$AccessorytypeIDSQL = $ClassIDSQL . " OR kit_accessorytype.AccessorytypeID = " . $row_Recordset9['AccessorytypeID'] ;
+	}
+?>
+	<a id="remAcc" href="#" onClick="answer=confirm('Remove this accessory?');if(answer!=0){delAcc(<? echo $row_Recordset9['kaID']; ?>);}else{alert('Canceled')}" >
+	<img id="remAcc" src="<?php echo $root; ?>/images/remove_icn.png" border="0" title="Remove Accessory" /></a>
+	<? echo $row_Recordset9['Name']; ?><br/> 
+<?php
+	}
+while ($row_Recordset9 = mysql_fetch_assoc($Recordset9));
+}
+if ($totalRows_Recordset9==0) {
+    echo "<span class='alert'>No Accessories registered. Add from the selection below.</span>";
+}
+ ?>
+  	<!-- ***********add/remove class form*********** -->
+
+    <form id="form4" name="form4" action="add-accessory.php" method="post">
+    <input id="AccessorytypeID" name="AccessorytypeID" type="hidden" />
+    <select name="accessory" size="1" id="accessory" style='margin-left: 20px;'>
+<?
+  	//***** ADD CLASS FORM *****
+	$accessories = mysql_query("SELECT * FROM accessorytype ORDER BY accessorytype.Name") or die(mysql_error());
+	while($option = mysql_fetch_array( $accessories )) {
+    // Print out the contents of each row into an option
+    echo "<option value='$option[Name]'>$option[Name]</option>";
+    } ?>
+    </select>
+    <input name="EquipmentID" type="hidden" value="<?php echo $EquipmentID; ?>">
+    <input type="button" name="AddAcc" value="Add Accessory" onClick="addAccAction();">
+    </form>
+	</div>
 <p id="f1_upload_process">Loading...<br/><img src="../images/loader.gif" /></p>
 <p id="result"></p>	<br />
 	<a href="#" style="float: right; margin-right: 35px;" onClick="addOrModify('mod');">
