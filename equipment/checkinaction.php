@@ -2,6 +2,7 @@
 require_once('config.php'); 
 include('includes/heading.html');
 
+$CheckoutUser = $_REQUEST['User'];
 $CheckedOutID = $_REQUEST['CheckedOutID'];
 $Notes = $_REQUEST['Notes'];
 $ModelNumber = $_REQUEST['ModelNumber'];
@@ -25,7 +26,7 @@ if (!isset($late)) {
 	$late = true;
 }
 
-$CheckInUser = $HTTP_COOKIE_VARS["EquipmentCheckout"];
+//$CheckInUser = $HTTP_COOKIE_VARS["EquipmentCheckout"];
 
 if($_REQUEST['Problem']=="on"){
 $Problem = 1;

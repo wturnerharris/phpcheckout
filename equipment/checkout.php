@@ -403,6 +403,7 @@ if ($row_Recordset1['FineAmount']!="") {
 <i>LAB AIDS: Check off all accessories in bags. If accessory is not in the bag
 do not check off.</i>
 
+<input type="hidden" name="User" value="<? echo $Username ?>">
 <input type="hidden" name="KitID" value="<? echo $KitID ?>">
 <input type="hidden" name="StudentID" value="<? echo $StudentID ?>">
 <P>

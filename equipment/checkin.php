@@ -76,6 +76,7 @@ Notes:
 </textarea><br />
 <p><input type="checkbox" name="Problem"> Report a Problem (this sends an email to the check-in adminstrator).<br></p>
 
+<input type="hidden" name="User" value="<? echo $Username ?>">
 <input type="hidden" name="CheckedOutID" value="<? echo $CheckedOutID ?>">
 <input type="hidden" name="KitID" value="<? echo $KitID ?>">
 <input type="hidden" name="StudentID" value="<? echo $StudentID ?>">
