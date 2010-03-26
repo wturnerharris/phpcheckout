@@ -24,13 +24,11 @@ global $auth;
 
 if (!isset($auth["session_php"]["session_expire_time"]))
 {
-  // Default to the behaviour of previous versions of MRBS, use only
   // session cookies - no persistent cookie.
   $auth["session_php"]["session_expire_time"] = 0;
 }
 
-session_set_cookie_params($auth["session_php"]["session_expire_time"],
-                          $cookie_path);
+session_set_cookie_params($auth["session_php"]["session_expire_time"],$cookie_path);
 session_name("EquipmentCheckout");
 session_start();
 
@@ -41,26 +39,26 @@ session_start();
 if (isset($Action) && ($Action == "SetName"))
 {
   /* First make sure the password is valid */
-  if ($NewUserName == "")
-  {
+//  if ($NewUserName == "")
+//  {
 
     // Unset the session variables
-    if (isset($_SESSION))
-    {
-      $_SESSION = array();
-    }
-    else
-    {
-      $_SESSION = array();
-    }
-  }
-  else
-  {
+//    if (isset($_SESSION))
+//    {
+//      $_SESSION = array();
+//    }
+//    else
+//    {
+//      $_SESSION = array();
+//    }
+//  }
+//  else
+//  {
     if (!authValidateUser($NewUserName, $NewUserPassword))
     {
     	//FAILURE!!
 		include('includes/heading2.html'); 
-      	echo "<span class='alert'>User Not authenticated.</span>";
+      	echo "<p style='text-align: center;' class='alert'>User Not authenticated.</p>";
       	printLoginForm($TargetURL);
 		include('includes/footer.html'); 
 
@@ -76,7 +74,7 @@ if (isset($Action) && ($Action == "SetName"))
       global $HTTP_SESSION_VARS;
       $HTTP_SESSION_VARS["user"] = $NewUserName;
     }
-  }
+//  }
   // preserve the original $HTTP_REFERER by sending it as a GET parameter
   if (!empty($returl))
   {
@@ -90,20 +88,14 @@ if (isset($Action) && ($Action == "SetName"))
       $TargetURL .= "&returl=" . urlencode($returl);
     }
   }
-//  header ("Location: $TargetURL"); /* Redirect browser to initial page */
-  /* Note HTTP 1.1 mandates an absolute URL. Most modern browsers support relative URLs,
-    which allows to work around problems with DNS inconsistencies in the server name.
-    Anyway, if the browser cannot redirect automatically, the manual link below will work. */
   echo "<br>\n";
   //SUCCESS!!
-	session_register($NewUserName);
-	$_SESSION['auth'] = 'true';
-	$_SESSION['time'] = time();
-  // setcookie("EquipmentCheckout", $user, time()+60*60*24); 
-	echo "<meta http-equiv=\"refresh\" content=\"0;URL=index.php\">";
-  	echo "<p>Please click <a href=\"index.php\">here</a> if you're not redirected automatically to the page you requested.</p>\n";
-  // Print footer and exit
-  // print_footer(TRUE);
+  session_register($NewUserName);
+  $_SESSION['auth'] = 'true';
+  $_SESSION['time'] = time();
+  /* Redirect browser to initial page */
+  echo "<meta http-equiv=\"refresh\" content=\"0;URL=index.php\">";
+  echo "<p>Please click <a href=\"index.php\">here</a> if you're not redirected automatically to the page you requested.</p>\n";
 }
 
 /*

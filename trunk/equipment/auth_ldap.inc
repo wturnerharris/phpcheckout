@@ -36,7 +36,7 @@ function authValidateUser($user, $pass)
   if (!function_exists("ldap_connect"))
   {
     die("<hr><p><b>ERROR: PHP's 'ldap' extension is not installed/enabled. ".
-        "Please check your MRBS and web server configuration.</b></p><hr>\n");
+        "Please check your installation and web server configuration.</b></p><hr>\n");
   }
 
   $all_ldap_base_dn     = array();
@@ -45,7 +45,7 @@ function authValidateUser($user, $pass)
   // Check if we do not have a username/password
   // User can always bind to LDAP anonymously with empty password,
   // therefore we need to block empty password here...
-  if (!isset($user) || !isset($pass) || strlen($pass)==0)
+  if (strlen($user)==0 || !isset($user) || !isset($pass) || strlen($pass)==0)
   {
     return 0;
   }
