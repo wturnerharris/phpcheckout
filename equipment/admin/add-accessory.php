@@ -18,27 +18,16 @@ if($modEquip == "acc"){
 	mysql_select_db($database_equip, $equip);
 	mysql_query($query_Equip, $equip) or die(mysql_error());
 } else {
-    //get class id
+    //get accessory id
     mysql_select_db($database_equip, $equip);
-    $ClassID_query = "SELECT ID FROM class WHERE Name='$class'";
-    $classes = mysql_query($ClassID_query, $equip) or die(mysql_error());
-    $option = mysql_fetch_array( $classes);
-    $ClassID = $option['ID'];
+    $AccID_query = "SELECT ID FROM accessorytype WHERE Name='$accessoryName'";
+    $accessories = mysql_query($AccID_query, $equip) or die(mysql_error());
+    $option = mysql_fetch_array($accessories);
+    $AccID = $option['ID'];
     if (isset($EquipmentID)) {
-        //add class per equipment id
-        $sql = "INSERT INTO kit_class(KitID, ClassID, CheckHours, OverNightAllowed) VALUES ('$EquipmentID','$ClassID', '$defaultHours', '$overnights')";
+        //add accessory per equipment id
+        $sql = "INSERT INTO kit_accessorytype(KitID, AccessorytypeID) VALUES ('$EquipmentID','$AccID')";
         mysql_select_db($database_equip, $equip);
         mysql_query($sql, $equip) or die(mysql_error());
-        include ('admin.php');
-        echo "<meta http-equiv='refresh' content='0,admin.php?page=classes' />";
-    	} else {
-        //add class per student id
-        $sql = "INSERT INTO student_class(StudentID, ClassID) VALUES ('$StudentID','$ClassID')";
-        mysql_select_db($database_equip, $equip);
-        mysql_query($sql, $equip) or die(mysql_error());
-
-include ('../studentinfo.php'); }} 
-
-echo "<meta http-equiv='refresh' content='6,../studentinfo.php?StudentID=$StudentID' />";
-echo "<div id='alert' style='visibility:visible'>Class Added: $class";
-echo "<br><br>StudentID: $StudentID<br/></div>";
+	}
+}
