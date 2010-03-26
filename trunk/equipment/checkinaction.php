@@ -2,7 +2,7 @@
 require_once('config.php'); 
 include('includes/heading.html');
 
-$CheckoutUser = $_REQUEST['User'];
+$CheckInUser = $_REQUEST['User'];
 $CheckedOutID = $_REQUEST['CheckedOutID'];
 $Notes = $_REQUEST['Notes'];
 $ModelNumber = $_REQUEST['ModelNumber'];
