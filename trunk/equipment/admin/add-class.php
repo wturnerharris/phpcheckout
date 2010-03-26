@@ -33,6 +33,6 @@ if (isset($newClass)) {
 
 include ('../studentinfo.php'); }} 
 
-echo "<meta http-equiv='refresh' content='6,../studentinfo.php?StudentID=$StudentID' />";
+echo "<meta http-equiv='refresh' content='1,../studentinfo.php?StudentID=$StudentID' />";
 echo "<div id='alert' style='visibility:visible'>Class Added: $class";
 echo "<br><br>StudentID: $StudentID<br/></div>";
