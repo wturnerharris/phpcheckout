@@ -1,16 +1,22 @@
 <?php
 require_once('../config.php'); 
 //variables
-$newClass = $_POST['txtClass'];
-$EquipmentID = $_POST['EquipmentID'];
-$StudentID = $_POST['StudentID'];
-$class = $_POST['class'];
+$modEquip = $_REQUEST['modEquip'];
+$EquipmentID = $_REQUEST['EquipmentID'];
+$StudentID = $_REQUEST['StudentID'];
+$accessoryName = $_REQUEST['accessory'];
+$AccessorytypeID = $_REQUEST['AccessorytypeID'];
 
-if (isset($newClass)) {
-    //add new class
-    $sql = "INSERT INTO class (Name) VALUES ('$newClass')";
+if(isset($AccessorytypeID)){
+    $remove = "DELETE FROM kit_accessorytype WHERE ID='$AccessorytypeID'";
     mysql_select_db($database_equip, $equip);
-    mysql_query($sql, $equip) or die(mysql_error());
+    mysql_query($remove, $equip) or die(mysql_error());
+}
+if($modEquip == "acc"){
+    //add new accessory
+	$query_Equip = "INSERT INTO accessorytype (Name) VALUES ('$KitName')";
+	mysql_select_db($database_equip, $equip);
+	mysql_query($query_Equip, $equip) or die(mysql_error());
 } else {
     //get class id
     mysql_select_db($database_equip, $equip);

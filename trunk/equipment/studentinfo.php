@@ -200,7 +200,7 @@ echo "<option value='$option[Name]'>$option[Name]</option>";
 </select>
 <input name="StudentID" type="hidden" value="<?php echo $row_Recordset1['StudentID']; ?>">
 <input type="submit" name="Submit" value="Add Class">
-<br><span class="alert"><?php echo $alert; ?></span>
+<br><span class="alert"><?php echo $alert['classes']; ?></span>
 </form> 
 <?
 }
@@ -273,7 +273,7 @@ if($fines) { //for fines
 
 if (empty($row_Recordset1['ContractSigned'])) {
 	?>
-	<strong class="alert">This student has not yet signed a contract. After the student has signed a paper contract, click the button below.</strong>
+	<p><strong class="alert">This student has not yet signed a contract. After the student has signed a paper contract, click the button below.</strong></p>
 	<form action="contractaction.php" method="post">
 	<input name="StudentID" type="hidden" value="<? echo $StudentID ?>">
 	<input type="submit" value="Contract Signed">

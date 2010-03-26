@@ -34,9 +34,6 @@ if($modEquip== "mod"){
 if($modEquip == "rem"){
 	$remove = true;
 }
-if($modEquip == "acc"){
-	$accessory = true;
-}
 if ($modEquip == "img"){
 	$image = true;
 }
@@ -60,11 +57,6 @@ if ((($var == "image/gif") || ($var == "image/jpeg") || ($var == "image/pjpeg") 
 if($add){
 	//***** DATABASE ***** add
 	$query_Equip = "INSERT INTO kit (Name, Image, Repair, Genre, CheckHours, SerialNumber, ModelNumber, ImageThumb, ContractRequired, Notes) VALUES ('$KitName', '$Image', '$Repair', '$Genre', '$CheckHours', '$SerialNumber', '$ModelNumber', '$ImageThumb', '$Contract', '$Notes')";
-	mysql_select_db($database_equip, $equip);
-	mysql_query($query_Equip, $equip) or die(mysql_error());
-}
-if($accessory){
-	$query_Equip = "INSERT INTO accessorytype (Name) VALUES ('$KitName')";
 	mysql_select_db($database_equip, $equip);
 	mysql_query($query_Equip, $equip) or die(mysql_error());
 }
