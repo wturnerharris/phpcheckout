@@ -41,7 +41,7 @@ $sunOpen = 00;
 $sunClose = 00;
 
 //USE FINES OR STRIKES
-$fines = false;
+$fines = true;
 //if $fines is false, strikes are enabled
 $maxStrike = 3;
 $gracePeriod = 1800; // grace period in seconds; for strikes as fines ignores the fine unless the full frequency time has passed.
