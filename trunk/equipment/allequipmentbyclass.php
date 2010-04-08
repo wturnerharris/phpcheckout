@@ -98,7 +98,7 @@ $classes = mysql_query("SELECT * FROM class ORDER BY class.Name") or die(mysql_e
 </form> 
 
 <?php
-$AccessoryCount = 0;
+//$AccessoryCount = 0;
 
 do { 
 if ($CurrentKitID != $info['KitID']) {
@@ -153,7 +153,7 @@ $AccessoryFirstTime = 0;
 
 	<?php }
 if (isset($info['KitImageThumb'])){
-	echo "<IMG SRC='images/".$info['KitImageThumb']."' align='center'>";
+	echo "<img src='images/".$info['KitImageThumb']."' align='center'>";
 	echo "</td><td valign='top' style='padding-left:50px;' CLASS='accessoryText'>";
 } else {
 	echo "</td><td valign='top' style='padding-left:50px;' CLASS='accessoryText'>No Accessories</td>";
@@ -167,14 +167,6 @@ echo "&nbsp;";
 if (isset($info['AccessoryTypeName'])){
 
 
-//echo $row_Recordset1['KitAccID'];
-//echo " - ";
-if($AccessoryCount > 8){
-if($AccessoryFirstTime < 1){
-echo "</td><td valign='top' style='padding-left:50px;' CLASS='accessoryText'>";
-$AccessoryFirstTime++;
-}	
-}
 echo "<br>&#187; " . $info['AccessoryTypeName'];
 $AccessoryCount++;
 } 
