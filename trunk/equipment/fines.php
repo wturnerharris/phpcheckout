@@ -20,7 +20,7 @@ echo "<hr />";
 }
 
 mysql_select_db($database_equip, $equip);
-$query_Recordset1 = "SELECT FirstName, LastName, checkedout.ID, checkedout.StudentID, checkedout.DateOut, checkedout.ExpectedDateIn, checkedout.DateIn, checkedout.kitID, checkedout.FinePaid, checkedout.Strike, kit.Name FROM checkedout LEFT JOIN students ON students.StudentID = checkedout.StudentID LEFT JOIN kit ON checkedout.kitID = kit.ID WHERE $FineOrStrike $SQL";
+$query_Recordset1 = "SELECT FirstName, LastName, checkedout.ID, checkedout.StudentID, checkedout.DateOut, checkedout.ExpectedDateIn, checkedout.BannedDate, checkedout.DateIn, checkedout.kitID, checkedout.FinePaid, checkedout.Strike, kit.Name FROM checkedout LEFT JOIN students ON students.StudentID = checkedout.StudentID LEFT JOIN kit ON checkedout.kitID = kit.ID WHERE $FineOrStrike $SQL";
 $Recordset1 = mysql_query($query_Recordset1, $equip) or die(mysql_error());
 $row_Recordset1 = mysql_fetch_assoc($Recordset1);
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
@@ -48,7 +48,11 @@ if ($row_Recordset1['Strike'] >0 || $doFines){
   <? if ($fines) { ?>
   <strong>Fine Rate Per <?php echo $fineFreq/60?> Minutes:</strong> <?php echo "$".number_format($fineAmount,2); ?> <br>
   <? } ?>
-  <?php if (!$fines) { echo "<strong>Strikes: </strong>".$row_Recordset1['Strike']; } else { echo "<strong>Amount Due: </strong>$"; ?>
+  <?php 
+  if (!$fines) { echo "<strong>Strikes: </strong>".$row_Recordset1['Strike'];
+  if ($row_Recordset1['BannedDate'] != null) { echo "<br><strong>Originally Banned Until:</strong> ".date("D, F j",strtotime($row_Recordset1['BannedDate'])); }
+  
+  } else { echo "<strong>Amount Due: </strong>$"; ?>
   		<?php $timeDue = date(strtotime($row_Recordset1['ExpectedDateIn']));
 				$timeIn = date(strtotime($row_Recordset1['DateIn']));
 				$diff = abs($timeIn - $timeDue);
