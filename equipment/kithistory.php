@@ -18,20 +18,6 @@ $totalRows_Recordset2 = mysql_num_rows($Recordset2);
 
 $CheckedOutCount = 0;
 ?>
-<style type="text/css">
-<!--
-.accessoryText {
-	font-family: Arial, Helvetica, sans-serif;
-	font-size: 11px;
-	font-style: normal;
-	line-height: normal;
-	font-weight: normal;
-	font-variant: normal;
-	text-transform: none;
-	color: #666666;
-}
--->
-</style>
 
 <div align="center"><h1>Checkout History</h1>
   <br>
@@ -59,14 +45,14 @@ $AccessoryFirstTime = 0;
         <td valign='top' CLASS='accessoryText'>
       <?
 if (isset($row_Recordset1['KitImage'])){
-echo "<p><IMG SRC='images/".$row_Recordset1['KitImage']."' width='75%' height='75%' align='center'>";
+echo "<p><img src='$root/images/".$row_Recordset1['KitImage']."' width='75%' height='75%' align='center'>";
 echo "</td><td valign='top' CLASS='accessoryText'>";
 }
 if (isset($row_Recordset1['AccessoryTypeName'])){
 echo '<em><strong>Accessories</strong></em>';
 }
 $CurrentKitID = $row_Recordset1['KitID'];
-echo "<BR>";
+echo "<br />";
 }
 if (isset($row_Recordset1['AccessoryTypeName'])){
 

@@ -66,19 +66,16 @@ if (!$fines) {
 		$strikesTotal = "SELECT SUM(Strike) FROM checkedout WHERE (unix_timestamp(DateIn) - $frequency) > unix_timestamp(ExpectedDateIn) AND Strike >= 1 AND StudentID = \"$StudentID\"";
 		$strikesQuery = mysql_query($strikesTotal, $equip) or die(mysql_error());
 		$strikesResult = mysql_result($strikesQuery, 0);
-		if (!$strikesResult) {
+		if ($strikesResult + $strikeGain==1) {
 		//1st late
-		//$strikeCount = 1;
 		$penaltyNotice = "This is a warning. The next late return will result in a two-week ban.";
-		} elseif ($strikesResult == 1) {
+		} elseif ($strikesResult + $strikeGain==2) {
 		//2nd late
-		//$strikeCount = 1;
 		$penaltyNotice = "This student now has a TWO-WEEK BAN.";
 		$banDuration = 14;
 		$BannedDate = date("Y-m-d H:i:s",mktime(17, 0, 0, date("m"), date("d")+$banDuration, date("Y")));
-		} elseif ($strikesResult == 2) {
+		} elseif ($strikesResult + $strikeGain >= 3) {
 		//3rd late
-		//$strikeCount = 1;
 		$penaltyNotice = "This student is banned for the duration of the semester.";
 		}
 	}
