@@ -6,12 +6,22 @@ $StudentID = $_REQUEST['StudentID'];
 $dayDate = date("D");
 $dayToday = date("l");
 
-
+mysql_select_db($database_equip, $equip);
+$q_check = sprintf("SELECT kit_class.KitID AS KitID, kit_class.ClassID AS KitClassID, student_class.StudentID AS StudentID, student_class.ClassID AS StudentClassID FROM student_class LEFT JOIN kit_class ON kit_class.ClassID = student_class.ClassID WHERE StudentID = '$StudentID' AND KitID = '$KitID' ORDER BY KitClassID ASC");
+$check = mysql_query($q_check, $equip) or die(mysql_error());
+$row_check = mysql_fetch_assoc($check);
+$totalRows_check = mysql_num_rows($check);
+if ($totalRows_check <1) {
+	include('studentinfo.php');
+	echo "<meta http-equiv='refresh' content='2;URL=studentinfo.php?StudentID=$StudentID'>";
+	echo "<div id='alert' class='alert' style='visibility: visible;'>This student is not enrolled <br/>in the proper class.<br/><br/>";
+	echo "Returning to Student Info...</div>";
+}
 if ($dayDate == $dayClosed1 || $dayDate == $dayClosed2) {
 	include('studentinfo.php');
-	echo "<meta http-equiv='refresh' content='3;URL=studentinfo.php?StudentID=$StudentID'>";
-	echo "<div id='alert' style='visibility: visible;'>Not open on ".$dayToday."s<br />";
-	echo "Checkout Unavailable</div>";
+	echo "<meta http-equiv='refresh' content='2;URL=studentinfo.php?StudentID=$StudentID'>";
+	echo "<div id='alert' style='visibility: visible;'>Not open on ".$dayToday."s<br /><br/>";
+	echo "Returning to Student Info...</div>";
 
 } else {
 
