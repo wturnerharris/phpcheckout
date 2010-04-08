@@ -4,10 +4,11 @@ require_once('config.php');
 $CheckedOutID = $_POST['CheckedOutID'];
 $FinePaid = $_POST['FinePaid'];
 $StudentID = $_POST['StudentID'];
+
 if ($fines) {
-$sql = "UPDATE checkedout SET FinePaid = '$FinePaid' WHERE ID = $CheckedOutID;";
+	$sql = "UPDATE checkedout SET FinePaid = '$FinePaid' WHERE ID = $CheckedOutID;";
 } else {
-$sql = "UPDATE checkedout SET Strike = '$FinePaid' WHERE ID = $CheckedOutID;";
+	$sql = "UPDATE checkedout SET Strike = '$FinePaid', BannedDate = NULL WHERE ID = $CheckedOutID;";
 }
 //echo $sql;
 mysql_select_db($database_equip, $equip);
