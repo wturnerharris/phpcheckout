@@ -43,7 +43,7 @@ $late = true;
 		//not counting days closed
 		if (date("D",strtotime($ExpectedDateIn.'+ 1 day')) == $dayClosed1 || date("D",strtotime($ExpectedDateIn.'+ 1 day')) == $dayClosed2){
       if (date("D",strtotime($dayClosed1.'+ 1 day')) == $dayClosed2) {
-        $strikeGain = $strikeGain - 2;
+        $strikeGain = $strikeGain - 1;
   			} else {
         $strikeGain = $strikeGain - 1;
       }
