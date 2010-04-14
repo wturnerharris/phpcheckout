@@ -11,6 +11,7 @@ $query_Recordset1 = sprintf("SELECT checkedout.Notes AS CheckedOutNotes, checked
 $Recordset1 = mysql_query($query_Recordset1, $equip) or die(mysql_error());
 $row_Recordset1 = mysql_fetch_assoc($Recordset1);
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
+$ExpectedDateIn = $row_Recordset1['ExpectedDateIn'];
 
 mysql_select_db($database_equip, $equip);
 $query_Recordset2 = sprintf("SELECT students.FirstName as FirstName, students.LastName as LastName FROM students WHERE students.StudentID = $StudentID");
@@ -25,28 +26,36 @@ if (!$fines) {
 } else {
 	$frequency = $fineFreq;
 }
-if (intval(strtotime($row_Recordset1['ExpectedDateIn']) + $frequency) < intval(strtotime("now"))) {
+if (intval(strtotime($ExpectedDateIn) + $frequency) < intval(strtotime("now"))) {
 $late = true;
 
-if (!$fines) {
-	//math for strikes
-$timeDue = date(strtotime($row_Recordset1['ExpectedDateIn']));
-$timeIn = date(strtotime("now"));
-$diff = abs($timeIn - $timeDue);
-if ($diff > $fineFreq) {
-	$strikeGain = round($diff/$fineFreq);
-	if ($strikeGain > $maxStrike) { $strikeGain = $maxStrike; }
-		} else {
-			$strikeGain = 1;
-			}
-		}
+  if (!$fines) {
+  	//math for strikes
+  $timeDue = date(strtotime($ExpectedDateIn));
+  $timeIn = date(strtotime("now"));
+  $diff = abs($timeIn - $timeDue);
+  if ($diff > $fineFreq) {
+  	$strikeGain = round($diff/$fineFreq);
+  	if ($strikeGain > $maxStrike) { $strikeGain = $maxStrike; }
+  		} else {
+  			$strikeGain = 1;
+  			}
+		//not counting days closed
+		if (date("D",strtotime($ExpectedDateIn.'+ 1 day')) == $dayClosed1 || date("D",strtotime($ExpectedDateIn.'+ 1 day')) == $dayClosed2){
+      if (date("D",strtotime($dayClosed1.'+ 1 day')) == $dayClosed2) {
+        $strikeGain = $strikeGain - 2;
+  			} else {
+        $strikeGain = $strikeGain - 1;
+      }
+  	}
+  }
 }
 ?>
 
 Checking in a <?php echo $row_Recordset1['Name']; ?> on <? echo date("D, F j, g:i a") ?> 
 
 <br>
-This item was due on <? echo date("D, F j, g:i a", strtotime($row_Recordset1['ExpectedDateIn']));
+This item was due on <? echo date("D, F j, g:i a", strtotime($ExpectedDateIn));
 if($late){
 echo "<P><strong><font color=\"#FF0000\">THIS ITEM IS LATE</font></strong>";
 }
