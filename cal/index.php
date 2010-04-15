@@ -29,9 +29,13 @@ $theDate = isset($_REQUEST["date1"]) ? $_REQUEST["date1"] : "";
   	  if (!empty($theDate)) {
         $newDate = strtotime($theDate);
         $myCalendar->setDate(date('d', $newDate), date('m', $newDate), date('Y', $newDate));
+        $theDateSQL1 = date("Y-m-d",strtotime($theDate));
+        $theDateSQL2 = date("Y-m-d H:i:s",strtotime($theDate));
         $theDate = date("D, F d, Y", $newDate);
 			} else {
         $myCalendar->setDate(date('d'), date('m'), date('Y'));
+        $theDateSQL1 = date("Y-m-d");
+        $theDateSQL2 = date("Y-m-d H:i:s");
         $theDate = date("D, F d, Y");
     	}
   	  $myCalendar->setPath("./");
@@ -77,56 +81,88 @@ $theDate = isset($_REQUEST["date1"]) ? $_REQUEST["date1"] : "";
 mysql_select_db($database_equip, $equip);
 $selectedClass = "SELECT kit.Name as KitName, kit.ID as KitID, class.Name as ClassName FROM kit LEFT JOIN kit_class ON kit_class.KitID = kit.ID LEFT JOIN class ON class.ID = kit_class.ClassID WHERE class.Name = '$class'";
 $kitNames = mysql_query($selectedClass, $equip) or die("Could not perform select query - " . mysql_error());
-$row_kitNames = mysql_fetch_assoc($kitNames);
-$totalRows_kitNames = mysql_num_rows($kitNames);
 
 // get items reserved today and items that are checked out and due in future
-$find = "SELECT kit.Name as kitName, kit.ID as KitID, checkedout.ID as CheckedID, checkedout.ReserveDate, checkedout.DateOut, checkedout.ExpectedDateIn FROM kit LEFT JOIN checkedout ON checkedout.KitID = kit.ID WHERE ReserveDate != CURDATE() OR DateOut < UTC_TIMESTAMP() AND DateIN = '' ORDER BY kitName";
+$find = "SELECT kit.Name as kitName, kit.ID as KitID, checkedout.ID as CheckedID, checkedout.ReserveDate, checkedout.DateOut, checkedout.DateIn, checkedout.ExpectedDateIn FROM kit LEFT JOIN checkedout ON checkedout.KitID = kit.ID WHERE ReserveDate >= '$theDateSQL1' OR DateOut < '$theDateSQL2' AND DateIn = '' ORDER BY kitName";
 $kitReserved = mysql_query($find, $equip) or die("Could not perform select query - " . mysql_error());
 $row_kitReserved = mysql_fetch_assoc($kitReserved);
 $reservedKitID = $row_kitReserved['KitID'];
 $totalRows_kitReserved = mysql_num_rows($kitReserved);
-$stack = array();
-while ($test = mysql_fetch_assoc($kitReserved)) {
-array_push($stack, $test['KitID']);
+
+//make an array of currently checked out or reserved items
+$item = array();
+mysql_data_seek($kitReserved,0);
+while ($loopReserved = mysql_fetch_assoc($kitReserved)) {
+  array_push($item, $loopReserved);
 }
 
-// debug array
-//print_r($stack);
+//debug array
+print_r($item);
+
+//get days
+$day = date("D",strtotime($theDate));
+$day = array($day);
+$date = date("Y-m-d",strtotime($theDate));
+$date = array($date);
+for ($i =1; $i <7; $i++){
+  array_push($day, date("D",strtotime($theDate."+ $i days")));
+  array_push($date, date("Y-m-d",strtotime($theDate."+ $i days")));
+}
+
 ?>
 <p>Div Header</p>
 <p>Div Calendar Selector | Week of: Date | Div Reservation Class</p>
 <table width="650" border="0" cellpadding="0" cellspacing="0">
   <tr>
     <td width="160">Items</td>
-    <td width="70">Mon</td>
-    <td width="70">Tue</td>
-    <td width="70">Wed</td>
-    <td width="70">Thu</td>
-    <td width="70">Fri</td>
-    <td width="70">Sat</td>
-    <td width="70">Sun</td>
-  </tr>
-  <?php
+    <?php
+    for ($i=0; $i<7; $i++){ 
+      echo "<td width='70'>".$day[$i]."<br>".$date[$i]."</td>";
+    }
+  echo "</tr>\n";
+
   //get items from
   mysql_data_seek($kitNames,0);
   while($kitName = mysql_fetch_array( $kitNames )) {
   	echo "<tr>\n";
-  	echo "<td>".$kitName['KitName']."</td>\n";
+  	echo "<td>".$kitName['KitName']."-".$kitName['KitID']."</td>\n";
   	$currKitID = $kitName['KitID'];
-  	?>
-    <td><?php if (in_array($currKitID,$stack)) {
-    	echo "<font color='red'>*reserved*</font>"; } else { echo "*available*"; } ?></td><!-- Monday -->
-    <td>x</td><!-- Tuesday -->
-    <td>x</td><!-- Wednesday -->
-    <td>x</td><!-- Thursday -->
-    <td>x</td><!-- Friday -->
-    <td>x</td><!-- Saturday -->
-    <td>x</td><!-- Sunday -->
+
+  	for ($i=0; $i<7; $i++){
+		//day0 (selected day)
+  	echo "<td>\n";
+    $kits = array();
+		mysql_data_seek($kitReserved,0);
+  	while ($loopRes = mysql_fetch_assoc($kitReserved)) {
+      array_push($kits, $loopRes['KitID']);
+    }
+		if (in_array($currKitID,$kits)) {
+      $r = array_keys($kits,$currKitID);
+      //$r = array_keys($item,$currKitID);
+      $r = $r[0];
+      //print_r($r);
+      $itemRdate = $item[$r]['ReserveDate'];
+      $itemCdate = $item[$r]['ExpectedDateIn'];
+
+      if ($day[$i] == $dayClosed1 || $day[$i] == $dayClosed2) {
+          echo "CLOSED";
+      } elseif ($itemRdate == $date[$i] || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 1 days")) || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 2 days"))) {
+        echo "<font color='red'>*reserved*</font>";
+			} elseif ($itemCdate == $date[$i].' 17:00:00' || $itemCdate == date("Y-m-d",strtotime($date[$i]."+ 1 days")).' 17:00:00' || $itemCdate == date("Y-m-d",strtotime($date[$i]."+ 2 days")).' 17:00:00') {
+        echo "<font color='red'>*checked out*</font>";
+   		} else {
+      echo "<a href='#'>*available*</a>";
+			}
+		}
+		echo "</td>\n";
+  	}
+		?>
     </tr>
     <?php } ?>
 </table>
 <p>Div Footer</p>
-
+<?
+//print_r($row_kitReserved);
+?>
 </body>
 </html>
