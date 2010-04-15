@@ -1,6 +1,19 @@
 <?php 
-require_once('config.php'); 
+require_once('../equipment/config.php');
 
+function show_login() {
+//SHOW LOGIN FORM
+echo "<div style='margin-left: auto; margin-right: auto; text-align: left; width: 300px;'>";
+echo "<p><strong>Enter your user name and password to login.</strong></p>";
+echo "<form name='form' action='$PHP_SELF' method='post'>";
+echo "<p>Username: <input name='Username' type='text' id='Username'></p>";
+echo "<p>Password: <input name='Password' type='password' id='Password'></p>";
+echo "<p><input type='submit' name='Submit' value='Login'></p>";
+echo "</form></div>";
+include('includes/footer.html'); 
+}
+ 
+$ldap_enabled = false;
 if ($ldap_enabled) {
 	include('includes/ldap/defaultincludes.inc'); 
 	include('includes/heading2.html'); 
@@ -14,7 +27,7 @@ $Username = $_REQUEST['Username'];
 $Password = $_REQUEST['Password'];
 
 // encrypt password
-$encrypted_mypassword=md5($Password);
+// $encrypted_mypassword=md5($Password);
 
 //CHECK USERNAME AND PASSWORD
 if (isset($Username)) {
@@ -24,12 +37,12 @@ if (isset($Username)) {
 	} else {
 
 		mysql_select_db($database_equip, $equip);
-		$query_Recordset1 = sprintf("SELECT * FROM users WHERE Username = '$Username'");
+		$query_Recordset1 = sprintf("SELECT * FROM students WHERE Email = '$Username'");
 		$Recordset1 = mysql_query($query_Recordset1, $equip) or die(mysql_error());
 		$row_Recordset1 = mysql_fetch_assoc($Recordset1);
 		$totalRows_Recordset1 = mysql_num_rows($Recordset1);
 	
-		if ($row_Recordset1['Password'] == $encrypted_mypassword) { 
+		if ($row_Recordset1['StudentID'] == $Password) { 
 			//name & start the session then register a variable
 			session_name("EquipmentCheckout");
 			session_start();
@@ -41,24 +54,15 @@ if (isset($Username)) {
 			mysql_free_result($Recordset1);
 			echo "<meta http-equiv=\"refresh\" content=\"0;URL=index.php\">";
 		} else {
-			echo "<meta http-equiv=\"refresh\" content=\"0;URL=error.php\">";
+			include('includes/heading2.html');
+			echo "LOGIN ERROR";
+			show_login();
 			mysql_free_result($Recordset1);
 		} 
 	}
 } else {
-
-//SHOW LOGIN FORM
-include('includes/heading2.html'); ?>
-<div style="margin-left: auto; margin-right: auto; text-align: left; width: 300px;">
-<p><strong>Enter your user name and password to login.</strong></p>
-<form name="form" action="<?php echo $PHP_SELF; ?>" method="post">
-<p>Username: <input name="Username" type="text" id="Username"></p>
-<p>Password: <input name="Password" type="password" id="Password"></p>
-<p><input type="submit" name="Submit" value="Login"></p>
-</form>
-</div>
-<?php 
-	include('includes/footer.html'); 
+	include('includes/heading2.html');
+	show_login();
 	} 
 } 
 ?>

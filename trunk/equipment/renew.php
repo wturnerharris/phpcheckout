@@ -10,14 +10,18 @@ $LastName = $_REQUEST['LastName'];
 $StudentID = $_REQUEST['StudentID'];
 $KitID = $_REQUEST['KitID'];
 $Accessories = $_REQUEST['Accessories'];
+if (!empty($Accessories)){
+	$AccessoryAdded = " Accessories='$Accessories',";
+} else {
+	$AccessoryAdded = "";
+}
 $Notes = $_REQUEST['Notes'];
-$CheckoutUser = $HTTP_COOKIE_VARS["EquipmentCheckout"];
 
 if (isset($renew)) {
 
 include('includes/heading.html');
 
-$renewal = "UPDATE checkedout SET ExpectedDateIn='$ReturnDate', Notes='$Notes', Accessories='$Accessories', CheckoutUser='$CheckoutUser' WHERE KitID='$KitID' AND StudentID='$StudentID'";
+$renewal = "UPDATE checkedout SET ExpectedDateIn='$ReturnDate', Notes='$Notes',$AccessoryAdded CheckoutUser='$Username' WHERE KitID='$KitID' AND StudentID='$StudentID'";
 mysql_select_db($database_equip, $equip);
 mysql_query($renewal, $equip) or die(mysql_error());
 

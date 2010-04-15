@@ -1,0 +1,58 @@
+<?php 
+//start the session
+session_name("EquipmentCheckout");
+session_start();
+$Username = $_SESSION['user'];
+$sessionAuth = $_SESSION['auth'];
+
+//check to make sure the session variable is registered
+if(session_is_registered($Username) && $sessionAuth =="true"){
+
+//the session variable is registered, the user is allowed to see anything that follows
+$MetaRefresh = "<meta http-equiv=\"refresh\" content=\"600;URL=".$cal_root."/index.php\">";
+?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>EDM Equipment Reservations</title>
+<?php
+echo $MetaRefresh;
+?>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="-1">
+<meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, post-check=0, pre-check=0">
+<script type="text/javascript" src="<?php echo $cal_root; ?>/includes/prototype.js"></script>
+<link href="calendar.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="calendar.js"></script>
+<script type="text/javascript">
+function hideDiv()
+{
+$('alert').style.visibility = "hidden";
+}
+</script>
+<link href="<?php echo $cal_root; ?>/includes/equip.css" rel="stylesheet" type="text/css">
+</head>
+<?php 
+$echo = basename($_SERVER['PHP_SELF'],php);
+if ($echo == "login" || $echo == "fines" || $echo == "studentinfo") { ?>
+<body OnLoad=$('StudentID').focus();>
+<?php } else { ?>
+<body>
+<?php } 
+//Print_r ($_SESSION);
+?>
+
+<div id="logout"><a class="logout" href="<?php echo $cal_root; ?>/logout.php"><img src="<?php echo $site_root.$root; ?>/images/logout_icon.png">&nbsp;<strong>Logout</strong></a></div>
+<div id="main">
+		<div id="gray-bar"></div>
+		<div id="header">
+				<a href="<?php echo $cal_root; ?>/index.php"><img src="<?php echo $site_root.$root; ?>/images/logo.jpg" align="center" width="308" height="127"></a>
+				<img src="<?php echo $site_root.$root; ?>/images/spacer.gif" height="10" width="1">
+		</div>
+		<div id="content">
+<? 
+} else {
+	header('location:'.$cal_root.'/login.php');
+}
+?>
