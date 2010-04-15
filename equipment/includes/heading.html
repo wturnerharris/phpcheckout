@@ -18,8 +18,8 @@ $MetaRefresh = "<meta http-equiv=\"refresh\" content=\"600;URL=".$root."/index.p
 <title>.:Equipment Check Out:.</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <?php echo $MetaRefresh ?>
-<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
-<META HTTP-EQUIV="Expires" CONTENT="-1">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="-1">
 <script type="text/javascript" src="<?php echo $root; ?>/includes/prototype.js"></script>
 <script type="text/javascript">
 function hideDiv()
@@ -32,7 +32,7 @@ $('alert').style.visibility = "hidden";
 <?php 
 $echo = basename($_SERVER['PHP_SELF'],php);
 if ($echo == "login" || $echo == "fines" || $echo == "studentinfo") { ?>
-<BODY OnLoad=$('StudentID').focus();>
+<body OnLoad=$('StudentID').focus();>
 <?php } else { ?>
 <body>
 <?php } 
