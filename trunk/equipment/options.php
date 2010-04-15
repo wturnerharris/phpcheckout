@@ -6,7 +6,7 @@ $fp = fopen($config_file, "r");
 
 while (!feof($fp)) {
   $line = trim(fgets($fp));
-  if ($line != preg_grep("^$comment",$line)) {
+  if (!preg_match("/^$comment/",$line)) {
     $pieces = explode("=", $line);
     $option = trim($pieces[0]);
     $value = trim($pieces[1]);
@@ -14,6 +14,7 @@ while (!feof($fp)) {
   }
 }
 fclose($fp);
-
-printf($config_values);
+echo "<pre>";
+print_r($config_values);
+echo "<BR>".$config_values['$hostname_equip'];
 ?>
