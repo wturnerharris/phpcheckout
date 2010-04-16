@@ -117,9 +117,9 @@ echo " <a class='pagenum' title='Beginning of Records'>< Previous</a> ";
 }
 else
 {
-echo " <a class='pagenum' href='{$_SERVER['PHP_SELF']}?pagenum=1'> << First</a> ";
+echo " <a class='pagenum' href='{$_SERVER['PHP_SELF']}?class=$class&pagenum=1'> << First</a> ";
 $previous = $pagenum-1;
-echo " <a class='pagenum' href='{$_SERVER['PHP_SELF']}?pagenum=$previous'> < Previous</a> ";
+echo " <a class='pagenum' href='{$_SERVER['PHP_SELF']}?class=$class&pagenum=$previous'> < Previous</a> ";
 }
 
 //just a spacer
@@ -133,9 +133,9 @@ echo " <a class='pagenum' title='End of Records'>Last >></a> ";
 }
 else {
 $next = $pagenum+1;
-echo " <a class='pagenum' href='{$_SERVER['PHP_SELF']}?pagenum=$next'>Next ></a> ";
+echo " <a class='pagenum' href='{$_SERVER['PHP_SELF']}?class=$class&pagenum=$next'>Next ></a> ";
 echo " ";
-echo " <a class='pagenum' href='{$_SERVER['PHP_SELF']}?pagenum=$last'>Last >></a> ";
+echo " <a class='pagenum' href='{$_SERVER['PHP_SELF']}?class=$class&pagenum=$last'>Last >></a> ";
 echo " </center> ";
 }
 mysql_free_result($Students); 
