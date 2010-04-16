@@ -2,7 +2,8 @@
 require_once('classes/tc_calendar.php');
 require_once('../equipment/config.php');
 include('includes/heading.html'); 
-$class = $_REQUEST['class'];
+
+$class = $_REQUEST['class'];
 $theDate = isset($_REQUEST["date1"]) ? $_REQUEST["date1"] : "";
 ?>
 	<div id="cal">
@@ -59,7 +60,6 @@ $theDate = isset($_REQUEST["date1"]) ? $_REQUEST["date1"] : "";
     		}
     		echo "<option $echo value='$option[Name]'>$option[Name]</option>";
     		}
-    		mysql_free_result($option);
     	?>
     	</select>
   	</form>
@@ -100,22 +100,22 @@ for ($i =1; $i <7; $i++){
 }
 
 ?>
-<table border="0" cellpadding="0" cellspacing="0">
+<table width="735" border="0" cellpadding="0" cellspacing="0">
   <tr>
-    <td>Items</td>
+    <td class="box">Items</td>
     <?php
     for ($i=0; $i<7; $i++){ 
-      echo "<td>".$day[$i]."<br>".$date[$i]."</td>";
+      echo "<td class='box'>".$day[$i]." ".date("n/j",strtotime($date[$i]))."</td>";
     }
     echo "</tr>\n";
-    
+
     //get items from
 	mysql_data_seek($kitNames,0);
 	while($kitName = mysql_fetch_array( $kitNames )) {
 		echo "<tr>\n";
-	  	echo "<td class='box'>".$kitName['KitName']."- ID".$kitName['KitID']."</td>\n";
+	  	echo "<td class='box'>".$kitName['KitName']."</td>\n";
 	  	$currKitID = $kitName['KitID'];
-	
+
 	  	for ($i=0; $i<7; $i++){
 	  		//day0 (selected day)
 	  		$kits = array();
@@ -132,40 +132,40 @@ for ($i =1; $i <7; $i++){
 				$itemCdate = $item[$r]['ExpectedDateIn'];
 				$hrs = " ".$dueHours;
 				if ($day[$i] == $dayClosed1 || $day[$i] == $dayClosed2) {
-					echo "<td class='box closed'>";
-					echo "<strong>*CLOSED*</strong>";
+					echo "<td class='box closed'>&nbsp;";
+					//echo "<strong>*CLOSED*</strong>";
 					echo "</td>\n";
 				} elseif ($itemRdate == $date[$i] || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 1 days")) || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 2 days")) || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 3 days"))) {
-					echo "<td class='box reserved'>";
-					echo "<font color='red'>*reserved*</font>";
+					echo "<td class='box reserved'>&nbsp;";
+					//echo "<font color='red'>*reserved*</font>";
 					echo "</td>\n";
 				} elseif ($itemRdate == date("Y-m-d",strtotime($date[$i]."- 4 days"))){
 					if (date("D",strtotime($date[$i]."- 3 days")) == $dayClosed1){
 						echo "<td class='box open'>";
-						echo "<a href='#'>*available*</a>";
+						echo "<a href='#'>**</a>";
 						echo "</td>\n";
 					} else {
-						echo "<td class='box reserved'>";
-						echo "<font color='red'>*reserved*</font>";
+						echo "<td class='box reserved'>&nbsp;";
+						//echo "<font color='red'>*reserved*</font>";
 						echo "</td>\n";
 					}
 				} elseif ($itemCdate == $date[$i].$hrs || $itemCdate == date("Y-m-d",strtotime($date[$i]."+ 1 days")).$hrs || $itemCdate == date("Y-m-d",strtotime($date[$i]."+ 2 days")).$hrs || $itemCdate == date("Y-m-d",strtotime($date[$i]."+ 3 days")).$hrs || $itemCdate == date("Y-m-d",strtotime($date[$i]."+ 4 days")).$hrs) {
-					echo "<td class='box checked'>";
-					echo "<font color='yellow'>*checked*</font>";
+					echo "<td class='box checked'>&nbsp;";
+					//echo "<font color='yellow'>*checked*</font>";
 					echo "</td>\n";
 				} else {
 					echo "<td class='box open'>";
-					echo "<a href='#'>*available*</a>";
+					echo "<a href='#'>**</a>";
 					echo "</td>\n";
 				}
 			} else {
 				if ($day[$i] == $dayClosed1 || $day[$i] == $dayClosed2) {
-					echo "<td class='box closed'>";
-					echo "<strong>*CLOSED*</strong>";
+					echo "<td class='box closed'>&nbsp;";
+					//echo "<strong>*CLOSED*</strong>";
 					echo "</td>\n";
 				} else {
 					echo "<td class='box open'>";
-					echo "<a href='#'>*available*</a>";
+					echo "<a href='#'>**</a>";
 					echo "</td>\n";
 				}
 			}
@@ -175,6 +175,6 @@ for ($i =1; $i <7; $i++){
     <?php } ?>
 </table>
 <?
-include('includes/footer.html'); 
+include('includes/footer.html');
 //print_r($row_kitReserved);
 ?>
