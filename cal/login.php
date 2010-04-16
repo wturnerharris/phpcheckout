@@ -55,7 +55,7 @@ if (isset($Username)) {
 			echo "<meta http-equiv=\"refresh\" content=\"0;URL=index.php\">";
 		} else {
 			include('includes/heading2.html');
-			echo "LOGIN ERROR";
+			echo "<p class='alert' align='center'>LOGIN ERROR</p>";
 			show_login();
 			mysql_free_result($Recordset1);
 		} 

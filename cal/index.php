@@ -2,8 +2,7 @@
 require_once('classes/tc_calendar.php');
 require_once('../equipment/config.php');
 include('includes/heading.html'); 
-
-
+$class = $_REQUEST['class'];
 $theDate = isset($_REQUEST["date1"]) ? $_REQUEST["date1"] : "";
 ?>
 	<div id="cal">
@@ -35,13 +34,13 @@ $theDate = isset($_REQUEST["date1"]) ? $_REQUEST["date1"] : "";
   	  //$myCalendar->autoSubmit(true, "", "index.php");
   	  $myCalendar->autoSubmit(true, "form1");
   	  $myCalendar->writeScript();
+  	  echo "<input type='hidden' name='class' id='class' value='$class'>";
   	  ?>
     </form>
 	</div>
 	<div id="class_selector">
 	<h1>Selected Date: </h1><h2><strong><? echo $theDate; ?></strong></h2><br/>
   	<?php
-    $class = $_REQUEST['class'];
     
     // LIST BY CLASS
     mysql_select_db($database_equip, $equip);
