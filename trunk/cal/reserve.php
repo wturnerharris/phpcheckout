@@ -1,5 +1,5 @@
 <?php 
-require_once('config.php'); 
+require_once('../equipment/config.php'); 
 
 $KitID = $_REQUEST['KitID'];
 $StudentID = $_REQUEST['StudentID'];
@@ -12,17 +12,10 @@ $check = mysql_query($q_check, $equip) or die(mysql_error());
 $row_check = mysql_fetch_assoc($check);
 $totalRows_check = mysql_num_rows($check);
 if ($totalRows_check <1) {
-	include('studentinfo.php');
-	echo "<meta http-equiv='refresh' content='2;URL=studentinfo.php?StudentID=$StudentID'>";
+	include('index.php');
+	echo "<meta http-equiv='refresh' content='2;URL=index.php>";
 	echo "<div id='alert' class='alert' style='visibility: visible;'>This student is not enrolled <br/>in the proper class.<br/><br/>";
 	echo "Returning to Student Info...</div>";
-}
-if ($dayDate == $dayClosed1 || $dayDate == $dayClosed2) {
-	include('studentinfo.php');
-	echo "<meta http-equiv='refresh' content='2;URL=studentinfo.php?StudentID=$StudentID'>";
-	echo "<div id='alert' style='visibility: visible;'>Not open on ".$dayToday."s<br /><br/>";
-	echo "Returning to Student Info...</div>";
-
 } else {
 
 include('includes/heading.html');
@@ -34,10 +27,9 @@ $row_Lates = mysql_fetch_assoc($Lates);
 $totalRows_Lates = mysql_num_rows($Lates);
 
 if ($totalRows_Lates !=0 && intval(strtotime($row_Lates['ExpectedDateIn'])) < intval(strtotime("now"))) {
-		echo "<meta http-equiv='refresh' content='3;URL=studentinfo.php?StudentID=$StudentID'>";
+		echo "<meta http-equiv='refresh' content='3;URL=index.php'>";
 		echo "<p><span class='alert'>STUDENT HAS ITEM(S) THAT ARE LATE!</span></p>";
 		echo "<p>No items can be checked out by this student until all LATE items are returned and/or fines have been lifted and paid.</p>";
-		echo "<p><a href='studentinfo.php?StudentID=$StudentID'>Check-in late item(s)</a>";
 		include('includes/footer.html');
 		mysql_free_result($Lates);
 } else {
@@ -156,9 +148,9 @@ changeMonth();
 <P>
 <div id="tag-br">
 <div id="tag-top"><?php echo $row_Recordset3['FirstName']; ?> <?php echo $row_Recordset3['LastName']; ?></div>
-<div id="tag-info"> is checking out the <?php echo $row_Recordset1['Name']; ?>.</div></div>
+<div id="tag-info"> is reserving out the <?php echo $row_Recordset1['Name']; ?>.</div></div>
 <div id="tag-br">
-<div id="tag">Checking Out:</div>
+<div id="tag">Reserving:</div>
 <div id="tag-info">
 <?php 
 $ServerCheckHours = 0;
@@ -173,7 +165,7 @@ $ServerCheckHours = 0;
 ?>
 <?php echo date("D, F d, g:i a"); ?></div></div>
 <div id="tag-br">
-<div id="tag">Due Back:</div>
+<div id="tag">Expected Back:</div>
 <div id="tag-info">
 <?php 
 
@@ -351,12 +343,6 @@ $ServerCheckHours = 0;
 
 ?>
 <span id="newDay"><? echo date("D", strtotime($returndateSQL));?></span>, <span id="newMonth"><? echo date("F", strtotime($returndateSQL));?></span> <span id="newDate"><? echo date("d", strtotime($returndateSQL));?></span>, BEFORE <? echo date("g:i a", strtotime($returndateSQL));?></div></div>
-<div id="options">
-Options:
-<label><input id="chkBox0" name="chkBox" type="radio" value="0" onClick="modDay0();" checked="checked" />Reset</label>
-<label><input id="chkBox1" name="chkBox" type="radio" value="1" onClick="modDay1();" />+1 Day</label>
-<label><input id="chkBox2" name="chkBox" type="radio" value="2" onClick="modDay2();" />+2 Days</label>
-</div>
 <? 
 function addDate($date,$day)//add days
 {
@@ -395,28 +381,19 @@ if ($row_Recordset1['FineAmount']!="") {
     <? 
     $Image = $row_Recordset1['Image'];
     if($Image!=""){ 
-    echo("<IMG SRC=\"images/$Image\" width='75%' height='75%'>");
+    echo("<IMG SRC=\"$root/images/$Image\" width='75%' height='75%'>");
     }?>
     <br>
     </div></td>
   </tr>
-  <tr>
-    <td>Serial Number: <?php echo $row_Recordset1['SerialNumber']; ?><br></td>
-  </tr>
-   <tr>
-    <td>Model Number: <?php echo $row_Recordset1['ModelNumber']; ?><br></td>
-  </tr>
 </table>
  <br>
  <HR>
-<u><strong>Be sure these accessories are included:</strong></u> <br>
-<i>LAB AIDS: Check off all accessories in bags. If accessory is not in the bag
-do not check off.</i>
-
-<input type="hidden" name="User" value="<? echo $Username ?>">
+<u><strong>Accessories that are included:</strong></u> <br>
 <input type="hidden" name="KitID" value="<? echo $KitID ?>">
 <input type="hidden" name="StudentID" value="<? echo $StudentID ?>">
-<P>
+<p>
+<ul>
 <?
 if ($AccessoryName=""){
 	echo"<p>No Accessories are available for this item.</p>";
@@ -424,16 +401,14 @@ if ($AccessoryName=""){
 $i = 0;
 do { 
 $AccessoryName = $row_Recordset2['Name'];
-echo"<input name=\"Accessory$i\" type=\"checkbox\" value=\"$AccessoryName\">";
-echo $AccessoryName ."<br>";
+echo"<li class='accessoryText'>$AccessoryName</li>";
 $i++;
 } while ($row_Recordset2 = mysql_fetch_assoc($Recordset2)); 
 }
 ?>
-<P>
-Notes:<br>
-<textarea cols=60 rows=5 name="Notes"></textarea><br>
-<p><input type="submit" name="Submit" value="Check Out"> <input type="button" name="back" value="Cancel" onClick="javascript:history.back();"></p>
+</ul>
+</p>
+<p><input type="submit" name="Submit" value="Reserve"> <input type="button" name="back" value="Cancel" onClick="javascript:history.back();"></p>
 </form>
 
 <? 

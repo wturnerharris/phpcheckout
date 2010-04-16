@@ -49,4 +49,5 @@ input, select, textarea {
 .checked {background: url(images/checked.gif) repeat; width: 100px;}
 .reserved {background: url(images/reserved.gif) repeat; width: 100px;}
 .open {background: url(images/open.gif) repeat; width: 100px;}
+.link {display: block; height: 35px;}
 .closed {background: url(images/closed.gif) repeat; width: 100px;}

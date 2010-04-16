@@ -135,14 +135,14 @@ for ($i =1; $i <7; $i++){
 					echo "<td class='box closed'>&nbsp;";
 					//echo "<strong>*CLOSED*</strong>";
 					echo "</td>\n";
-				} elseif ($itemRdate == $date[$i] || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 1 days")) || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 2 days")) || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 3 days"))) {
+				} elseif ($itemRdate == $date[$i] || $itemRdate == date("Y-m-d",strtotime($date[$i]."+ 1 days")) || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 1 days")) || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 2 days")) || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 3 days"))) {
 					echo "<td class='box reserved'>&nbsp;";
 					//echo "<font color='red'>*reserved*</font>";
 					echo "</td>\n";
 				} elseif ($itemRdate == date("Y-m-d",strtotime($date[$i]."- 4 days"))){
 					if (date("D",strtotime($date[$i]."- 3 days")) == $dayClosed1){
 						echo "<td class='box open'>";
-						echo "<a href='#'>**</a>";
+						echo "<a class='link' href='reserve.php?KitID=$currKitID&StudentID=$sid'></a>";
 						echo "</td>\n";
 					} else {
 						echo "<td class='box reserved'>&nbsp;";
@@ -155,7 +155,7 @@ for ($i =1; $i <7; $i++){
 					echo "</td>\n";
 				} else {
 					echo "<td class='box open'>";
-					echo "<a href='#'>**</a>";
+					echo "<a class='link' href='reserve.php?KitID=$currKitID&StudentID=$sid'></a>";
 					echo "</td>\n";
 				}
 			} else {
@@ -165,7 +165,7 @@ for ($i =1; $i <7; $i++){
 					echo "</td>\n";
 				} else {
 					echo "<td class='box open'>";
-					echo "<a href='#'>**</a>";
+					echo "<a class='link' href='reserve.php?KitID=$currKitID&StudentID=$sid'></a>";
 					echo "</td>\n";
 				}
 			}
