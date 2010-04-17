@@ -10,7 +10,7 @@ $sid = $_SESSION['sid'];
 if(session_is_registered($Username) && $sessionAuth =="true"){
 
 //the session variable is registered, the user is allowed to see anything that follows
-$MetaRefresh = "<meta http-equiv=\"refresh\" content=\"600;URL=".$cal_root."/index.php\">";
+$MetaRefresh = "<meta http-equiv=\"refresh\" content=\"600;URL=\"index.php\">";
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -32,7 +32,7 @@ function hideDiv()
 $('alert').style.visibility = "hidden";
 }
 </script>
-<link href="<?php echo $cal_root; ?>/includes/equip.css" rel="stylesheet" type="text/css">
+<link href="includes/equip.css" rel="stylesheet" type="text/css">
 </head>
 <?php 
 $echo = basename($_SERVER['PHP_SELF'],php);
@@ -44,16 +44,16 @@ if ($echo == "login" || $echo == "fines" || $echo == "studentinfo") { ?>
 //Print_r ($_SESSION);
 ?>
 
-<div id="logout"><a class="logout" href="<?php echo $cal_root; ?>/logout.php"><img src="<?php echo $site_root.$root; ?>/images/logout_icon.png">&nbsp;<strong>Logout</strong></a></div>
+<div id="logout"><a class="logout" href="logout.php"><img src="images/logout_icon.png">&nbsp;<strong>Logout</strong></a></div>
 <div id="main">
 		<div id="gray-bar"></div>
 		<div id="header">
-				<a href="<?php echo $cal_root; ?>/index.php"><img src="<?php echo $site_root.$root; ?>/images/logo.jpg" align="center" width="308" height="127"></a>
-				<img src="<?php echo $site_root.$root; ?>/images/spacer.gif" height="10" width="1">
+				<a href="index.php"><img src="images/logo.jpg" align="center" width="308" height="127"></a>
+				<img src="images/spacer.gif" height="10" width="1">
 		</div>
 		<div id="content">
 <? 
 } else {
-	header('location:'.$cal_root.'/login.php');
+	header('location:login.php');
 }
 ?>

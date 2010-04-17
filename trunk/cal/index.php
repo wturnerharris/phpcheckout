@@ -62,13 +62,23 @@ $theDate = isset($_REQUEST["date1"]) ? $_REQUEST["date1"] : "";
     		}
     	?>
     	</select>
+		<input type="hidden" name="date1" value="<?php echo $theDateSQL1; ?>">
   	</form>
 	</div>
 <?php
 // get item names based on selected class
 mysql_select_db($database_equip, $equip);
-$selectedClass = "SELECT kit.Name as KitName, kit.ID as KitID, class.Name as ClassName FROM kit LEFT JOIN kit_class ON kit_class.KitID = kit.ID LEFT JOIN class ON class.ID = kit_class.ClassID WHERE class.Name = '$class'";
+$selectedClass = "SELECT kit.Name as KitName, kit.ID as KitID, kit.Repair as Repair, class.Name as ClassName FROM kit LEFT JOIN kit_class ON kit_class.KitID = kit.ID LEFT JOIN class ON class.ID = kit_class.ClassID WHERE class.Name = '$class' ORDER BY kit.Name";
 $kitNames = mysql_query($selectedClass, $equip) or die("Could not perform select query - " . mysql_error());
+
+//make an array of repair items
+$selectedClass = "SELECT * FROM kit WHERE Repair = 1 ORDER BY Name";
+$repairs = mysql_query($selectedClass, $equip) or die("Could not perform select query - " . mysql_error());
+$repair = array();
+mysql_data_seek($repairs,0);
+while ($loopRepair = mysql_fetch_assoc($repairs)) {
+  array_push($repair, $loopRepair['ID']);
+}
 
 // get items reserved today and items that are checked out and due in future
 $find = "SELECT kit.Name as kitName, kit.ID as KitID, checkedout.ID as CheckedID, checkedout.ReserveDate, checkedout.DateOut, checkedout.DateIn, checkedout.ExpectedDateIn FROM kit LEFT JOIN checkedout ON checkedout.KitID = kit.ID WHERE ReserveDate >= '$theDateSQL1' OR DateOut < '$theDateSQL2' AND DateIn = '' ORDER BY kitName";
@@ -100,6 +110,7 @@ for ($i =1; $i <7; $i++){
 }
 
 ?>
+<div id="table">
 <table width="735" border="0" cellpadding="0" cellspacing="0">
   <tr>
     <td class="box">Items</td>
@@ -130,42 +141,57 @@ for ($i =1; $i <7; $i++){
 				//print_r($r);
 				$itemRdate = $item[$r]['ReserveDate'];
 				$itemCdate = $item[$r]['ExpectedDateIn'];
+				$itemOdate = $item[$r]['DateOut'];
+				$d1 = strtotime($itemOdate);
+				$d2 = strtotime($itemCdate);
+				$dayDiff = floor(($d2-$d1)/86400);
 				$hrs = " ".$dueHours;
+				
 				if ($day[$i] == $dayClosed1 || $day[$i] == $dayClosed2) {
 					echo "<td class='box closed'>&nbsp;";
 					//echo "<strong>*CLOSED*</strong>";
 					echo "</td>\n";
-				} elseif ($itemRdate == $date[$i] || $itemRdate == date("Y-m-d",strtotime($date[$i]."+ 1 days")) || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 1 days")) || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 2 days")) || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 3 days"))) {
+				} elseif ($itemRdate == $date[$i] || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 1 days"))
+				 || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 2 days"))) {
 					echo "<td class='box reserved'>&nbsp;";
 					//echo "<font color='red'>*reserved*</font>";
 					echo "</td>\n";
-				} elseif ($itemRdate == date("Y-m-d",strtotime($date[$i]."- 4 days"))){
-					if (date("D",strtotime($date[$i]."- 3 days")) == $dayClosed1){
+				} elseif ($itemRdate == date("Y-m-d",strtotime($date[$i]."- 4 days"))
+				 || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 3 days"))){
+					if (date("D",strtotime($date[$i]."- 3 days")) == $dayClosed1
+					 || date("D",strtotime($date[$i]."- 1 days")) == date("D",strtotime($itemCdate))
+					  || date("D",strtotime($date[$i]."- 2 days")) == date("D",strtotime($itemCdate))){
 						echo "<td class='box open'>";
-						echo "<a class='link' href='reserve.php?KitID=$currKitID&StudentID=$sid'></a>";
+						echo "<a class='link' href='reserve.php?KitID=$currKitID&StudentID=$sid&date=$date[$i]'></a>";
 						echo "</td>\n";
 					} else {
 						echo "<td class='box reserved'>&nbsp;";
 						//echo "<font color='red'>*reserved*</font>";
 						echo "</td>\n";
 					}
-				} elseif ($itemCdate == $date[$i].$hrs || $itemCdate == date("Y-m-d",strtotime($date[$i]."+ 1 days")).$hrs || $itemCdate == date("Y-m-d",strtotime($date[$i]."+ 2 days")).$hrs || $itemCdate == date("Y-m-d",strtotime($date[$i]."+ 3 days")).$hrs || $itemCdate == date("Y-m-d",strtotime($date[$i]."+ 4 days")).$hrs) {
-					echo "<td class='box checked'>&nbsp;";
-					//echo "<font color='yellow'>*checked*</font>";
-					echo "</td>\n";
+				} elseif (empty($itemRdate)) {
+					if (strtotime($date[$i]) >= $d1 && strtotime($date[$i]) <= $d2) {
+						echo "<td class='box checked'>&nbsp;";
+						//echo "<font color='yellow'>*checked*</font>";
+						echo "</td>\n";
+					} else {
+						echo "<td class='box open'>";
+						echo "<a class='link' href='reserve.php?KitID=$currKitID&StudentID=$sid&date=$date[$i]'></a>";
+						echo "</td>\n";
+					}
 				} else {
 					echo "<td class='box open'>";
-					echo "<a class='link' href='reserve.php?KitID=$currKitID&StudentID=$sid'></a>";
+					echo "<a class='link' href='reserve.php?KitID=$currKitID&StudentID=$sid&date=$date[$i]'></a>";
 					echo "</td>\n";
 				}
 			} else {
-				if ($day[$i] == $dayClosed1 || $day[$i] == $dayClosed2) {
+				if ($day[$i] == $dayClosed1 || $day[$i] == $dayClosed2 || in_array($currKitID,$repair)) {
 					echo "<td class='box closed'>&nbsp;";
 					//echo "<strong>*CLOSED*</strong>";
 					echo "</td>\n";
 				} else {
 					echo "<td class='box open'>";
-					echo "<a class='link' href='reserve.php?KitID=$currKitID&StudentID=$sid'></a>";
+					echo "<a class='link' href='reserve.php?KitID=$currKitID&StudentID=$sid&date=$date[$i]'></a>";
 					echo "</td>\n";
 				}
 			}
@@ -174,6 +200,7 @@ for ($i =1; $i <7; $i++){
     </tr>
     <?php } ?>
 </table>
+</div>
 <?
 include('includes/footer.html');
 //print_r($row_kitReserved);
