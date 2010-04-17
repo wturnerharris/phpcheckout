@@ -3,8 +3,9 @@ require_once('../equipment/config.php');
 
 $KitID = $_REQUEST['KitID'];
 $StudentID = $_REQUEST['StudentID'];
-$dayDate = date("D");
-$dayToday = date("l");
+$theDate = $_REQUEST['date'];
+$dayDate = date('D',strtotime($theDate));
+$dayToday = date("l",strtotime($theDate));
 
 mysql_select_db($database_equip, $equip);
 $q_check = sprintf("SELECT kit_class.KitID AS KitID, kit_class.ClassID AS KitClassID, student_class.StudentID AS StudentID, student_class.ClassID AS StudentClassID FROM student_class LEFT JOIN kit_class ON kit_class.ClassID = student_class.ClassID WHERE StudentID = '$StudentID' AND KitID = '$KitID' ORDER BY KitClassID ASC");
@@ -13,12 +14,11 @@ $row_check = mysql_fetch_assoc($check);
 $totalRows_check = mysql_num_rows($check);
 if ($totalRows_check <1) {
 	include('index.php');
-	echo "<meta http-equiv='refresh' content='2;URL=index.php>";
-	echo "<div id='alert' class='alert' style='visibility: visible;'>This student is not enrolled <br/>in the proper class.<br/><br/>";
-	echo "Returning to Student Info...</div>";
+	echo "<div id='overlay'></div>";
+	echo "<meta http-equiv='refresh' content='2;URL=index.php'>";
+	echo "<div id='alert' class='alert' style='visibility: visible;'>You are not enrolled <br/>in that class.<br/><br/>";
+	echo "Returning to the Calendar.</div>";
 } else {
-
-include('includes/heading.html');
 
 mysql_select_db($database_equip, $equip);
 $query_Lates = sprintf("SELECT * FROM checkedout WHERE StudentID = '$StudentID' AND DateIn = '' ORDER BY ExpectedDateIn");
@@ -27,11 +27,13 @@ $row_Lates = mysql_fetch_assoc($Lates);
 $totalRows_Lates = mysql_num_rows($Lates);
 
 if ($totalRows_Lates !=0 && intval(strtotime($row_Lates['ExpectedDateIn'])) < intval(strtotime("now"))) {
-		echo "<meta http-equiv='refresh' content='3;URL=index.php'>";
-		echo "<p><span class='alert'>STUDENT HAS ITEM(S) THAT ARE LATE!</span></p>";
-		echo "<p>No items can be checked out by this student until all LATE items are returned and/or fines have been lifted and paid.</p>";
-		include('includes/footer.html');
-		mysql_free_result($Lates);
+	include('index.php');
+	echo "<div id='overlay'></div>";
+	echo "<meta http-equiv='refresh' content='3;URL=index.php'>";
+	echo "<div id='alert' class='alert' style='visibility: visible;'><p>YOU HAVE ITEM(S) THAT ARE LATE!</p>";
+	echo "<p>You may not make any reservations <br/>until all LATE items are returned <br/>and/or fines have been lifted and paid.</p>";
+	echo "Returning to the Calendar.</div>";
+	mysql_free_result($Lates);
 } else {
 	
 mysql_select_db($database_equip, $equip);
@@ -58,6 +60,8 @@ $Recordset4 = mysql_query($query_Recordset4, $equip) or die(mysql_error());
 $row_Recordset4 = mysql_fetch_assoc($Recordset4);
 $totalRows_Recordset4 = mysql_num_rows($Recordset4); 
 
+include('includes/heading.html');
+
 if ($row_Recordset1['ContractRequired'] == 1) { 
 echo("<b>Student must sign an individual contract for this kit.</b>");
 }
@@ -66,78 +70,9 @@ echo("<b>Student must sign an individual contract for this kit.</b>");
 function hide() {
 $('alert').style.visibility = "hidden";
 }
-function changeMonth() {
-	now = new Date();
-	returnDate = $("ReturnDate").value.substr(5,2);
-	originalDate =  $("OriginalDate").value.substr(5,2);
-	if (originalDate - returnDate !=0) {
-		months = new Array(13);
-		months[0]  = "January";
-		months[1]  = "February";
-		months[2]  = "March";
-		months[3]  = "April";
-		months[4]  = "May";
-		months[5]  = "June";
-		months[6]  = "July";
-		months[7]  = "August";
-		months[8]  = "September";
-		months[9]  = "October";
-		months[10] = "November";
-		months[11] = "December";
-		months[12] = "January";
-	var monthnumber = now.getMonth() + 2;
-	var monthname   = months[monthnumber];
-	$('newMonth').firstChild.nodeValue = monthname;
-	} else {
-		months = new Array(13);
-		months[0]  = "January";
-		months[1]  = "February";
-		months[2]  = "March";
-		months[3]  = "April";
-		months[4]  = "May";
-		months[5]  = "June";
-		months[6]  = "July";
-		months[7]  = "August";
-		months[8]  = "September";
-		months[9]  = "October";
-		months[10] = "November";
-		months[11] = "December";
-		months[12] = "January";
-	var monthnumber = now.getMonth();
-	var monthname   = months[monthnumber];
-	$('newMonth').firstChild.nodeValue = monthname;
-	}
-}
-function modDay0() {
-var date = $("OriginalDate").value;
-$("ReturnDate").value = $("OriginalDate").value;
-$('newDay').firstChild.nodeValue = $('plusNone').value;
-$('newDate').firstChild.nodeValue = date.substr(8,2);
-changeMonth();
-}
-function modDay1() 
-{
-newDay = $('plusOne').value;
-newDate = $("plusOneDate").value.substr(8,2);
-$("ReturnDate").value = $("plusOneDate").value;
-$('newDay').firstChild.nodeValue = newDay;
-$('newDate').firstChild.nodeValue = newDate;
-//$('newMonth').firstChild.nodeValue = $('plusNone').value;
-changeMonth();
-}
-function modDay2() 
-{
-newDay = $('plusTwo').value;
-newDate = $("plusTwoDate").value.substr(8,2);
-$("ReturnDate").value = $("plusTwoDate").value;
-$('newDay').firstChild.nodeValue = newDay;
-$('newDate').firstChild.nodeValue = newDate;
-//$('newMonth').firstChild.nodeValue = $('plusNone').value;
-changeMonth();
-}
 </script>
-<P>
-<form name="frmCheckOut" action="checkoutaction.php" method="post">
+<p>
+<form name="frmCheckOut" action="reserve_action.php" method="post">
 
 <input type="hidden" name="FirstName" value="<?php echo $row_Recordset3['FirstName']; ?>">
 <input type="hidden" name="LastName" value="<?php echo $row_Recordset3['LastName']; ?>">
@@ -145,10 +80,10 @@ changeMonth();
 <input type="hidden" name="ContractRequired" value="<?php echo $_REQUEST['ContractRequired']; ?>">
 
 
-<P>
+<p>
 <div id="tag-br">
 <div id="tag-top"><?php echo $row_Recordset3['FirstName']; ?> <?php echo $row_Recordset3['LastName']; ?></div>
-<div id="tag-info"> is reserving out the <?php echo $row_Recordset1['Name']; ?>.</div></div>
+<div id="tag-info"> is reserving the <?php echo $row_Recordset1['Name']; ?>.</div></div>
 <div id="tag-br">
 <div id="tag">Reserving:</div>
 <div id="tag-info">
@@ -163,15 +98,15 @@ $ServerCheckHours = 0;
 	}
 } while ($row_Recordset4 = mysql_fetch_assoc($Recordset4)); 
 ?>
-<?php echo date("D, F d, g:i a"); ?></div></div>
+<?php echo date("D, F d, g:i a", strtotime($theDate)); ?></div></div>
 <div id="tag-br">
 <div id="tag">Expected Back:</div>
 <div id="tag-info">
 <?php 
 
-	$Year = date('Y');
+	$Year = date('Y', strtotime($theDate));
 	
-	$Month = date('m');
+	$Month = date('m', strtotime($theDate));
 	
 //	if ($Month<10) {
 //	$Month = "0".$Month;
@@ -183,7 +118,7 @@ $ServerCheckHours = 0;
 	
 	
 	//DUE BACK NEXT DAY / 24 HOURS
-	$Day = date('d');
+	$Day = date('d', strtotime($theDate));
 
 
 	//LOGIC FOR END OF MONTH
@@ -253,14 +188,12 @@ $ServerCheckHours = 0;
 	
 	//IF NOT OPEN weekends
 	if(!$weekends) {
-		if (date("D", strtotime($returndateSQL)) == $dayClosed1) {
-			$Day = ($Day + 2);
-			echo "<div id='alert' style='visibility: visible;'>Not open on ";
-			echo $dayClosed1;
-			echo ".<br />Return on next day open...</div>";
-			echo "<script type='text/javascript'>";
-			echo "setTimeout('hide();',1500);";
-			echo "</script>"; 
+		if (date('D', strtotime($returndateSQL)) == $dayClosed1) {
+			if (date('D', strtotime($returndateSQL.'+1 day')) == $dayClosed2) {
+				$Day = ($Day + 2);
+			} else {
+				$Day = ($Day + 1);
+			}
 		}
 		
 		//IS LAST DAY OF MONTH?
@@ -272,14 +205,8 @@ $ServerCheckHours = 0;
 		$returndateSQL = $Year."-".$Month."-".$Day." ".$dueHours;
 		
 		//RULES FOR SPECIFC DAY CLOSED (PRESUMABLY SUNDAY)
-		if (date("D", strtotime($returndateSQL)) == $dayClosed2) {
+		if (date('D', strtotime($returndateSQL)) == $dayClosed2) {
 			$Day = ($Day + 1);
-			echo "<div id='alert' >Closed ";
-			echo $dayClosed2;
-			echo ".<br />Return on next day open...</div>";
-			echo "<script type='text/javascript'>";
-			echo "setTimeout('hide();',1500);";
-			echo "</script>"; 
 		}
 		
 		//IS LAST DAY OF MONTH?
@@ -292,7 +219,7 @@ $ServerCheckHours = 0;
 	$returndateSQL = $Year."-".$Month."-".$Day." ".$dueHours;
 	
 	// figure out hours here
-	switch (date("D",strtotime($returndateSQL))) {
+	switch (date('D',strtotime($returndateSQL))) {
 	
 		case "Sun" : 
 					$openTime = $sunOpen;
@@ -340,27 +267,37 @@ $ServerCheckHours = 0;
 	
 	//date formate for sql 0000-00-00 00:00:00
 	$returndateSQL = $Year."-".$Month."-".$Day." ".$dueHours;
+	
+	//if reserved, send back to main
+	mysql_select_db($database_equip, $equip);
+	$r_check = sprintf("SELECT * FROM checkedout WHERE ReserveDate > curdate() AND KitID = '$KitID'");
+	$res = mysql_query($r_check, $equip) or die(mysql_error());
+	$row_res = mysql_fetch_assoc($res);
+	$totalRows_res = mysql_num_rows($res);
+	$rtndate = substr($returndateSQL,0,10);
+	$rtndate2 = date('Y-m-d',strtotime($rtndate.'-1 day'));
+	//echo $rtndate;
+	if ($totalRows_res > 0) {
+		$reserved_array = array();
+		mysql_data_seek($res,0);
+		while ($loopReserved = mysql_fetch_assoc($res)) {
+	  		array_push($reserved_array, $loopReserved['ReserveDate']);
+		}
+		//print_r($reserved_array);
+		if (in_array($rtndate, $reserved_array) || in_array($rtndate2, $reserved_array)){
+			//if returndateSQL == reservedate || returndateSQL == reservedate - 1
+			//include('index.php');
+			echo "<meta http-equiv='refresh' content='2;URL=index.php'>";
+			echo "<div id='overlay'></div>";
+			echo "<div id='alert' class='alert' style='visibility: visible;'>Conflicts with another reservation.<br/>You must checkout in person.<br/><br/>";
+			echo "Returning to the Calendar.</div>";
+		}
+	}
 
 ?>
-<span id="newDay"><? echo date("D", strtotime($returndateSQL));?></span>, <span id="newMonth"><? echo date("F", strtotime($returndateSQL));?></span> <span id="newDate"><? echo date("d", strtotime($returndateSQL));?></span>, BEFORE <? echo date("g:i a", strtotime($returndateSQL));?></div></div>
-<? 
-function addDate($date,$day)//add days
-{
-$sum = strtotime(date("Y-m-d", strtotime("$date")) . " +$day days");
-$dateTo=date('Y-m-d',$sum);
-return $dateTo;
-}
-$plusOne = addDate($returndateSQL,1);
-$plusTwo = addDate($returndateSQL,2);
-
-?>
-<input type="hidden" id="plusNone" name="plusNone" value="<? echo date("D", strtotime($returndateSQL)); ?>">
-<input type="hidden" id="plusOne" name="plusOne" value="<? echo date("D", strtotime($plusOne)); ?>">
-<input type="hidden" id="plusOneDate" name="plusOneDate" value="<? echo date("Y-m-d", strtotime($plusOne))." ".$dueHours; ?>">
-<input type="hidden" id="plusTwo" name="plusTwo" value="<? echo date("D", strtotime($plusTwo)); ?>">
-<input type="hidden" id="plusTwoDate" name="plusTwoDate" value="<? echo date("Y-m-d", strtotime($plusTwo))." ".$dueHours; ?>">
-<input type="hidden" id="OriginalDate" name="OriginalDate" value="<? echo date("Y-m-d H:i:s", strtotime($returndateSQL)); ?>">
-<input type="hidden" id="ReturnDate" name="ReturnDate" value="<? echo date("Y-m-d H:i:s", strtotime($returndateSQL)); ?>">
+<span id="newDay"><? echo date('D', strtotime($returndateSQL));?></span>, <span id="newMonth"><? echo date('F', strtotime($returndateSQL));?></span> <span id="newDate"><? echo date('d', strtotime($returndateSQL));?></span>, BEFORE <? echo date('g:i a', strtotime($returndateSQL));?></div></div>
+<input type="hidden" id="ReturnDate" name="ReturnDate" value="<? echo date('Y-m-d H:i:s', strtotime($returndateSQL)); ?>">
+<input type="hidden" id="ReserveDate" name="ReserveDate" value="<? echo $theDate; ?>">
 </span>
 <? 
 if ($row_Recordset1['FineAmount']!="") { 
@@ -371,43 +308,51 @@ if ($row_Recordset1['FineAmount']!="") {
  } 
 ?>
 <div id="tag-br"></div>
- <br>
- <table width="40%" border="0" align="center" cellpadding="0" cellspacing="0">
+ <table width="100%" border="0" cellpadding="0" cellspacing="0">
   <tr>
-    <td> Item: <?php echo $row_Recordset1['Name']; ?></td>
+    <td><h2><?php echo $row_Recordset1['Name']; ?></h2><br/></td>
+    <td></td>
   </tr>
   <tr>
     <td><div align="center">
     <? 
     $Image = $row_Recordset1['Image'];
     if($Image!=""){ 
-    echo("<IMG SRC=\"$root/images/$Image\" width='75%' height='75%'>");
-    }?>
+    	echo "<img src='..$root/images/$Image' width='350' />";
+    } ?>
     <br>
     </div></td>
+    <td valign="top">
+    <div id="acessories_box">
+    <strong>Accessories:</strong><br>
+	<p>
+		<ul>
+		<?
+		if ($AccessoryName=""){
+			echo"<p>No Accessories are available for this item.</p>";
+		} else {
+		$i = 0;
+		do { 
+		$AccessoryName = $row_Recordset2['Name'];
+		echo"<li class='accessoryText'>$AccessoryName</li>";
+		$i++;
+		} while ($row_Recordset2 = mysql_fetch_assoc($Recordset2)); 
+		}
+		?>
+		</ul>
+	</p>
+	</div>
+    </td>
   </tr>
 </table>
  <br>
  <HR>
-<u><strong>Accessories that are included:</strong></u> <br>
+<input type="hidden" name="User" value="<? echo $Username ?>">
 <input type="hidden" name="KitID" value="<? echo $KitID ?>">
 <input type="hidden" name="StudentID" value="<? echo $StudentID ?>">
 <p>
-<ul>
-<?
-if ($AccessoryName=""){
-	echo"<p>No Accessories are available for this item.</p>";
-} else {
-$i = 0;
-do { 
-$AccessoryName = $row_Recordset2['Name'];
-echo"<li class='accessoryText'>$AccessoryName</li>";
-$i++;
-} while ($row_Recordset2 = mysql_fetch_assoc($Recordset2)); 
-}
-?>
-</ul>
-</p>
+Notes:<br>
+<textarea cols=60 rows=5 name="Notes" readonly="readonly"><?php echo $row_Recordset1['Notes']; ?></textarea></p>
 <p><input type="submit" name="Submit" value="Reserve"> <input type="button" name="back" value="Cancel" onClick="javascript:history.back();"></p>
 </form>
 
