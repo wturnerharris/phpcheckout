@@ -10,6 +10,7 @@ $equip = mysql_pconnect($hostname_equip, $username_equip, $password_equip) or di
 # auth methods, either database or ldap for checkout users only
 # all students must be added to database manually or imported to mysql
 $ldap_enabled = false; 
+$ldap_cal = false;
 # options
 # to enable kit-specific due date change to true
 $checkHours = false; 
