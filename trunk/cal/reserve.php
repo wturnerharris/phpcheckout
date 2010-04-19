@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once('../equipment/config.php'); 
 
 $KitID = $_REQUEST['KitID'];
@@ -270,12 +270,14 @@ $ServerCheckHours = 0;
 	
 	//if reserved, send back to main
 	mysql_select_db($database_equip, $equip);
-	$r_check = sprintf("SELECT * FROM checkedout WHERE ReserveDate > curdate() AND KitID = '$KitID'");
+	$r_check = sprintf("SELECT * FROM checkedout WHERE ReserveDate >= CURDATE() AND KitID = '$KitID'");
 	$res = mysql_query($r_check, $equip) or die(mysql_error());
-	$row_res = mysql_fetch_assoc($res);
+	//$row_res = mysql_fetch_assoc($res);
 	$totalRows_res = mysql_num_rows($res);
 	$rtndate = substr($returndateSQL,0,10);
 	$rtndate2 = date('Y-m-d',strtotime($rtndate.'-1 day'));
+	$today = date('Y-m-d',strtotime($theDate));
+	$tomorrow = date('Y-m-d',strtotime($theDate.'+1 day'));
 	//echo $rtndate;
 	if ($totalRows_res > 0) {
 		$reserved_array = array();
@@ -284,10 +286,10 @@ $ServerCheckHours = 0;
 	  		array_push($reserved_array, $loopReserved['ReserveDate']);
 		}
 		//print_r($reserved_array);
-		if (in_array($rtndate, $reserved_array) || in_array($rtndate2, $reserved_array)){
+		if (in_array($rtndate, $reserved_array) || in_array($rtndate2, $reserved_array) || in_array($today, $reserved_array) || in_array($tomorrow, $reserved_array)){
 			//if returndateSQL == reservedate || returndateSQL == reservedate - 1
 			//include('index.php');
-			echo "<meta http-equiv='refresh' content='2;URL=index.php'>";
+			echo "<meta http-equiv='refresh' content='2;URL=index.php?date1=$today'>";
 			echo "<div id='overlay'></div>";
 			echo "<div id='alert' class='alert' style='visibility: visible;'>Conflicts with another reservation.<br/>You must checkout in person.<br/><br/>";
 			echo "Returning to the Calendar.</div>";

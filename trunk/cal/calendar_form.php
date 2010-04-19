@@ -306,7 +306,7 @@ window.onload = function(){ adjustContainer(); };
     </div>
     <div id="calendar-container">
         <div id="calendar-body">	
-        <table border="0" cellspacing="1" cellpadding="3" align="center" class="bg">
+        <table border="0" cellspacing="0" cellpadding="0" align="center" class="bg">
             <?php
             $day_headers = array_values($cobj->getDayHeaders());
             

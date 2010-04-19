@@ -12,20 +12,20 @@ $theDate = isset($_REQUEST["date1"]) ? $_REQUEST["date1"] : "";
       <?php
       $thisYear = date("Y");
       $thisDate = date("Y-m-d");
-      $thisRange = date("Y-m-d",strtotime("+13 days"));
+      $thisRange = date("Y-m-d",strtotime("+7 days"));
+      if (strtotime($theDate) > strtotime($thisRange) || strtotime($theDate) < strtotime($thisDate)) {
+        $theDate = $thisDate;
+      }
   	  $myCalendar = new tc_calendar("date1");
   	  $myCalendar->setIcon("images/iconCalendar.gif");
   	  if (!empty($theDate)) {
         $newDate = strtotime($theDate);
         $myCalendar->setDate(date('d', $newDate), date('m', $newDate), date('Y', $newDate));
-        $theDateSQL1 = date("Y-m-d",strtotime($theDate));
-        $theDateSQL2 = date("Y-m-d H:i:s",strtotime($theDate));
-        $theDate = date("D, F d, Y", $newDate);
+        $nowDate = date("D, F d, Y", $newDate);
 			} else {
         $myCalendar->setDate(date('d'), date('m'), date('Y'));
-        $theDateSQL1 = date("Y-m-d");
-        $theDateSQL2 = date("Y-m-d H:i:s");
-        $theDate = date("D, F d, Y");
+        $theDate = date("Y-m-d");
+        $nowDate = date("D, F d, Y");
     	}
   	  $myCalendar->setPath("./");
   	  $myCalendar->setYearInterval($thisYear, $thisYear);
@@ -40,9 +40,9 @@ $theDate = isset($_REQUEST["date1"]) ? $_REQUEST["date1"] : "";
     </form>
 	</div>
 	<div id="class_selector">
-	<h1>Selected Date: </h1><h2><strong><? echo $theDate; ?></strong></h2><br/>
+	<h1>Selected Date: </h1><h2><strong><? echo $nowDate; ?></strong></h2><br/>
   	<?php
-    
+
     // LIST BY CLASS
     mysql_select_db($database_equip, $equip);
     $classes = mysql_query("SELECT * FROM class ORDER BY class.Name") or die(mysql_error());  
@@ -56,13 +56,13 @@ $theDate = isset($_REQUEST["date1"]) ? $_REQUEST["date1"] : "";
     		if ($class == "$option[Name]") { 
     			$echo = " selected"; 
     		} else { 
-    			$echo = ""; 
+    			$echo = "";
     		}
     		echo "<option $echo value='$option[Name]'>$option[Name]</option>";
     		}
     	?>
     	</select>
-		<input type="hidden" name="date1" value="<?php echo $theDateSQL1; ?>">
+		<input type="hidden" name="date1" value="<?php echo $theDate; ?>">
   	</form>
 	</div>
 <?php
@@ -81,7 +81,7 @@ while ($loopRepair = mysql_fetch_assoc($repairs)) {
 }
 
 // get items reserved today and items that are checked out and due in future
-$find = "SELECT kit.Name as kitName, kit.ID as KitID, checkedout.ID as CheckedID, checkedout.ReserveDate, checkedout.DateOut, checkedout.DateIn, checkedout.ExpectedDateIn FROM kit LEFT JOIN checkedout ON checkedout.KitID = kit.ID WHERE ReserveDate >= '$theDateSQL1' OR DateOut < '$theDateSQL2' AND DateIn = '' ORDER BY kitName";
+$find = "SELECT kit.Name as kitName, kit.ID as KitID, checkedout.ID as CheckedID, checkedout.ReserveDate, checkedout.DateOut, checkedout.DateIn, checkedout.ExpectedDateIn FROM kit LEFT JOIN checkedout ON checkedout.KitID = kit.ID WHERE ReserveDate >= CURDATE() OR DateOut <= UTC_TIMESTAMP() AND DateIn = '' ORDER BY kitName";
 $kitReserved = mysql_query($find, $equip) or die("Could not perform select query - " . mysql_error());
 $row_kitReserved = mysql_fetch_assoc($kitReserved);
 $reservedKitID = $row_kitReserved['KitID'];
@@ -89,9 +89,9 @@ $totalRows_kitReserved = mysql_num_rows($kitReserved);
 
 //make an array of currently checked out and reserved items
 $item = array();
-mysql_data_seek($kitReserved,0);
+if ($totalRows_kitReserved > 0) { mysql_data_seek($kitReserved,0); }
 while ($loopReserved = mysql_fetch_assoc($kitReserved)) {
-  array_push($item, $loopReserved);
+  $item[$loopReserved['CheckedID']] = $loopReserved;
 }
 
 //debug array of checked out and reserved items
@@ -104,101 +104,105 @@ $day = date("D",strtotime($theDate));
 $day = array($day);
 $date = date("Y-m-d",strtotime($theDate));
 $date = array($date);
-for ($i =1; $i <7; $i++){
-  array_push($day, date("D",strtotime($theDate."+ $i days")));
-  array_push($date, date("Y-m-d",strtotime($theDate."+ $i days")));
+for ($i =1; $i < 7; $i++){
+  array_push($day, date("D",strtotime($theDate." + $i days")));
+  array_push($date, date("Y-m-d",strtotime($theDate." + $i days")));
 }
-
 ?>
 <div id="table">
+  		<?php
+      if (strtotime($theDate) > strtotime($thisDate)) {
+        $prevDate = date("Y-m-d",strtotime($theDate."- 1 days"));
+        echo "<a class='arrows active l' href='index.php?date1=$prevDate'><< Previous</a>";
+      } else { echo "<span class='arrows l'><< Previous</span>"; }
+      ?>
+  		<?php
+      if (strtotime($theDate) < strtotime($thisRange)) {
+        $nextDate = date("Y-m-d",strtotime($theDate."+ 1 days"));
+        echo "<a class='arrows active r' href='index.php?date1=$nextDate'>Next >></a>";
+      } else { echo "<span class='arrows r'>Next >></span>"; }
+      ?>
 <table width="735" border="0" cellpadding="0" cellspacing="0">
   <tr>
     <td class="box">Items</td>
-    <?php
-    for ($i=0; $i<7; $i++){ 
-      echo "<td class='box'>".$day[$i]." ".date("n/j",strtotime($date[$i]))."</td>";
-    }
-    echo "</tr>\n";
-
-    //get items from
+    <?php for ($i=0; $i<7; $i++){ echo "<td class='box'>".$day[$i]." ".date("n/j",strtotime($date[$i]))."</td>\n"; } ?>
+  </tr>
+	<?
+  //get item names
 	mysql_data_seek($kitNames,0);
 	while($kitName = mysql_fetch_array( $kitNames )) {
 		echo "<tr>\n";
-	  	echo "<td class='box'>".$kitName['KitName']."</td>\n";
-	  	$currKitID = $kitName['KitID'];
+		echo "  <td class='box'>".$kitName['KitName']."</td>\n";
+		$currKitID = $kitName['KitID'];
+		
+		//make array of reserved dates per kit id
+		$kits = array();
+		if ($totalRows_kitReserved > 0) { mysql_data_seek($kitReserved,0); }
+		while ($loopRes = mysql_fetch_assoc($kitReserved)) {
+      if (array_key_exists($loopRes['KitID'], $kits)) {
+        array_push($kits[$loopRes['KitID']], $loopRes['ReserveDate']);
+			} else {
+        $kits[$loopRes['KitID']] = array($loopRes['ReserveDate']);
+			}
+		}
 
-	  	for ($i=0; $i<7; $i++){
-	  		//day0 (selected day)
-	  		$kits = array();
-			mysql_data_seek($kitReserved,0);
-		  	while ($loopRes = mysql_fetch_assoc($kitReserved)) {
-		      array_push($kits, $loopRes['KitID']);
-		    }
-			if (in_array($currKitID,$kits)) {
-				$r = array_keys($kits,$currKitID);
-				//$r = array_keys($item,$currKitID);
-				$r = $r[0];
-				//print_r($r);
-				$itemRdate = $item[$r]['ReserveDate'];
-				$itemCdate = $item[$r]['ExpectedDateIn'];
-				$itemOdate = $item[$r]['DateOut'];
-				$d1 = strtotime($itemOdate);
-				$d2 = strtotime($itemCdate);
-				$dayDiff = floor(($d2-$d1)/86400);
-				$hrs = " ".$dueHours;
-				
-				if ($day[$i] == $dayClosed1 || $day[$i] == $dayClosed2) {
-					echo "<td class='box closed'>&nbsp;";
-					//echo "<strong>*CLOSED*</strong>";
-					echo "</td>\n";
-				} elseif ($itemRdate == $date[$i] || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 1 days"))
-				 || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 2 days"))) {
+		//make array of checked dates per kit id
+		$checked = array();
+		if ($totalRows_kitReserved > 0) { mysql_data_seek($kitReserved,0); }
+		while ($loopCheck = mysql_fetch_assoc($kitReserved)) {
+      if ($loopCheck['ReserveDate'] == null || $loopCheck['ReserveDate'] == '') {
+        $checked[$loopCheck['KitID']] = array(substr($loopCheck['DateOut'],0,10),substr($loopCheck['ExpectedDateIn'],0,10));
+			}
+		}
+
+    //each day (selected day)
+		for ($i=0; $i<7; $i++){
+			if ($day[$i] == $dayClosed1 || $day[$i] == $dayClosed2) {
+        echo "<td class='box closed'>&nbsp;</td>\n";
+ 			} elseif (in_array($currKitID,$repair)) {
+					echo "<td class='box repairs'>&nbsp;</td>\n";
+			} elseif (array_key_exists($currKitID,$kits)) {
+				if (in_array($date[$i], $kits[$currKitID]) || in_array(date("Y-m-d",strtotime($date[$i]."- 1 days")), $kits[$currKitID]) || in_array(date("Y-m-d",strtotime($date[$i]."- 2 days")), $kits[$currKitID]))
+				{
 					echo "<td class='box reserved'>&nbsp;";
 					//echo "<font color='red'>*reserved*</font>";
 					echo "</td>\n";
-				} elseif ($itemRdate == date("Y-m-d",strtotime($date[$i]."- 4 days"))
-				 || $itemRdate == date("Y-m-d",strtotime($date[$i]."- 3 days"))){
-					if (date("D",strtotime($date[$i]."- 3 days")) == $dayClosed1
-					 || date("D",strtotime($date[$i]."- 1 days")) == date("D",strtotime($itemCdate))
-					  || date("D",strtotime($date[$i]."- 2 days")) == date("D",strtotime($itemCdate))){
-						echo "<td class='box open'>";
-						echo "<a class='link' href='reserve.php?KitID=$currKitID&StudentID=$sid&date=$date[$i]'></a>";
+				} 
+				elseif (in_array(date("Y-m-d",strtotime($date[$i]."- 4 days")), $kits[$currKitID]) || in_array(date("Y-m-d",strtotime($date[$i]."- 3 days")), $kits[$currKitID]))
+				{
+          if (date("D",strtotime($date[$i]."- 1 days")) == $dayClosed1 || date("D",strtotime($date[$i]."- 1 days")) == $dayClosed2)
+				  {
+						echo "<td class='box reserved'>&nbsp;";
+						//echo "<font color='red'>UserID</font>";
 						echo "</td>\n";
 					} else {
-						echo "<td class='box reserved'>&nbsp;";
-						//echo "<font color='red'>*reserved*</font>";
-						echo "</td>\n";
+						echo "<td class='box open'>";
+						echo "<a class='link' href='reserve.php?KitID=$currKitID&StudentID=$sid&date=$date[$i]'></a></td>\n";
 					}
-				} elseif (empty($itemRdate)) {
+				}
+				elseif (isset($checked))
+				{
+  				$d1 = strtotime($checked[$currKitID][0]);
+  				$d2 = strtotime($checked[$currKitID][1]);
 					if (strtotime($date[$i]) >= $d1 && strtotime($date[$i]) <= $d2) {
 						echo "<td class='box checked'>&nbsp;";
-						//echo "<font color='yellow'>*checked*</font>";
+						//echo "<font color='yellow'>UserID</font>";
 						echo "</td>\n";
 					} else {
 						echo "<td class='box open'>";
-						echo "<a class='link' href='reserve.php?KitID=$currKitID&StudentID=$sid&date=$date[$i]'></a>";
-						echo "</td>\n";
+						echo "<a class='link' href='reserve.php?KitID=$currKitID&StudentID=$sid&date=$date[$i]'></a></td>\n";
 					}
 				} else {
 					echo "<td class='box open'>";
-					echo "<a class='link' href='reserve.php?KitID=$currKitID&StudentID=$sid&date=$date[$i]'></a>";
-					echo "</td>\n";
+					echo "<a class='link' href='reserve.php?KitID=$currKitID&StudentID=$sid&date=$date[$i]'></a></td>\n";
 				}
 			} else {
-				if ($day[$i] == $dayClosed1 || $day[$i] == $dayClosed2 || in_array($currKitID,$repair)) {
-					echo "<td class='box closed'>&nbsp;";
-					//echo "<strong>*CLOSED*</strong>";
-					echo "</td>\n";
-				} else {
-					echo "<td class='box open'>";
-					echo "<a class='link' href='reserve.php?KitID=$currKitID&StudentID=$sid&date=$date[$i]'></a>";
-					echo "</td>\n";
-				}
+        echo "<td class='box open'>";
+				echo "<a class='link' href='reserve.php?KitID=$currKitID&StudentID=$sid&date=$date[$i]'></a></td>\n";
 			}
-  		}
-		?>
-    </tr>
-    <?php } ?>
+		} ?>
+  </tr>
+  <?php } ?>
 </table>
 </div>
 <?
