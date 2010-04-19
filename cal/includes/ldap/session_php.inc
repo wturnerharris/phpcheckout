@@ -29,7 +29,7 @@ if (!isset($auth["session_php"]["session_expire_time"]))
 }
 
 session_set_cookie_params($auth["session_php"]["session_expire_time"],$cookie_path);
-session_name("EquipmentCheckout");
+session_name("EquipmentReservation");
 session_start();
 
 /*

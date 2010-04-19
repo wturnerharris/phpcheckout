@@ -1,9 +1,9 @@
-<?php 
+<?php
 require_once('config.php');
 include('includes/heading.html'); 
 
 mysql_select_db($database_equip, $equip);
-$query_Recordset1 = "SELECT * FROM checkedout  LEFT JOIN students ON students.StudentID = checkedout.StudentID LEFT JOIN kit ON kit.ID = checkedout.KitID WHERE DateIn = '' ORDER BY checkedout.ExpectedDateIn";
+$query_Recordset1 = "SELECT * FROM checkedout LEFT JOIN students ON students.StudentID = checkedout.StudentID LEFT JOIN kit ON kit.ID = checkedout.KitID WHERE DateIn = '' AND DateOut <= UTC_TIMESTAMP() ORDER BY checkedout.ExpectedDateIn";
 $Recordset1 = mysql_query($query_Recordset1, $equip) or die(mysql_error());
 $row_Recordset1 = mysql_fetch_assoc($Recordset1);
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
@@ -21,7 +21,7 @@ do { ?>
 <?
 $StudentID = $row_Recordset1['StudentID'];
 mysql_select_db($database_kit, $equip);
-$query_Recordset4 = sprintf("SELECT kit.ID AS KitID, checkedout.ID AS CheckOutID, kit.Name, checkedout.DateOut, checkedout.ExpectedDateIn FROM checkedout INNER JOIN kit ON kit.ID = checkedout.KitID WHERE checkedout.DateIn = '' AND StudentID = \"$StudentID\"");
+$query_Recordset4 = sprintf("SELECT kit.ID AS KitID, checkedout.ID AS CheckOutID, kit.Name, checkedout.DateOut, checkedout.ExpectedDateIn FROM checkedout INNER JOIN kit ON kit.ID = checkedout.KitID WHERE checkedout.DateIn = '' AND DateOut <= UTC_TIMESTAMP() AND StudentID = \"$StudentID\"");
 //echo $query_Recordset4 ;
 $Recordset4 = mysql_query($query_Recordset4, $equip) or die(mysql_error());
 $row_Recordset4 = mysql_fetch_assoc($Recordset4);

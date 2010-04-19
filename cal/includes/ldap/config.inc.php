@@ -84,9 +84,9 @@ $ldap_base_dn = "cn=users,dc=artserverx,dc=arts,dc=ccny,dc=cuny,dc=edu";
 $ldap_user_attrib = "uid";
 
 //testing group
-$group_filter = true;
-$groupdn = "cn=checkout,cn=groups,dc=artserverx,dc=arts,dc=ccny,dc=cuny,dc=edu";
-$group_attr = "memberUid";
+//$group_filter = true;
+//$groupdn = "cn=checkout,cn=groups,dc=artserverx,dc=arts,dc=ccny,dc=cuny,dc=edu";
+//$group_attr = "memberUid";
 
 // If you need to search the directory to find the user's DN to bind
 // with, set the following to the attribute that holds the user's

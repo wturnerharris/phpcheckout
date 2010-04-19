@@ -1,13 +1,13 @@
-<?php 
+<?php
 //start the session
-session_name("EquipmentCheckout");
+session_name("EquipmentReservation");
 session_start();
 $Username = $_SESSION['user'];
 $sessionAuth = $_SESSION['auth'];
 $sid = $_SESSION['sid'];
 
 //check to make sure the session variable is registered
-if(session_is_registered($Username) && $sessionAuth =="true"){
+if(session_is_registered($Username) && $sessionAuth == true){
 
 //the session variable is registered, the user is allowed to see anything that follows
 $MetaRefresh = "<meta http-equiv=\"refresh\" content=\"600;URL=\"index.php\">";

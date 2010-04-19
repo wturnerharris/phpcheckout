@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once('config.php'); 
 
 if ($ldap_enabled) {
@@ -36,7 +36,7 @@ if (isset($Username)) {
 			session_register($Username);
 			// this sets variables in the session
 			$_SESSION['user'] = $Username;
-			$_SESSION['auth'] = 'true';
+			$_SESSION['auth'] = true;
 			$_SESSION['time'] = time();
 			mysql_free_result($Recordset1);
 			echo "<meta http-equiv=\"refresh\" content=\"0;URL=index.php\">";
