@@ -2,20 +2,20 @@
 require_once('../equipment/config.php');
 
 function show_login() {
-//SHOW LOGIN FORM
-global $root;
-echo "<div style='margin-left: auto; margin-right: auto; text-align: left; width: 300px;'>";
-echo "<p><strong>Enter your user name and password to login.</strong></p>";
-echo "<form name='form' action='$PHP_SELF' method='post'>";
-echo "<p>Email: <input style='margin-left: 30px;' name='Username' type='text' id='Username'></p>";
-echo "<p>StudentID: <input style='margin-left:4px;' name='Password' type='password' id='Password'></p>";
-echo "<p><input type='submit' name='Submit' value='Login'></p>";
-echo "</form></div>";
-include('includes/footer.html'); 
+	//SHOW LOGIN FORM
+	global $root;
+	
+	echo "<div style='margin-left: auto; margin-right: auto; text-align: left; width: 300px;'>";
+	echo "<p><strong>Enter your user name and password to login.</strong></p>";
+	echo "<form name='form' action='$PHP_SELF' method='post'>";
+	echo "<p>Email: <input style='margin-left: 30px;' name='Username' type='text' id='Username'></p>";
+	echo "<p>StudentID: <input style='margin-left:4px;' name='Password' type='password' id='Password'></p>";
+	echo "<p><input type='submit' name='Submit' value='Login'></p>";
+	echo "</form></div>";
+	include('includes/footer.html'); 
 }
 
-$ldap_enabled = false;
-if ($ldap_enabled) {
+if ($ldap_cal) {
 	include('includes/ldap/defaultincludes.inc'); 
 	include('includes/heading2.html'); 
 	printLoginForm($TargetURL);
