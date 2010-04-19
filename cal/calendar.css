@@ -12,7 +12,7 @@ input, select, textarea {
 #calendar-header .closeme { padding: 0px 3px 2px 0px; }
 
 #calendar-body { padding-bottom: 2px; background-color: #6699CC; margin: auto; width: 100%; }
-#calendar-body .general { background-color: #FFFFFF; padding: 3px}
+#calendar-body .general { background-color: #FFFFFF; padding: 5px}
 #calendar-body .othermonth { background-color: #EEEEEE; color: #AAAAAA; padding: 5px}
 #calendar-body .header { background-color: #6699CC; color: #FFFFFF; padding: 2px 0 3px 0; }
 #calendar-body .today { background-color: #FFFFCC; }
