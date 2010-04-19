@@ -51,7 +51,7 @@ echo '<hr />';
  } while ($row_Recordset1 = mysql_fetch_assoc($Recordset1)); 
  } else {
  
-echo "<center><strong><h1>All Equipment Checked In</h1></strong></center><p>";
+echo "<center><strong><h1>No Reservations</h1></strong></center><p>";
  }
 
 mysql_free_result($Recordset1);
