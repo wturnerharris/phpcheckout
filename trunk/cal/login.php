@@ -47,13 +47,13 @@ if (isset($Username)) {
 	
 		if ($row_Recordset1['StudentID'] == $Password) { 
 			//name & start the session then register a variable
-			session_name("EquipmentCheckout");
+			session_name("EquipmentReservation");
 			session_start();
 			session_register($Username);
 			// this sets variables in the session
 			$_SESSION['user'] = $Username;
 			$_SESSION['sid'] = $Password;
-			$_SESSION['auth'] = 'true';
+			$_SESSION['auth'] = true;
 			$_SESSION['time'] = time();
 			mysql_free_result($Recordset1);
 			echo "<meta http-equiv=\"refresh\" content=\"0;URL=index.php\">";

@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once('config.php'); 
 
 $KitID = $_REQUEST['KitID'];
@@ -349,6 +349,38 @@ $ServerCheckHours = 0;
 	//date formate for sql 0000-00-00 00:00:00
 	$returndateSQL = $Year."-".$Month."-".$Day." ".$dueHours;
 
+	//if reserved, send back to main
+	mysql_select_db($database_equip, $equip);
+	$r_check = sprintf("SELECT * FROM checkedout WHERE ReserveDate >= CURDATE() AND KitID = '$KitID'");
+	$res = mysql_query($r_check, $equip) or die(mysql_error());
+	//$row_res = mysql_fetch_assoc($res);
+	$totalRows_res = mysql_num_rows($res);
+	$rtndate = substr($returndateSQL,0,10);
+	$rtndate2 = date('Y-m-d',strtotime($rtndate.'-1 day'));
+	$today = date('Y-m-d',strtotime($theDate));
+	$tomorrow = date('Y-m-d',strtotime($theDate.'+1 day'));
+	//echo $rtndate;
+	if ($totalRows_res > 0) {
+		$reserved_array = array();
+		mysql_data_seek($res,0);
+		while ($loopReserved = mysql_fetch_assoc($res)) {
+	  		array_push($reserved_array, $loopReserved['ReserveDate']);
+		}
+		//print_r($reserved_array);
+		if (in_array($rtndate2, $reserved_array)){
+			echo "<meta http-equiv='refresh' content='3;URL=studentinfo.php?StudentID=$StudentID'>";
+			echo "<div id='overlay'></div>";
+			echo "<div id='alert' class='alert' style='visibility: visible;'>It looks like someone reserved this.<br/>Please check this in.<br/><br/>";
+			echo "Returning to Student Info.</div>";
+		} elseif (in_array($rtndate, $reserved_array)){
+			echo "<div id='overlay'></div>";
+			echo "<div id='alert' class='alert' style='visibility: visible;'>It looks like someone reserved this.<br/>You can check out only for one day.<br/>This must be returned tomorrow!<br/><br/></div>";
+			$returndateSQL = date('Y-m-d H:i:s',strtotime($returndateSQL.'-1 day'));
+			echo "<script type='text/javascript'>";
+			echo "setTimeout('hide();',1500);";
+			echo "</script>"; 
+		}
+	}
 ?>
 <span id="newDay"><? echo date("D", strtotime($returndateSQL));?></span>, <span id="newMonth"><? echo date("F", strtotime($returndateSQL));?></span> <span id="newDate"><? echo date("d", strtotime($returndateSQL));?></span>, BEFORE <? echo date("g:i a", strtotime($returndateSQL));?></div></div>
 <div id="options">

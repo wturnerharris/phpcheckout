@@ -99,7 +99,7 @@ if (isset($_REQUEST['StudentID'])) {
   $colname_Recordset4 = (get_magic_quotes_gpc()) ? $_REQUEST['StudentID'] : addslashes($_REQUEST['StudentID']);
 }
 mysql_select_db($database_kit, $equip);
-$query_Recordset4 = sprintf("SELECT kit.ID AS KitID, checkedout.ID AS CheckOutID, kit.Name, checkedout.DateOut, checkedout.ExpectedDateIn FROM checkedout INNER JOIN kit ON kit.ID = checkedout.KitID WHERE checkedout.DateIn = '' AND StudentID = \"$StudentID\"");
+$query_Recordset4 = sprintf("SELECT kit.ID AS KitID, checkedout.ID AS CheckOutID, kit.Name, checkedout.DateOut, checkedout.ExpectedDateIn FROM checkedout INNER JOIN kit ON kit.ID = checkedout.KitID WHERE checkedout.DateIn = '' AND DateOut <= UTC_TIMESTAMP() AND StudentID = \"$StudentID\"");
 //echo $query_Recordset4 ;
 $Recordset4 = mysql_query($query_Recordset4, $equip) or die(mysql_error());
 $row_Recordset4 = mysql_fetch_assoc($Recordset4);
@@ -301,27 +301,72 @@ $Recordset5 = mysql_query($query_Recordset5, $equip) or die(mysql_error());
 $row_Recordset5 = mysql_fetch_assoc($Recordset5);
 $totalRows_Recordset5 = mysql_num_rows($Recordset5);
 
-do { 
+do {
 	if($previousID != $row_Recordset3['KitID']){
 ?>
 
 <tr>
-<td><?php if ($row_Recordset5['ExpectedDateIn'] != '') { echo $row_Recordset3['Name']; ?> </td> 
-	<? } else { 
-	if ($row_Recordset3['Repair'] !=1) { ?>
-		<a href="checkout.php?KitID=<?php echo $row_Recordset3['KitID']; ?>&ContractRequired=<?php echo $row_Recordset3['ContractRequired']; ?>&StudentID=<?php echo $row_Recordset1['StudentID']; ?>"><?php echo $row_Recordset3['Name']; ?></a></td>
-	<? } else { echo $row_Recordset3['Name']; }} ?>
-	<?php if ($row_Recordset3['Repair'] !=1) { ?>
-	<td><?php if($row_Recordset5['DateOut'] !=''){ ?> <strong class="alert"> <?php
-					echo date("D, F j, g:i a", strtotime($row_Recordset5['DateOut'])); ?> </strong> <?php
-					} else { echo 'Available'; } ?></td>
-    <td><?php if($row_Recordset5['ExpectedDateIn'] !=''){ ?> <strong class="alert"> <?php
-					echo date("D, F j, g:i a", strtotime($row_Recordset5['ExpectedDateIn'])); ?> </strong> <?php
-					} else { echo 'Available'; } ?></td>
-		<?php } else { ?> <td><strong>Out for Repairs</strong></td><td><strong>Out for Repairs</strong></td> <?php ;} ?>
-  </tr>
+  <td>
+  <?php
+  //reserved
+  if ($row_Recordset5['ReserveDate'] != '') {
+    if ($row_Recordset5['StudentID'] == $StudentID) {
+		?>
+		<ul class="nav">
+		<li><strong><?php echo $row_Recordset3['Name']; ?></strong>
+			<ul>
+  			<li><a href="renew.php?CheckedOutID=<?php echo $row_Recordset5['ID']; ?>&KitID=<?php echo $row_Recordset3['KitID']; ?>&StudentID=<?php echo $StudentID; ?>" title="Check Out">Check Out</a></li>
+  			<li><a href="renew.php?CheckedOutID=<?php echo $row_Recordset5['ID']; ?>&KitID=<?php echo $row_Recordset3['KitID']; ?>&StudentID=<?php echo $StudentID; ?>" title="Cancel Reservation">Cancel</a></li>
+			</ul>
+		</li>
+		</ul>
+  </td>
+	  <? echo "<td>Reserved</td>\n<td>Reserved</td\n";
+ 		} else {
+      echo $row_Recordset3['Name']."</td>\n<td>Reserved</td>\n<td>Reserved</td\n";
+    }
+  //unavailable
+  } else {
+    if ($row_Recordset5['ExpectedDateIn'] != '') {
+    echo $row_Recordset3['Name']."</td>\n";
+  //available
+	} else {
+    if ($row_Recordset3['Repair'] !=1) { ?>
+			 <a href="checkout.php?KitID=<?php echo $row_Recordset3['KitID']; ?>&ContractRequired=<?php echo $row_Recordset3['ContractRequired']; ?>&StudentID=<?php echo $StudentID; ?>">
+			 <?php echo $row_Recordset3['Name']."</a></td>\n";
+		} else {
+      //has repair
+    	echo $row_Recordset3['Name'];
+		}
+	}
+	if ($row_Recordset3['Repair'] !=1) {
+    echo "<td>\n";
+    //unavailable status
+		if($row_Recordset5['DateOut'] !=''){
+      echo "<span class=\"alert\">".date("D, F j, g:i a", strtotime($row_Recordset5['DateOut']))."</span>";
+		} else {
+      //available status
+      echo "<strong>Available</strong>"; 
+		} ?>
+	</td>
+	<td>
+	  <?php
+	  //unavailable status
+		if($row_Recordset5['ExpectedDateIn'] !=''){
+      echo "<span class=\"alert\">".date("D, F j, g:i a", strtotime($row_Recordset5['ExpectedDateIn']))."</span>";
+		} else {
+      //available status
+      echo "<strong>Available</strong>"; } 
+		?>
+	</td>
+		<?php } else {
+      //has repair
+		?>
+		<td><strong>Out for Repairs</strong></td><td><strong>Out for Repairs</strong></td>
+		<?php } ?>
+ </tr>
 <?php 
-}
+}}
 $previousID = $row_Recordset3['KitID'];
 } while ($row_Recordset5 = mysql_fetch_assoc($Recordset5)); ?>
 

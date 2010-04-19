@@ -3,6 +3,8 @@ require_once('classes/tc_calendar.php');
 require_once('../equipment/config.php');
 include('includes/heading.html'); 
 
+if ($ldap_enabled) { $sid=$Username; }
+
 $class = $_REQUEST['class'];
 $theDate = isset($_REQUEST["date1"]) ? $_REQUEST["date1"] : "";
 ?>

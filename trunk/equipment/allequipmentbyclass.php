@@ -1,4 +1,4 @@
-<?php 
+<?php
 require_once('config.php');
 include('includes/heading.html'); 
 
@@ -26,7 +26,7 @@ $row_Recordset1 = mysql_fetch_assoc($Recordset1);
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
 
 mysql_select_db($database_equip, $equip);
-$query_Recordset2 = sprintf("SELECT * FROM checkedout WHERE DateIn = ''");
+$query_Recordset2 = sprintf("SELECT * FROM checkedout WHERE DateIn = '' AND DateOut <= UTC_TIMESTAMP()");
 $Recordset2 = mysql_query($query_Recordset2, $equip) or die(mysql_error());
 $row_Recordset2 = mysql_fetch_assoc($Recordset2);
 $totalRows_Recordset2 = mysql_num_rows($Recordset2);
@@ -116,7 +116,7 @@ $AccessoryFirstTime = 0;
 	<?php	
 	// SHOWS AVAILABILITY WITHOUT SID SELECTED
 	mysql_select_db($database_kit, $equip);
-	$query_Recordset5 = "SELECT * FROM checkedout WHERE KitID = $currentID AND DateIn = ''";
+	$query_Recordset5 = "SELECT * FROM checkedout WHERE KitID = $currentID AND DateIn = '' AND DateOut <= UTC_TIMESTAMP()";
 	$Recordset5 = mysql_query($query_Recordset5, $equip) or die(mysql_error());
 	$row_Recordset5 = mysql_fetch_assoc($Recordset5);
 	$totalRows_Recordset5 = mysql_num_rows($Recordset5);
@@ -134,7 +134,7 @@ $AccessoryFirstTime = 0;
 <?	}	}	} else {
 	// SHOWS AVAILABILITY WITH SID SELECTED
 	mysql_select_db($database_kit, $equip);
-	$query_Recordset5 = "SELECT * FROM checkedout WHERE KitID = $currentID AND DateIn = ''";
+	$query_Recordset5 = "SELECT * FROM checkedout WHERE KitID = $currentID AND DateIn = '' AND DateOut <= UTC_TIMESTAMP()";
 	$Recordset5 = mysql_query($query_Recordset5, $equip) or die(mysql_error());
 	$row_Recordset5 = mysql_fetch_assoc($Recordset5);
 	$totalRows_Recordset5 = mysql_num_rows($Recordset5);

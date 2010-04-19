@@ -1,4 +1,4 @@
-<?php 
+<?php
 //start the session
 session_name("EquipmentCheckout");
 session_start();
@@ -6,7 +6,7 @@ $Username = $_SESSION['user'];
 $auth = $_SESSION['auth'];
 
 //check to make sure the session variable is registered
-if(session_is_registered($Username) && ($auth =="true")){
+if(session_is_registered($Username) && ($auth == true)){
 
 //the session variable is registered, the user is allowed to see anything that follows
 $MetaRefresh = "<meta http-equiv=\"refresh\" content=\"600;URL=".$root."/index.php\">";
@@ -36,7 +36,7 @@ if ($echo == "login" || $echo == "fines" || $echo == "studentinfo") { ?>
 <?php } else { ?>
 <body>
 <?php } 
-// Print_r ($_SESSION);
+//Print_r ($_SESSION);
 ?>
 
 <div id="logout"><a class="logout" href="<?php echo $root; ?>/logout.php"><img src="<?php echo $root; ?>/images/logout_icon.png">&nbsp;<strong>Logout</strong></a></div>
