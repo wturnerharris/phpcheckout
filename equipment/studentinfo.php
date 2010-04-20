@@ -321,9 +321,9 @@ do {
 		</li>
 		</ul>
   </td>
-	  <? echo "<td>Reserved</td>\n<td>Reserved</td\n";
+	  <? echo "<td><strong style='color: blue;'>Reserved</strong></td>\n<td><strong style='color: blue;'>Reserved</strong></td>\n";
  		} else {
-      echo $row_Recordset3['Name']."</td>\n<td>Reserved</td>\n<td>Reserved</td\n";
+      echo $row_Recordset3['Name']."</td>\n<td><strong style='color: blue;'>Reserved</strong></td>\n<td><strong style='color: blue;'>Reserved</strong></td>\n";
     }
   //unavailable
   } else {
