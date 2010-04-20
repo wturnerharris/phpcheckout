@@ -21,7 +21,7 @@ if (isset($renew)) {
 
 include('includes/heading.html');
 
-$renewal = "UPDATE checkedout SET ExpectedDateIn='$ReturnDate', Notes='$Notes',$AccessoryAdded CheckoutUser='$Username' ReserveDate='' WHERE KitID='$KitID' AND StudentID='$StudentID'";
+$renewal = "UPDATE checkedout SET ExpectedDateIn='$ReturnDate', Notes='$Notes',$AccessoryAdded CheckoutUser='$Username', ReserveDate='' WHERE KitID='$KitID' AND StudentID='$StudentID'";
 mysql_select_db($database_equip, $equip);
 mysql_query($renewal, $equip) or die(mysql_error());
 
