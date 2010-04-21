@@ -370,14 +370,13 @@ $ServerCheckHours = 0;
 		if (in_array($rtndate2, $reserved_array)){
 			echo "<meta http-equiv='refresh' content='3;URL=studentinfo.php?StudentID=$StudentID'>";
 			echo "<div id='overlay'></div>";
-			echo "<div id='alert' class='alert' style='visibility: visible;'>It looks like someone reserved this.<br/>Please check this in.<br/><br/>";
+			echo "<div id='alert' style='visibility: visible;'>It looks like someone reserved this.<br/><br/><br/>";
 			echo "Returning to Student Info.</div>";
 		} elseif (in_array($rtndate, $reserved_array)){
-			echo "<div id='overlay'></div>";
-			echo "<div id='alert' class='alert' style='visibility: visible;'>It looks like someone reserved this.<br/>You can check out only for one day.<br/>This must be returned tomorrow!<br/><br/></div>";
+			echo "<div id='alert' style='visibility: visible;'>It looks like someone reserved this.<br/>You can check out only for one day.<br/>This must be returned tomorrow!<br/><br/></div>";
 			$returndateSQL = date('Y-m-d H:i:s',strtotime($returndateSQL.'-1 day'));
 			echo "<script type='text/javascript'>";
-			echo "setTimeout('hide();',1500);";
+			echo "setTimeout('hide();',3000);";
 			echo "</script>"; 
 		}
 	}

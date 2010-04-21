@@ -6,8 +6,8 @@
 // *******************
 
 if (empty($_REQUEST['StudentID'])) {
-?>
-<? include('includes/heading.html'); ?>  
+
+include('includes/heading.html'); ?>  
 <meta http-equiv="refresh" content="60;URL=studentid.php">
 </head>
 <body>
@@ -310,28 +310,35 @@ do {
   <?php
   //reserved
   if ($row_Recordset5['ReserveDate'] != '') {
-    if ($row_Recordset5['StudentID'] == $StudentID) {
-		?>
-		<ul class="nav">
-		<li><strong><?php echo $row_Recordset3['Name']; ?></strong>
-			<ul>
-  			<li><a href="renew.php?CheckedOutID=<?php echo $row_Recordset5['ID']; ?>&KitID=<?php echo $row_Recordset3['KitID']; ?>&StudentID=<?php echo $StudentID; ?>" title="Check Out">Check Out</a></li>
-  			<li><a href="renew.php?CheckedOutID=<?php echo $row_Recordset5['ID']; ?>&KitID=<?php echo $row_Recordset3['KitID']; ?>&StudentID=<?php echo $StudentID; ?>" title="Cancel Reservation">Cancel</a></li>
-			</ul>
-		</li>
+  	?>
+	<ul class="nav">
+	<li><strong><?php echo $row_Recordset3['Name']; ?></strong>
+		<ul>
+		<?
+    	if ($row_Recordset5['StudentID'] == $StudentID) { 
+    	?>
+ 			<li><a href="reserved.php?StudentID=<?php echo $StudentID; ?>" >Check Out</a></li>
+ 			<li><a href="cancel_res.php?CheckOutID=<?php echo $row_Recordset5['ID']; ?>&StudentID=<?php echo $StudentID; ?>" >Cancel</a></li>
 		</ul>
+	</li>
+	</ul>
   </td>
-	  <? echo "<td><strong style='color: blue;'>Reserved</strong></td>\n<td><strong style='color: blue;'>Reserved</strong></td>\n";
- 		} else {
-      echo $row_Recordset3['Name']."</td>\n<td><strong style='color: blue;'>Reserved</strong></td>\n<td><strong style='color: blue;'>Reserved</strong></td>\n";
-    }
-  //unavailable
+	  <? } else { ?>
+ 			<li><a href="checkout.php?KitID=<?php echo $row_Recordset3['KitID']; ?>&StudentID=<?php echo $StudentID; ?>" >Check Out</a></li>
+ 			<li><a href="cancel_res.php?CheckOutID=<?php echo $row_Recordset5['ID']; ?>&StudentID=<?php echo $StudentID; ?>" >Cancel</a></li>
+		</ul>
+	</li>
+	</ul>
+  </td>
+  <? }
+  echo "<td><strong style='color: blue;'>Reserved</strong></td>\n<td><strong style='color: blue;'>Reserved</strong></td>";
   } else {
+  //unavailable
     if ($row_Recordset5['ExpectedDateIn'] != '') {
     echo $row_Recordset3['Name']."</td>\n";
-  //available
 	} else {
-    if ($row_Recordset3['Repair'] !=1) { ?>
+	  	//available
+	    if ($row_Recordset3['Repair'] !=1) { ?>
 			 <a href="checkout.php?KitID=<?php echo $row_Recordset3['KitID']; ?>&ContractRequired=<?php echo $row_Recordset3['ContractRequired']; ?>&StudentID=<?php echo $StudentID; ?>">
 			 <?php echo $row_Recordset3['Name']."</a></td>\n";
 		} else {
