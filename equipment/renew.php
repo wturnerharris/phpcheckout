@@ -3,6 +3,7 @@ require_once('config.php');
 
 $renew = $_REQUEST['renew'];
 
+$CheckOutID = $_POST['CheckOutID'];
 $KitName = $_REQUEST['KitName'];
 $ReturnDate = $_POST['ReturnDate'];
 $FirstName = $_REQUEST['FirstName'];
@@ -21,7 +22,7 @@ if (isset($renew)) {
 
 include('includes/heading.html');
 
-$renewal = "UPDATE checkedout SET ExpectedDateIn='$ReturnDate', Notes='$Notes',$AccessoryAdded CheckoutUser='$Username', ReserveDate='' WHERE KitID='$KitID' AND StudentID='$StudentID'";
+$renewal = "UPDATE checkedout SET ExpectedDateIn='$ReturnDate', Notes='$Notes',$AccessoryAdded CheckoutUser='$Username', ReserveDate='' WHERE KitID='$KitID' AND StudentID='$StudentID' AND ID='$CheckOutID'";
 mysql_select_db($database_equip, $equip);
 mysql_query($renewal, $equip) or die(mysql_error());
 
@@ -391,7 +392,7 @@ $ServerCheckHours = 0;
 
 	//if reserved, send back to main
 	mysql_select_db($database_equip, $equip);
-	$r_check = sprintf("SELECT * FROM checkedout WHERE ReserveDate >= CURDATE() AND KitID = '$KitID'");
+	$r_check = sprintf("SELECT * FROM checkedout WHERE ReserveDate > CURDATE() AND KitID = '$KitID'");
 	$res = mysql_query($r_check, $equip) or die(mysql_error());
 	//$row_res = mysql_fetch_assoc($res);
 	$totalRows_res = mysql_num_rows($res);
@@ -413,11 +414,10 @@ $ServerCheckHours = 0;
 			echo "<div id='alert' class='alert' style='visibility: visible;'>It looks like someone reserved this.<br/>Please check this in.<br/><br/>";
 			echo "Returning to Student Info.</div>";
 		} elseif (in_array($rtndate, $reserved_array)){
-			echo "<div id='overlay'></div>";
-			echo "<div id='alert' class='alert' style='visibility: visible;'>It looks like someone reserved this.<br/>You can renew this only for one day.<br/>This must be returned tomorrow!<br/><br/></div>";
+			echo "<div id='alert' class='alert' style='visibility: visible;'>It looks like someone reserved this. You can renew this only for one day.<br/>This must be returned tomorrow!<br/><br/></div>";
 			$returndateSQL = date('Y-m-d H:i:s',strtotime($returndateSQL.'-1 day'));
 			echo "<script type='text/javascript'>";
-			echo "setTimeout('hide();',1500);";
+			echo "setTimeout('hide();',3000);";
 			echo "</script>"; 
 		}
 	}
@@ -488,6 +488,7 @@ do not check it off.</i>
 
 <input type="hidden" name="KitID" value="<? echo $KitID ?>">
 <input type="hidden" name="StudentID" value="<? echo $StudentID ?>">
+<input type="hidden" name="CheckOutID" value="<? echo $CheckOutID ?>">
 <P>
 <?
 if ($AccessoryName=""){
