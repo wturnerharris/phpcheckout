@@ -91,7 +91,7 @@ if (isset($Action) && ($Action == "SetName"))
   echo "<br>\n";
   //SUCCESS!!
   session_register($NewUserName);
-  $_SESSION['auth'] = 'true';
+  $_SESSION['auth'] = true;
   $_SESSION['time'] = time();
   /* Redirect browser to initial page */
   echo "<meta http-equiv=\"refresh\" content=\"0;URL=index.php\">";

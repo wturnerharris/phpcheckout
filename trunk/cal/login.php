@@ -8,10 +8,11 @@ function show_login() {
 	echo "<div style='margin-left: auto; margin-right: auto; text-align: left; width: 300px;'>";
 	echo "<p><strong>Enter your user name and password to login.</strong></p>";
 	echo "<form name='form' action='$PHP_SELF' method='post'>";
-	echo "<p>Email: <input style='margin-left: 30px;' name='Username' type='text' id='Username'></p>";
-	echo "<p>StudentID: <input style='margin-left:4px;' name='Password' type='password' id='Password'></p>";
+	echo "<p>Username: <input style='margin-left: 5px;' name='Username' type='text' id='Username'></p>";
+	echo "<p>StudentID: <input style='margin-left: 6.5px;' name='Password' type='password' id='Password'></p>";
 	echo "<p><input type='submit' name='Submit' value='Login'></p>";
 	echo "</form></div>";
+	
 	include('includes/footer.html'); 
 }
 
@@ -40,7 +41,7 @@ if (isset($Username)) {
 	} else {
 
 		mysql_select_db($database_equip, $equip);
-		$query_Recordset1 = sprintf("SELECT * FROM students WHERE Email = '$Username'");
+		$query_Recordset1 = sprintf("SELECT * FROM students WHERE UID = '$Username'");
 		$Recordset1 = mysql_query($query_Recordset1, $equip) or die(mysql_error());
 		$row_Recordset1 = mysql_fetch_assoc($Recordset1);
 		$totalRows_Recordset1 = mysql_num_rows($Recordset1);
@@ -61,7 +62,6 @@ if (isset($Username)) {
 			include('includes/heading2.html');
 			echo "<p class='alert' align='center'>Wrong Email Address or Student ID</p>";
 			show_login();
-			mysql_free_result($Recordset1);
 		} 
 	}
 } else {
@@ -70,4 +70,3 @@ if (isset($Username)) {
 	} 
 } 
 ?>
-
