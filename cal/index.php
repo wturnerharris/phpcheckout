@@ -3,11 +3,19 @@ require_once('classes/tc_calendar.php');
 require_once('../equipment/config.php');
 include('includes/heading.html'); 
 
-if ($ldap_cal) { $sid=$Username; }
+if ($ldap_cal) { 
+	mysql_select_db($database_equip, $equip);
+	$query_Recordset1 = sprintf("SELECT * FROM students WHERE UID = '$Username'");
+	$Recordset1 = mysql_query($query_Recordset1, $equip) or die(mysql_error());
+	$row_Recordset1 = mysql_fetch_assoc($Recordset1);
+	//$totalRows_Recordset1 = mysql_num_rows($Recordset1);
+	$sid=$row_Recordset1['StudentID']; 
+}
 
 $class = $_REQUEST['class'];
 $theDate = isset($_REQUEST["date1"]) ? $_REQUEST["date1"] : "";
 ?>
+<div id="top_content">
 	<div id="cal">
     <form name="form1" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
       <p class="largetxt"><b>Select Date: </b></p>
@@ -67,6 +75,8 @@ $theDate = isset($_REQUEST["date1"]) ? $_REQUEST["date1"] : "";
 		<input type="hidden" name="date1" value="<?php echo $theDate; ?>">
   	</form>
 	</div>
+	<div id="legend"><div id="smBox" class="closed" >Closed</div><div id="smBox" class="open" >Open</div><div id="smBox" class="reserved" >Reserved</div><div id="smBox" class="checked" >Checked</div><div id="smBox" class="repairs" >Repairs</div></div>
+</div>
 <?php
 // get item names based on selected class
 mysql_select_db($database_equip, $equip);
@@ -97,9 +107,22 @@ while ($loopReserved = mysql_fetch_assoc($kitReserved)) {
 }
 
 //debug array of checked out and reserved items
-//echo "<pre>";
+echo "<div id='arrows'>";
 //print_r($item);
-//echo "</pre>";
+if (strtotime($theDate) > strtotime($thisDate)) {
+  $prevDate = date("Y-m-d",strtotime($theDate."- 1 days"));
+  echo "<a class='active l' href='index.php?date1=$prevDate'><< Previous</a>";
+} else { 
+	echo "<span class='l'><< Previous</span>"; 
+}
+
+if (strtotime($theDate) < strtotime($thisRange)) {
+  $nextDate = date("Y-m-d",strtotime($theDate."+ 1 days"));
+  echo "<a class='active r' href='index.php?date1=$nextDate'>Next >></a>";
+} else { 
+	echo "<span class='r'>Next >></span>"; 
+}
+echo "</div>";
 
 //get days
 $day = date("D",strtotime($theDate));
@@ -110,20 +133,9 @@ for ($i =1; $i < 7; $i++){
   array_push($day, date("D",strtotime($theDate." + $i days")));
   array_push($date, date("Y-m-d",strtotime($theDate." + $i days")));
 }
+
 ?>
 <div id="table">
-  		<?php
-      if (strtotime($theDate) > strtotime($thisDate)) {
-        $prevDate = date("Y-m-d",strtotime($theDate."- 1 days"));
-        echo "<a class='arrows active l' href='index.php?date1=$prevDate'><< Previous</a>";
-      } else { echo "<span class='arrows l'><< Previous</span>"; }
-      ?>
-  		<?php
-      if (strtotime($theDate) < strtotime($thisRange)) {
-        $nextDate = date("Y-m-d",strtotime($theDate."+ 1 days"));
-        echo "<a class='arrows active r' href='index.php?date1=$nextDate'>Next >></a>";
-      } else { echo "<span class='arrows r'>Next >></span>"; }
-      ?>
 <table width="735" border="0" cellpadding="0" cellspacing="0">
   <tr>
     <td class="box">Items</td>
