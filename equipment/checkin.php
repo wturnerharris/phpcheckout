@@ -4,10 +4,10 @@ include('includes/heading.html');
 
 $KitID = $_REQUEST['KitID'];
 $StudentID = $_REQUEST['StudentID'];
-$CheckedOutID = $_REQUEST['CheckedOutID'];
+$CheckOutID = $_REQUEST['CheckOutID'];
 
 mysql_select_db($database_equip, $equip);
-$query_Recordset1 = sprintf("SELECT checkedout.Notes AS CheckedOutNotes, checkedout.ExpectedDateIn, checkedout.Accessories, kit.Name, kit.SerialNumber, kit.ModelNumber FROM checkedout JOIN kit ON kit.ID = checkedout.KitID WHERE checkedout.ID = $CheckedOutID");
+$query_Recordset1 = sprintf("SELECT checkedout.Notes AS CheckedOutNotes, checkedout.ExpectedDateIn, checkedout.Accessories, kit.Name, kit.SerialNumber, kit.ModelNumber FROM checkedout JOIN kit ON kit.ID = checkedout.KitID WHERE checkedout.ID = $CheckOutID");
 $Recordset1 = mysql_query($query_Recordset1, $equip) or die(mysql_error());
 $row_Recordset1 = mysql_fetch_assoc($Recordset1);
 $totalRows_Recordset1 = mysql_num_rows($Recordset1);
@@ -86,7 +86,7 @@ Notes:
 <p><input type="checkbox" name="Problem"> Report a Problem (this sends an email to the check-in adminstrator).<br></p>
 
 <input type="hidden" name="User" value="<? echo $Username ?>">
-<input type="hidden" name="CheckedOutID" value="<? echo $CheckedOutID ?>">
+<input type="hidden" name="CheckOutID" value="<? echo $CheckOutID ?>">
 <input type="hidden" name="KitID" value="<? echo $KitID ?>">
 <input type="hidden" name="StudentID" value="<? echo $StudentID ?>">
 <input type="hidden" name="ReturnDate" value="<? echo $returndateSQL ?>">
