@@ -112,9 +112,6 @@ echo("<b>Student must sign an individual contract for this kit.</b>");
 }
 ?>
 <script type="text/javascript">
-function hide() {
-$('alert').style.visibility = "hidden";
-}
 function changeMonth() {
 	now = new Date();
 	returnDate = $("ReturnDate").value.substr(5,2);
@@ -299,6 +296,7 @@ $ServerCheckHours = 0;
 	}
 		
 	$returndateSQL = $Year."-".$Month."-".$Day." ".$dueHours;
+	$originalDate = $returndateSQL;
 	
 	//IF NOT OPEN weekends
 	if(!$weekends) {
@@ -310,6 +308,7 @@ $ServerCheckHours = 0;
 			echo "<script type='text/javascript'>";
 			echo "setTimeout('hide();',1500);";
 			echo "</script>"; 
+			$closed = true;
 		}
 		
 		//IS LAST DAY OF MONTH?
@@ -329,6 +328,7 @@ $ServerCheckHours = 0;
 			echo "<script type='text/javascript'>";
 			echo "setTimeout('hide();',1500);";
 			echo "</script>"; 
+			$closed = true;
 		}
 		
 		//IS LAST DAY OF MONTH?
@@ -394,12 +394,12 @@ $ServerCheckHours = 0;
 	mysql_select_db($database_equip, $equip);
 	$r_check = sprintf("SELECT * FROM checkedout WHERE ReserveDate > CURDATE() AND KitID = '$KitID'");
 	$res = mysql_query($r_check, $equip) or die(mysql_error());
-	//$row_res = mysql_fetch_assoc($res);
+	$row_res = mysql_fetch_assoc($res);
 	$totalRows_res = mysql_num_rows($res);
 	$rtndate = substr($returndateSQL,0,10);
 	$rtndate2 = date('Y-m-d',strtotime($rtndate.'-1 day'));
-	$today = date('Y-m-d',strtotime($theDate));
-	$tomorrow = date('Y-m-d',strtotime($theDate.'+1 day'));
+	$today = date('Y-m-d',strtotime('now'));
+	$tomorrow = date('Y-m-d',strtotime('now +1 day'));
 	//echo $rtndate;
 	if ($totalRows_res > 0) {
 		$reserved_array = array();
@@ -408,7 +408,7 @@ $ServerCheckHours = 0;
 	  		array_push($reserved_array, $loopReserved['ReserveDate']);
 		}
 		//print_r($reserved_array);
-		if (in_array($rtndate2, $reserved_array)){
+		if (in_array($rtndate2, $reserved_array) || $closed == true){
 			echo "<meta http-equiv='refresh' content='3;URL=studentinfo.php?StudentID=$StudentID'>";
 			echo "<div id='overlay'></div>";
 			echo "<div id='alert' class='alert' style='visibility: visible;'>It looks like someone reserved this.<br/>Please check this in.<br/><br/>";
@@ -419,6 +419,10 @@ $ServerCheckHours = 0;
 			echo "<script type='text/javascript'>";
 			echo "setTimeout('hide();',3000);";
 			echo "</script>"; 
+		} elseif (strtotime($originalDate.'- 2 days') < strtotime($today)){
+			echo "<meta http-equiv='refresh' content='3;URL=studentinfo.php?StudentID=$StudentID'>";
+			echo "<div id='alert' class='alert' style='visibility: visible;'>You're trying to check out this reservation too early.<br/><br/>";
+			echo "Returning to Student Info.</div>";
 		}
 	}
 ?>

@@ -43,7 +43,7 @@ do {
 	<strong>Student Name: </strong><?php echo $row_Recordset1['FirstName']; ?> <?php echo $row_Recordset1['LastName']; ?><br>
 	<strong>Student ID: </strong><a href="studentinfo.php?StudentID=<?php echo $row_Recordset1['StudentID']; ?>"><?php echo $row_Recordset1['StudentID']; ?></a><br>
 	<strong>Email: </strong><?php echo $row_Recordset1['Email']; ?><br>
-	<strong>Check In: </strong><a href="checkin.php?CheckedOutID=<?php echo $row_Recordset4['CheckOutID']; ?>&KitID=<?php echo $row_Recordset1['KitID']; ?>&StudentID=<?php echo $row_Recordset1['StudentID']; ?>">Check In Item</a> | <a href="renew.php?CheckedOutID=<?php echo $row_Recordset4['CheckOutID']; ?>&KitID=<?php echo $row_Recordset4['KitID']; ?>&StudentID=<?php echo $row_Recordset1['StudentID']; ?>" title="Renew">Renew</a><br>
+	<strong>Check In: </strong><a href="checkin.php?CheckOutID=<?php echo $row_Recordset4['CheckOutID']; ?>&KitID=<?php echo $row_Recordset1['KitID']; ?>&StudentID=<?php echo $row_Recordset1['StudentID']; ?>">Check In Item</a> | <a href="renew.php?CheckOutID=<?php echo $row_Recordset4['CheckOutID']; ?>&KitID=<?php echo $row_Recordset4['KitID']; ?>&StudentID=<?php echo $row_Recordset1['StudentID']; ?>" title="Renew">Renew</a><br>
    
     <?php 
 echo '<strong>Date Out: </strong>'; 

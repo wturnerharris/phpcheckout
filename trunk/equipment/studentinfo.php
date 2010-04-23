@@ -125,8 +125,8 @@ $totalRows_Recordset4 = mysql_num_rows($Recordset4);
 		<ul class="nav">
 		<li><strong><?php echo $row_Recordset4['Name']; ?></strong>
 			<ul>
-			<li><a href="checkin.php?CheckedOutID=<?php echo $row_Recordset4['CheckOutID']; ?>&KitID=<?php echo $row_Recordset4['KitID']; ?>&StudentID=<?php echo $row_Recordset1['StudentID']; ?>" title="Check-in">Check-in</a></li>
-			<li><a href="renew.php?CheckedOutID=<?php echo $row_Recordset4['CheckOutID']; ?>&KitID=<?php echo $row_Recordset4['KitID']; ?>&StudentID=<?php echo $row_Recordset1['StudentID']; ?>" title="Renew">Renew</a></li>
+			<li><a href="checkin.php?CheckOutID=<?php echo $row_Recordset4['CheckOutID']; ?>&KitID=<?php echo $row_Recordset4['KitID']; ?>&StudentID=<?php echo $row_Recordset1['StudentID']; ?>" title="Check-in">Check-in</a></li>
+			<li><a href="renew.php?CheckOutID=<?php echo $row_Recordset4['CheckOutID']; ?>&KitID=<?php echo $row_Recordset4['KitID']; ?>&StudentID=<?php echo $row_Recordset1['StudentID']; ?>" title="Renew">Renew</a></li>
 			</ul>
 		</li>
 		</ul>

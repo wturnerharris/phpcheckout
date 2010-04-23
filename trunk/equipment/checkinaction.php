@@ -3,7 +3,7 @@ require_once('config.php');
 include('includes/heading.html');
 
 $CheckInUser = $_REQUEST['User'];
-$CheckedOutID = $_REQUEST['CheckedOutID'];
+$CheckOutID = $_REQUEST['CheckOutID'];
 $Notes = $_REQUEST['Notes'];
 $ModelNumber = $_REQUEST['ModelNumber'];
 $KitName = $_REQUEST['KitName'];
@@ -86,7 +86,7 @@ if (isset($BannedDate)) {
 } else {
 	$insertBan = "";
 }
-$sql = "UPDATE checkedout SET DateIn = NOW(), Problem = $Problem, Notes = '$Notes',$insertBan Strike = '$strikeGain', CheckInUser = '$CheckInUser' WHERE ID = $CheckedOutID;";
+$sql = "UPDATE checkedout SET DateIn = NOW(), Problem = $Problem, Notes = '$Notes',$insertBan Strike = '$strikeGain', CheckInUser = '$CheckInUser' WHERE ID = $CheckOutID;";
 //echo $sql;
 $Recordset1 = mysql_query($sql, $equip) or die(mysql_error());
 

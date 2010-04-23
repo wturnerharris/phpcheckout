@@ -268,7 +268,8 @@ $ServerCheckHours = 0;
 			echo ".<br />Return on next day open...</div>";
 			echo "<script type='text/javascript'>";
 			echo "setTimeout('hide();',1500);";
-			echo "</script>"; 
+			echo "</script>";
+			$closed = true;
 		}
 		
 		//IS LAST DAY OF MONTH?
@@ -288,6 +289,7 @@ $ServerCheckHours = 0;
 			echo "<script type='text/javascript'>";
 			echo "setTimeout('hide();',1500);";
 			echo "</script>"; 
+			$closed = true;
 		}
 		
 		//IS LAST DAY OF MONTH?
@@ -357,8 +359,8 @@ $ServerCheckHours = 0;
 	$totalRows_res = mysql_num_rows($res);
 	$rtndate = substr($returndateSQL,0,10);
 	$rtndate2 = date('Y-m-d',strtotime($rtndate.'-1 day'));
-	$today = date('Y-m-d',strtotime("now"));
-	$tomorrow = date('Y-m-d',strtotime("now +1 day"));
+	$today = date('Y-m-d',strtotime('now'));
+	$tomorrow = date('Y-m-d',strtotime('now +1 day'));
 	//echo $rtndate."<BR>".$rtndate2."<BR>".$today."<BR>".$tomorrow."<BR>";
 	if ($totalRows_res > 0) {
 		$reserved_array = array();
@@ -367,7 +369,7 @@ $ServerCheckHours = 0;
 	  		array_push($reserved_array, $loopReserved['ReserveDate']);
 		}
 		//print_r($reserved_array);
-		if (in_array($rtndate2, $reserved_array) || in_array($today, $reserved_array)){
+		if (in_array($rtndate2, $reserved_array) || in_array($today, $reserved_array) || $closed == true){
 			echo "<meta http-equiv='refresh' content='3;URL=studentinfo.php?StudentID=$StudentID'>";
 			echo "<div id='overlay'></div>";
 			echo "<div id='alert' style='visibility: visible;'>It looks like someone reserved this.<br/><br/><br/>";
