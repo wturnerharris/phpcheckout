@@ -357,9 +357,9 @@ $ServerCheckHours = 0;
 	$totalRows_res = mysql_num_rows($res);
 	$rtndate = substr($returndateSQL,0,10);
 	$rtndate2 = date('Y-m-d',strtotime($rtndate.'-1 day'));
-	$today = date('Y-m-d',strtotime($theDate));
-	$tomorrow = date('Y-m-d',strtotime($theDate.'+1 day'));
-	//echo $rtndate;
+	$today = date('Y-m-d',strtotime("now"));
+	$tomorrow = date('Y-m-d',strtotime("now +1 day"));
+	//echo $rtndate."<BR>".$rtndate2."<BR>".$today."<BR>".$tomorrow."<BR>";
 	if ($totalRows_res > 0) {
 		$reserved_array = array();
 		mysql_data_seek($res,0);
@@ -367,7 +367,7 @@ $ServerCheckHours = 0;
 	  		array_push($reserved_array, $loopReserved['ReserveDate']);
 		}
 		//print_r($reserved_array);
-		if (in_array($rtndate2, $reserved_array)){
+		if (in_array($rtndate2, $reserved_array) || in_array($today, $reserved_array)){
 			echo "<meta http-equiv='refresh' content='3;URL=studentinfo.php?StudentID=$StudentID'>";
 			echo "<div id='overlay'></div>";
 			echo "<div id='alert' style='visibility: visible;'>It looks like someone reserved this.<br/><br/><br/>";

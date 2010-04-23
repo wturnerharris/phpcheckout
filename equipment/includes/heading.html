@@ -31,7 +31,7 @@ $('alert').style.visibility = "hidden";
 </head>
 <?php 
 $echo = basename($_SERVER['PHP_SELF'],php);
-if ($echo == "login" || $echo == "fines" || $echo == "studentinfo") { ?>
+if ($echo == "login" || $echo == "fines" || $echo == "index") { ?>
 <body OnLoad=$('StudentID').focus();>
 <?php } else { ?>
 <body>
@@ -45,10 +45,10 @@ if ($echo == "login" || $echo == "fines" || $echo == "studentinfo") { ?>
 		<div id="header">
 			<a href="<?php echo $root; ?>/index.php"><img src="<?php echo $root; ?>/images/logo.jpg" align="center" width="308" height="127"></a>
 			<ul id="header-nav">
-				<li><a href="<?php echo $root; ?>/studentinfo.php?StudentID=<? echo $_REQUEST['StudentID'] ?>">Student Info</a></li>
-				<li><a href="<?php echo $root; ?>/allstudents.php">Student Records</a></li>
-				<li><a href="<?php echo $root; ?>/allequipmentbyclass.php?StudentID=<? echo $_REQUEST['StudentID'] ?>">List Equipment</a></li>
+				<li><a href="<?php echo $root; ?>/allequipmentbyclass.php?StudentID=<? echo $_REQUEST['StudentID'] ?>">All Equipment</a></li>
+				<li><a href="<?php echo $root; ?>/allstudents.php">Students List</a></li>
 				<li><a href="<?php echo $root; ?>/currentlycheckedout.php?StudentID=<? echo $_REQUEST['StudentID'] ?>">Checked Out</a></li>
+				<li><a href="<?php echo $root; ?>/reserved.php?StudentID=<? echo $_REQUEST['StudentID'] ?>">Reservations</a></li>
 				<li><a href="<?php echo $root; ?>/fines.php?StudentID=<?php echo $_REQUEST['StudentID'] ?>"><? if (!$fines) { echo "Strikes"; } else { echo "Fines"; } ?> List</a></li>
 			</ul>
 		</div>
