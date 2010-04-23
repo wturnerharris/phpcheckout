@@ -3,9 +3,9 @@ require_once('config.php');
 
 $renew = $_REQUEST['renew'];
 
-$CheckOutID = $_POST['CheckOutID'];
+$CheckOutID = $_REQUEST['CheckOutID'];
 $KitName = $_REQUEST['KitName'];
-$ReturnDate = $_POST['ReturnDate'];
+$ReturnDate = $_REQUEST['ReturnDate'];
 $FirstName = $_REQUEST['FirstName'];
 $LastName = $_REQUEST['LastName'];
 $StudentID = $_REQUEST['StudentID'];
@@ -22,7 +22,7 @@ if (isset($renew)) {
 
 include('includes/heading.html');
 
-$renewal = "UPDATE checkedout SET ExpectedDateIn='$ReturnDate', Notes='$Notes',$AccessoryAdded CheckoutUser='$Username', ReserveDate='' WHERE KitID='$KitID' AND StudentID='$StudentID' AND ID='$CheckOutID'";
+$renewal = "UPDATE checkedout SET ExpectedDateIn='$ReturnDate', Notes='$Notes',$AccessoryAdded CheckoutUser='$Username', ReserveDate=null WHERE KitID='$KitID' AND StudentID='$StudentID' AND ID='$CheckOutID'";
 mysql_select_db($database_equip, $equip);
 mysql_query($renewal, $equip) or die(mysql_error());
 
@@ -486,9 +486,9 @@ if ($row_Recordset1['FineAmount']!="") {
 <i>LAB AIDS: Check off all accessories in bags. If an accessory is not in the bag
 do not check it off.</i>
 
-<input type="hidden" name="KitID" value="<? echo $KitID ?>">
-<input type="hidden" name="StudentID" value="<? echo $StudentID ?>">
-<input type="hidden" name="CheckOutID" value="<? echo $CheckOutID ?>">
+<input type="hidden" name="KitID" value="<? echo $KitID; ?>">
+<input type="hidden" name="StudentID" value="<? echo $StudentID; ?>">
+<input type="hidden" name="CheckOutID" value="<? echo $CheckOutID; ?>">
 <P>
 <?
 if ($AccessoryName=""){
