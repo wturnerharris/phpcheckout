@@ -8,8 +8,13 @@
 <script type="text/javascript" src="<?php echo $root; ?>/includes/prototype.js"></script>
 <link href="<?php echo $root; ?>/includes/equip.css" rel="stylesheet" type="text/css">
 </head>
-
-<body bgcolor="#333333" OnLoad=$('Username').focus();>
+<?php 
+if ($ldap_enabled) {
+	echo "<body bgcolor='#333333' OnLoad=$('NewUserName').focus();>\n";
+} else {
+	echo "<body bgcolor='#333333' OnLoad=$('Username').focus();>\n";
+}
+?>
 <div id="main">
 		<div id="gray-bar"></div>
 		<div id="header">
