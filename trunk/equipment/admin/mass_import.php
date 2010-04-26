@@ -22,9 +22,12 @@ if (isset($_POST['profName']) && isset($_POST['classTeach']) && isset($_POST['cl
 
 function initialize() {
 	try {
-		document.getElementById("form-div").addEventListener ("focus", targHandler, true);
-		document.getElementById("form-div").addEventListener ("blur", blurHandler, true);
-		document.getElementById("btn").addEventListener ("click", submitProf, true);
+		$("form-div").addEventListener ("focus", targHandler, true);
+		$("form-div").addEventListener ("blur", blurHandler, true);
+		$("btn").addEventListener ("click", submitProf, true);
+<?php if($add) { ?>
+		$("form-div").addEventListener ("change", chgHandler, true);
+<?php } ?>
 	}
 	catch(e) {
 		alert("Exception caught: " + e)
@@ -43,11 +46,29 @@ function blurHandler(event) {
 		text.value = text.defaultValue;
 	}
 } 
+<?php if($add) { ?>
+function chgHandler() {
+	var sz = $('size').value;
+	var i;
+	for (i=1; i<=sz; i++) {
+		var f = $('FirstName'+i).value.substr(0, 1);
+		var l = $('LastName'+i).value;
+		var nm1 = f+l;
+		var nm2 = nm1.replace(/-/g,'').replace(/\s/g,'');
+		var nm = nm2.toLowerCase();
+		$('UserID'+i).value= nm;
+	}
+} 
+<?php } ?>
 function submitProf(event) {
+<?php if($add) { ?>
+	chgHandler();
+<?php } ?>
 	var targ = event.target;
-	if (IsEmpty(targ.value) || targ.value == targ.defaultValue) 
+	if (IsEmpty(targ.value)) 
 	{ 
 		alert('Do not leave '+targ.defaultValue+' field blank.');
+		alert(targ);
 		targ.focus();
 		return false;
 	}
@@ -191,12 +212,12 @@ function delEntry(){
 	  <div id="form-div">
 	<? for ($i=1; $i<=$size; $i++) { ?>
       <div id="part<?php echo $i; ?>" class="part"><?php echo $i; ?></div>
-      <input type="text" id="StudentID<?php echo $i; ?>" name="StudentID<?php echo $i; ?>" value="Student ID Number" />
-	  <input type="text" id="Email<?php echo $i; ?>" name="Email<?php echo $i; ?>" value="Email Address" />
-	  <input type="text" id="FirstName<?php echo $i; ?>" name="FirstName<?php echo $i; ?>" value="First Name" />
-	  <input type="text" id="LastName<?php echo $i; ?>" name="LastName<?php echo $i; ?>" value="Last Name" />
-	  <input type="text" id="Phone<?php echo $i; ?>" name="Phone<?php echo $i; ?>" value="Phone Number" />
-	  <input type="text" id="UserID<?php echo $i; ?>" name="UserID<?php echo $i; ?>" disabled="true" />
+      <input type="text" id="StudentID<?php echo $i; ?>" name="data[<?php echo $i; ?>][StudentID]" value="Student ID Number" />
+	  <input type="text" id="Email<?php echo $i; ?>" name="data[<?php echo $i; ?>][Email]" value="Email Address" />
+	  <input type="text" id="FirstName<?php echo $i; ?>" name="data[<?php echo $i; ?>][FirstName]" value="First Name" />
+	  <input type="text" id="LastName<?php echo $i; ?>" name="data[<?php echo $i; ?>][LastName]" value="Last Name" />
+	  <input type="text" id="Phone<?php echo $i; ?>" name="data[<?php echo $i; ?>][Phone]" value="555-212-1234" />
+	  <input type="text" id="UserID<?php echo $i; ?>" name="data[<?php echo $i; ?>][UserID]" />
 	  <hr/ style="border: 0px; height: 3px; background-color: #ffcc00;">
 	<? } ?>
 	  <input type="hidden" id="class" name="class" value="<?php echo $class; ?>" />
