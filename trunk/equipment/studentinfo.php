@@ -331,7 +331,7 @@ do {
 	</ul>
   </td>
   <? }
-  echo "<td><strong style='color: blue;'>Reserved</strong></td>\n<td><strong style='color: blue;'>Reserved</strong></td>";
+  echo "<td><strong style='color: blue;'>Reserved for ".date('m/d',strtotime($row_Recordset5['ReserveDate']))."</strong></td>\n<td><strong style='color: blue;'>Reserved</strong></td>";
   } else {
   //unavailable
     if ($row_Recordset5['ExpectedDateIn'] != '') {
