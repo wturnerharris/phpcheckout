@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 //variables
 $filter = $_REQUEST['filter'];
@@ -23,12 +23,33 @@ if (isset($StudentID)) {
 ?>
 
 <script type="text/javascript">
+<?php if ($filter == "add") { ?>
+window.onload=initialize;
+
+function initialize() {
+	try {
+		$("txtFirstName1").addEventListener ("change", chgHandler, true);
+		$("txtLastName1").addEventListener ("change", chgHandler, true);
+	}
+	catch(e) {
+		alert("Exception caught: " + e)
+	}
+}
+function chgHandler() {
+	var f = $('txtFirstName1').value.substr(0, 1);
+	var l = $('txtLastName1').value;
+	var nm1 = f+l;
+	var nm2 = nm1.replace(/-/g,'').replace(/\s/g,'');
+	var nm = nm2.toLowerCase();
+	$('txtUser1').value= nm;
+} 
+<? } ?>
 function showResponse(req){
 	setTimeout('refreshPage();',1000);
 }
 function refreshPage(){
 	$('filter').value = "no";
-	var location = "admin.php?page=students"
+	var location = "admin.php?page=students";
 	window.location.href = location;
 }
 function TxtBoxStart(){
@@ -91,6 +112,7 @@ function Add() {
 	var txtEmail1 = $('txtEmail1');
 	var txtPhone1 = $('txtPhone1');
 	var txtContract1 = $('txtContract1');
+	var txtUser1 = $('txtUser1');
 	
    if (!(isNumeric(StudentID.value))) 
    { 
@@ -150,6 +172,12 @@ function Add() {
       txtPhone1.focus(); 
       return false; 
    } 
+   if(IsEmpty(txtUser1.value)) 
+   { 
+      alert('You have not entered a User ID.') 
+      txtUser1.focus(); 
+      return false; 
+   } 
    if(txtContract1.checked == false)
    { 
       alert('You must check this box if you have collected a Lending Contract.') 
@@ -203,7 +231,8 @@ function delEntry(){
 	$('alert').style.visibility = "visible";
 	$('alert').innerHTML = "Student Record Removed";
 	$('form2').submit();
-	}
+}
+
 </script>		
 
 <form id="form1" name="form1" action="admin.php?page=students" method="post">
@@ -285,6 +314,8 @@ if ($filter == "yesyes") {
 <br />
 <strong>Phone Number: </strong><input type="textarea" id="txtPhone" name="txtPhone" value="<?php echo $row_Students['Phone']; ?>" readonly="true" onClick="this.readOnly = false; this.style.background = '#ffffff'; this.style.color = '#000000';" onKeyPress="return disableEnterKey(event)"/>
 <br />
+<strong>User ID: </strong><input type="textarea" id="txtUser" name="txtUser" value="<?php echo $row_Students['UID']; ?>" readonly="true" onClick="this.readOnly = false; this.style.background = '#ffffff'; this.style.color = '#000000';" onKeyPress="return disableEnterKey(event)"/>
+<br />
 <br />
 <a href="#" style="float: right; margin-right: 35px;" onClick="Modify()">
 	<img src="<?php echo $root; ?>/images/modify-button.png" border="0" title="Modify" /></a>
@@ -310,6 +341,8 @@ if ($filter == "add") {
 <strong>Email Address: </strong><input type="textarea" id="txtEmail1" name="txtEmail1" value="" onKeyPress="return disableEnterKey(event)" />
 <br />
 <strong>Phone Number: </strong><input type="textarea" id="txtPhone1" name="txtPhone1" value="" onKeyPress="return disableEnterKey(event)" />
+<br />
+<strong>User ID: </strong><input type="textarea" id="txtUser1" name="txtUser1" value="" onKeyPress="return disableEnterKey(event)" />
 <br />
 <strong>Contract Signed: </strong><input type="checkbox" id="txtContract1" name="txtContract1" value="1" onClick="alert('Have you collected the signed contract?');" />
 <br />

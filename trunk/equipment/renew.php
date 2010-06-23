@@ -181,6 +181,16 @@ $('newDate').firstChild.nodeValue = newDate;
 //$('newMonth').firstChild.nodeValue = $('plusNone').value;
 changeMonth();
 }
+function modDay3() 
+{
+newDay = $('plusThree').value;
+newDate = $("plusThreeDate").value.substr(8,2);
+$("ReturnDate").value = $("plusThreeDate").value;
+$('newDay').firstChild.nodeValue = newDay;
+$('newDate').firstChild.nodeValue = newDate;
+//$('newMonth').firstChild.nodeValue = $('plusNone').value;
+changeMonth();
+}
 </script>
 <P>
 <form name="frmRenew" action="renew.php" method="post">
@@ -442,6 +452,7 @@ return $dateTo;
 }
 $plusOne = addDate($returndateSQL,1);
 $plusTwo = addDate($returndateSQL,2);
+$plusThree = addDate($returndateSQL,3);
 
 ?>
 <input type="hidden" id="plusNone" name="plusNone" value="<? echo date("D", strtotime($returndateSQL)); ?>">
@@ -449,6 +460,8 @@ $plusTwo = addDate($returndateSQL,2);
 <input type="hidden" id="plusOneDate" name="plusOneDate" value="<? echo date("Y-m-d", strtotime($plusOne))." ".$dueHours; ?>">
 <input type="hidden" id="plusTwo" name="plusTwo" value="<? echo date("D", strtotime($plusTwo)); ?>">
 <input type="hidden" id="plusTwoDate" name="plusTwoDate" value="<? echo date("Y-m-d", strtotime($plusTwo))." ".$dueHours; ?>">
+<input type="hidden" id="plusThree" name="plusThree" value="<? echo date("D", strtotime($plusThree)); ?>">
+<input type="hidden" id="plusThreeDate" name="plusThreeDate" value="<? echo date("Y-m-d", strtotime($plusThree))." ".$dueHours; ?>">
 <input type="hidden" id="OriginalDate" name="OriginalDate" value="<? echo date("Y-m-d H:i:s", strtotime($returndateSQL)); ?>">
 <input type="hidden" id="ReturnDate" name="ReturnDate" value="<? echo date("Y-m-d H:i:s", strtotime($returndateSQL)); ?>">
 <input type="hidden" id="renew" name="renew" value="yes">

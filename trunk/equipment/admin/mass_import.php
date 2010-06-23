@@ -137,62 +137,7 @@ function delEntry(){
 		} ?>
 		</select>
 	</p>
-	<p>
-	<table style="margin-left: -50px;">
-		<tr>
-			<td>Photo 1</td>
-			<td>Photo 2</td>
-			<td>Photo 3</td>
-			<td>Photo 4</td>
-		</tr>
-		<tr>
-			<td>Tripods</td>
-			<td>Tripods</td>
-			<td>Tripods</td>
-			<td>Tripods</td>
-		</tr>
-		<tr>
-			<td></td>
-			<td>Light Meters</td>
-			<td>Light Meters</td>
-			<td>Light Meters</td>
-		</tr>
-		<tr>
-			<td></td>
-			<td>Mamiya 645</td>
-			<td>Mamiya 645</td>
-			<td>Mamiya 645</td>
-		</tr>
-		<tr>
-			<td></td>
-			<td></td>
-			<td>Digital SLRs</td>
-			<td>Digital SLRs</td>
-		</tr>
-		<tr>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td>Travel Lights</td>
-		</tr>
-		<tr>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td>Hot Lights</td>
-		</tr>
-		<tr>
-			<td></td>
-			<td></td>
-			<td></td>
-			<td>View Cameras</td>
-		</tr>
-	</table>
-		Photo 1 = Tripods<br>
-		Photo 2 = Tripods, Light Meters, Mamiya 645<br>
-		Photo 3 = Tripods, Light Meters, Mamiya 645, Digital SLRs<br>
-		Photo 4 = Tripods, Light Meters, Mamiya 645, Digital SLRs, Travel Lights, Hot Lights, View Cameras<br>
-	</p>
+<?php include('table.html'); ?>
 	<p>	
 		<input type="text" id="profName" name="profName" style="margin-right: 5px;" value="Professor's Full Name" readonly="true" /> 
 		<input type="text" id="classTeach" name="classTeach" style="margin-right: 5px;" value="Class Instructing" readonly="true" />
