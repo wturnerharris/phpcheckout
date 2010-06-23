@@ -143,6 +143,16 @@ $('newDate').firstChild.nodeValue = newDate;
 //$('newMonth').firstChild.nodeValue = $('plusNone').value;
 changeMonth();
 }
+function modDay3() 
+{
+newDay = $('plusThree').value;
+newDate = $("plusThreeDate").value.substr(8,2);
+$("ReturnDate").value = $("plusThreeDate").value;
+$('newDay').firstChild.nodeValue = newDay;
+$('newDate').firstChild.nodeValue = newDate;
+//$('newMonth').firstChild.nodeValue = $('plusNone').value;
+changeMonth();
+}
 </script>
 <P>
 <form name="frmCheckOut" action="checkoutaction.php" method="post">
@@ -389,6 +399,7 @@ Options:
 <label><input id="chkBox0" name="chkBox" type="radio" value="0" onClick="modDay0();" checked="checked" />Reset</label>
 <label><input id="chkBox1" name="chkBox" type="radio" value="1" onClick="modDay1();" />+1 Day</label>
 <label><input id="chkBox2" name="chkBox" type="radio" value="2" onClick="modDay2();" />+2 Days</label>
+<label><input id="chkBox3" name="chkBox" type="radio" value="3" onClick="modDay3();" />+3 Days</label>
 </div>
 <? 
 function addDate($date,$day)//add days
@@ -399,6 +410,7 @@ return $dateTo;
 }
 $plusOne = addDate($returndateSQL,1);
 $plusTwo = addDate($returndateSQL,2);
+$plusThree = addDate($returndateSQL,3);
 
 ?>
 <input type="hidden" id="plusNone" name="plusNone" value="<? echo date("D", strtotime($returndateSQL)); ?>">
@@ -406,6 +418,8 @@ $plusTwo = addDate($returndateSQL,2);
 <input type="hidden" id="plusOneDate" name="plusOneDate" value="<? echo date("Y-m-d", strtotime($plusOne))." ".$dueHours; ?>">
 <input type="hidden" id="plusTwo" name="plusTwo" value="<? echo date("D", strtotime($plusTwo)); ?>">
 <input type="hidden" id="plusTwoDate" name="plusTwoDate" value="<? echo date("Y-m-d", strtotime($plusTwo))." ".$dueHours; ?>">
+<input type="hidden" id="plusThree" name="plusThree" value="<? echo date("D", strtotime($plusThree)); ?>">
+<input type="hidden" id="plusThreeDate" name="plusThreeDate" value="<? echo date("Y-m-d", strtotime($plusThree))." ".$dueHours; ?>">
 <input type="hidden" id="OriginalDate" name="OriginalDate" value="<? echo date("Y-m-d H:i:s", strtotime($returndateSQL)); ?>">
 <input type="hidden" id="ReturnDate" name="ReturnDate" value="<? echo date("Y-m-d H:i:s", strtotime($returndateSQL)); ?>">
 </span>
